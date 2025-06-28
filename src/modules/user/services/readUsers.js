@@ -1,5 +1,5 @@
-import User from '../../model/userModel.js';
-
+//import User from '../../model/userModel.js';
+import { User } from '../../../models/index.js';
 export const readUsers = async (req, res) => {
     try {
         const ids = req.params.ids.split(',');

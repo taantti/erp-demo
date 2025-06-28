@@ -1,6 +1,8 @@
 //import User from '../../model/userModel.js';
-import { User } from '../../index.js'; 
+//import { User } from './../../models/index.js'; 
 
+//import { User } from '../../models/index.js';
+import { User } from '../../../models/index.js';
 
 export const readUser = async (req, res) => {
     try {
