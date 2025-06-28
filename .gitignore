@@ -1,0 +1,7 @@
+.git/
+node_modules/
+config/
+middleware/
+modelIterators
+.env
+.env-example

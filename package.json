@@ -1,0 +1,20 @@
+{
+  "name": "erp-demo",
+  "version": "1.0.0",
+  "main": "src/app.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo 'TODO: test scripts'",
+    "start": "node src/app.js",
+    "build": "echo 'TODO: Typescript build'"
+  },
+  "keywords": [],
+  "author": "Antti Tapaus",
+  "license": "MIT",
+  "description": "A demo ERP-project.",
+  "dependencies": {
+    "express": "^5.1.0",
+    "mongodb": "^6.17.0",
+    "mongoose": "^8.16.0"
+  }
+}
