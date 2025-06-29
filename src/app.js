@@ -25,13 +25,7 @@ import aux from "./utils/auxiliary.js";
 import dotenv from 'dotenv';
 
 dotenv.config();
-
-const DATABASE_HOST = process.env.DATABASE_HOST;
-const DATABASE_PORT = process.env.DATABASE_PORT;
-const DATABASE_NAME = process.env.DATABASE_NAME;
-const DATABASE_USERNAME = process.env.DATABASE_USERNAME;
-const DATABASE_PASSWORD =process.env.DATABASE_PASSWORD;
-const PORT = process.env.PORT;
+const { DATABASE_HOST, DATABASE_PORT, DATABASE_NAME, DATABASE_USERNAME, DATABASE_PASSWORD, PORT} = process.env;
 
 const app = express();
 app.use(express.json());
@@ -41,7 +35,10 @@ app.use(aux.logRequest); // Todo: Omaan middleware kansioon ja .js tiedostoon.
 app.use('/user', routes.user);
 app.get('/', (req, res) => response(res));
 
-mongoose.connect(`${DATABASE_HOST}${DATABASE_NAME}`).then(() => {
+
+//const DATABASE_ADDRESS = 'mongodb://localhost:27017/';
+
+mongoose.connect(`mongodb://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}`).then(() => {
     aux.cLog(`Connected to ${DATABASE_HOST}${DATABASE_NAME} database`);
 
     app.listen(PORT, () => {
@@ -49,7 +46,7 @@ mongoose.connect(`${DATABASE_HOST}${DATABASE_NAME}`).then(() => {
     });  
 
 }).catch(() => {
-    aux.cLog(`Connection to ${DATABASE_HOST}${DATABASE_NAME} database failed`);
+    aux.cLog(`Connection to mongodb://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME} database failed`);
 });
 
 
