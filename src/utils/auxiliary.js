@@ -4,7 +4,7 @@ function cLog(text) {
 }
 
 function logRequest(req, res, next) {
-    consoleLog(`${req.method}: ${req.url}`);
+    cLog(`${req.method}: ${req.url}`);
     next();
 }
 
