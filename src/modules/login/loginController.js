@@ -4,6 +4,6 @@ import { login } from './services/index.js';
 
 const router = express.Router();
 
-router.post('/', login);
+router.post('/', login); // JSON Web Token login (stateless). Authorization: Bearer <JWT>
 
 export default router;
