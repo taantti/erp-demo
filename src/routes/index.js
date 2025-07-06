@@ -5,6 +5,7 @@
 //import logoutRoutes from './logoutRoutes.js';
 //import productRoutes from './productRoutes.js';
 import userRoutes from './userRoutes.js';
+import usersRoutes from './usersRoutes.js';
 
 const routes = {
     //access: accessRoutes,
@@ -13,7 +14,8 @@ const routes = {
     //login: loginRoutes,
     //logout: logoutRoutes,
     //product: productRoutes,
-    user: userRoutes
+    user: userRoutes,
+    users: usersRoutes
 }
 
 export default routes;

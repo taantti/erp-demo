@@ -1,3 +1,4 @@
+/*
 import {createUser}  from './createUser.js';
 import  {readUser}  from './readUser.js';
 import  {readUsers}  from './readUsers.js';
@@ -13,3 +14,21 @@ export default {
     deleteUser,
     readUserReport
 }
+*/
+
+import {createUser}  from './userService.js';
+import {readUser}  from './userService.js';
+import {readUsers}  from './userService.js';
+import {updateUser}  from './userService.js';
+import {deleteUser}  from './userService.js';
+import {readUserReport}  from './userReportService.js';
+
+export default {
+    createUser,
+    readUser ,
+    readUsers,
+    updateUser,
+    deleteUser,
+    readUserReport
+}
+

@@ -25,10 +25,9 @@ app.use(aux.logRequest); // Todo: Siirra middleware kansioon ja omaan logger.js 
 /* Middlewares */
 // auth
 
-//app.use('/logout', routes.logout);
+
+app.use('/users', routes.users);
 app.use('/user', routes.user);
-//app.use('/product', routes.product);
-//app.get('/', (req, res) => response(res));
 
 mongoose.connect(`mongodb://${env.DATABASE_HOST}:${env.DATABASE_PORT}/${env.DATABASE_NAME}`).then(() => {
     aux.cLog(`Connected to mongodb://${env.DATABASE_HOST}:${env.DATABASE_PORT}/${env.DATABASE_NAME} database`);
