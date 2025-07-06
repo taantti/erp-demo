@@ -8,15 +8,10 @@ export const readUserReport =  (req, res) => {
 };
 
 export const readUsers = async (req, res) => {
-    console.log("userService.readUsers(): ");
-    //userService.readUsers(req, res);
-
-    
+    console.log("userService.readUsers(): "); 
     const users = await userService.readUsers(req, res);
     if (!users) return res.status(404).json({ error: 'Users not found' });
     res.status(200).json(users);
-    
-
 };
 
 export const readUser = async (req, res) => {  
@@ -25,19 +20,25 @@ export const readUser = async (req, res) => {
     res.status(200).json(user); 
 };
 
-export const createUser =  (req, res) => {
+export const createUser = async (req, res) => {
     console.log("userService.readUsers(): ");
-    userService.createUser(req, res);
+    const newUser = await userService.createUser(req, res);
+    if(!newUser) return res.status(404).json({error: 'User not created'});
+    res.status(201).json(newUser);
 };
 
-export const updateUser =  (req, res) => {
+export const updateUser = async (req, res) => {
     console.log("userService.readUsers(): ");
-    userService.updateUser(req, res);
+    const updatedUser = await userService.updateUser(req, res);
+    if(!updatedUser) res.status(404).json({error: 'User not found'});
+    res.status(201).json(updatedUser);
 };
 
 export const deleteUser =  (req, res) => {
     console.log("userService.deleteUser(): ");
-    userService.deleteUser(req, res);
+    const deletedUser = userService.deleteUser(req, res);
+    if(!deletedUser) res.status(404).json({error: 'User not found'});
+    res.status(404).json({error: 'User deleted'});
 };
 
 
