@@ -1,6 +1,15 @@
-export { createUser } from './createUser.js';
-export { readUser } from './readUser.js';
-export { readUsers } from './readUsers.js';
-export { updateUser } from './updateUser.js';
-export { deleteUser } from './deleteUser.js';
-export { readUserReport } from './readUserReport.js';
+import {createUser}  from './createUser.js';
+import  {readUser}  from './readUser.js';
+import  {readUsers}  from './readUsers.js';
+import  {updateUser}  from './updateUser.js';
+import  {deleteUser}  from './deleteUser.js';
+import  {readUserReport}  from './readUserReport.js';
+
+export default {
+    createUser,
+    readUser ,
+    readUsers,
+    updateUser,
+    deleteUser,
+    readUserReport
+}

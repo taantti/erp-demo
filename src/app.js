@@ -17,21 +17,28 @@ aux.cLog("PORT = " + env.PORT);
 const app = express();
 app.use(express.json());
 app.use(aux.logRequest); // Todo: Siirra middleware kansioon ja omaan logger.js tiedostoon.
+
+/* Public routes */
+//app.use('/login', routes.login);
+//app.use('/help', routes.help);
+
+/* Middlewares */
+// auth
+
+//app.use('/logout', routes.logout);
 app.use('/user', routes.user);
-app.get('/', (req, res) => response(res));
+//app.use('/product', routes.product);
+//app.get('/', (req, res) => response(res));
 
 mongoose.connect(`mongodb://${env.DATABASE_HOST}:${env.DATABASE_PORT}/${env.DATABASE_NAME}`).then(() => {
     aux.cLog(`Connected to mongodb://${env.DATABASE_HOST}:${env.DATABASE_PORT}/${env.DATABASE_NAME} database`);
-    //console.log(`Connected to mongodb://${env.DATABASE_HOST}:${env.DATABASE_PORT}/${env.DATABASE_NAME} database`);
 
     app.listen(PORT, () => {
         aux.cLog(`Server running on port ${env.PORT}`);
-        //console.log(`Server running on port ${env.PORT}`);
     });  
 
 }).catch(() => {
     aux.cLog(`Connection to mongodb://${env.DATABASE_HOST}:${env.DATABASE_PORT}/${env.DATABASE_NAME} database failed`);
-    //console.log(`Connection to mongodb://${env.DATABASE_HOST}:${env.DATABASE_PORT}/${env.DATABASE_NAME} database failed`);
 });
 
 const response = (res) => {
