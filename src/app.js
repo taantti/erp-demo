@@ -25,10 +25,10 @@ app.use(aux.logRequest); // Todo: Siirra middleware kansioon ja omaan logger.js 
 //app.use('/login', routes.login);
 //app.use('/help', routes.help);
 
+app.use('/login', routes.login);
+
 /* Middlewares */
 // auth
-
-
 app.use('/users', routes.users);
 app.use('/user', routes.user);
 

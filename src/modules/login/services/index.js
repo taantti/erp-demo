@@ -1,3 +1,4 @@
-export { login } from './jwtLogin.js';
-//export { logout } from './logout.js'; 
-
+import {login}  from './loginService.js';
+export default {
+    login
+}

@@ -1,5 +1,5 @@
 import express from 'express';
-import loginController from '../modules/login/loginController.js';
 const router = express.Router();
-router.use(loginController);
+import { login } from '../modules/login/loginController.js';
+router.post('/', login);
 export default router;

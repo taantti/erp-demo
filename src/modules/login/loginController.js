@@ -1,9 +1,33 @@
-import express from 'express';
-import aux from "../../utils/auxiliary.js";
-import { login } from './services/index.js';
+import loginService from './services/index.js';
 
-const router = express.Router();
+export const login = async (req, res) => {
+    console.log("loginService.login(): ");
+    const login = await loginService.login(req, res);
+    console.log("loginService.login(): login = " + login);  
+    if(!login) return res.status(404).json({error: 'Wrong username or password'});
+     res.status(200).json(login);
+};
 
-router.post('/', login); // JSON Web Token login (stateless). Authorization: Bearer <JWT>
 
-export default router;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
