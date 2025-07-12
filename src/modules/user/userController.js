@@ -1,4 +1,3 @@
-//import express from 'express';
 //import aux from "../../utils/auxiliary.js";
 
 import userService from './services/index.js';

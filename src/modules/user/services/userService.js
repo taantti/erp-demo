@@ -1,21 +1,29 @@
+import config from './../../../config.js';
+import bcrypt from "bcrypt";
 import { User } from '../../../models/index.js';
+
 
 export const createUser = async (req, res) => {
     console.log("userService.js: createUser(): ");
+    const {username, plain_text_password, first_name, last_name,email, role, active} = req.body;
+    const saltRounds = config.BCRYPT_SALT_ROUNDS | 10;
+
     try {
-        const {firstname, username, password} = req.body;
-        console.log("firstname = " + firstname);
-        console.log("username = " + username);
-        console.log("password = " + password);
-
-        const user = new User({username, password})
-        //const newUser = await user.save();
-        //res.status(201).json(newUser); 
-
-        return user.save();
         
+        //tenant = get from request user
+        console.log("username = " + username);
+        console.log("plain_text_password = " + plain_text_password);
+        console.log("first_name = " + first_name);
+        console.log("last_name = " + last_name);
+        console.log("email = " + email);
+        console.log("role = " + role);
+        console.log("active = " + active);
 
+        const salt = bcrypt.genSaltSync(saltRounds);
+        const password = bcrypt.hashSync(plain_text_password, salt);
 
+        const user = new User({username, password, first_name, last_name, email, role, active});
+        return user.save();
     } catch (error) {
         res.status(500).json({ error: error.message});
     }
@@ -55,10 +63,11 @@ export const readUsers = async (req, res) => {
 export const updateUser = async (req, res) => {
     console.log("userService.js: updateUser(" + req.params.id + "): ");
     try {
-        const {name, username, password} = req.body;
+        const {firstname, lastname, username, password} = req.body;
         const { id } = req.params;
         console.log("id = " + id);
-        console.log("firstname = " + name);
+        console.log("firstname = " + firstname);
+        console.log("lastname = " + lastname);
         console.log("username = " + username);
         console.log("password = " + password);
 

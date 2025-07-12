@@ -42,6 +42,8 @@ mongoose.connect(`mongodb://${config.DATABASE_HOST}:${config.DATABASE_PORT}/${co
         aux.cLog(`Server running on port ${config.PORT}`);
     }); 
 
-}).catch(() => {
+}).catch((error) => {
     aux.cLog(`Connection to mongodb://${config.DATABASE_HOST}:${config.DATABASE_PORT}/${config.DATABASE_NAME} database failed`);
+    aux.cLog(`${error.name}: ${error.message}`);
+    process.exit(1);
 });

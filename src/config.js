@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-const env = {
+const config = {
     DATABASE_HOST: process.env.DATABASE_HOST,
     DATABASE_PORT: process.env.DATABASE_PORT,
     DATABASE_NAME: process.env.DATABASE_NAME,
@@ -10,7 +10,8 @@ const env = {
     PORT: process.env.PORT,
     JWT_SECRET_KEY: process.env.JWT_SECRET_KEY,
     JWT_PASSPHRASE: process.env.JWT_PASSPHRASE,  
-    JWT_TOKEN_EXPIRATION: process.env.JWT_TOKEN_EXPIRATION
+    JWT_TOKEN_EXPIRATION: process.env.JWT_TOKEN_EXPIRATION,
+    BCRYPT_SALT_ROUNDS: process.env.BCRYPT_SALT_ROUNDS
 }
 
-export default env;
+export default config;
