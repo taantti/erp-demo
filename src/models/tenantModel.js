@@ -5,4 +5,6 @@ const tenantSchema = new mongoose.Schema({
     admin: Boolean
 });
 
+const Tenant = mongoose.model('Tenant', tenantSchema);
+
 export default Tenant;

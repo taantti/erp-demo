@@ -1,13 +1,31 @@
 import { Tenant } from '../../../models/index.js';
+import { User } from '../../../models/index.js';
 
 export const createTenant = async (req, res) => {
     console.log("tenantService.js: createUser(): ");
     try {
-        const {name, admin} = req.body;
+        const {name, admin, first_name, last_name, username, password} = req.body;
+        const status = TRUE;
         console.log("name = " + name);
         console.log("admin = " + admin);
-        const tenant = new Tenant({name, admin})
-        return tenant.save();
+        console.log("status = " + status);
+        const tenant = new Tenant({name, admin, status})
+        //return tenant.save();
+        if(!tenant.save()) return false;
+
+        console.log("first_name = " + first_name);
+        console.log("last_name = " + last_name);
+        console.log("username = " + username);
+        console.log("password = " + password);
+
+
+        //const user = new User({username, password, first_name, last_name, email, "ADMIN", TRUE, tenant['_id']});
+        //if(!user.save()) return false;
+
+        const newTenantAndUser = {};
+
+
+
     } catch (error) {
         res.status(500).json({ error: error.message});
     }
