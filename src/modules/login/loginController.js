@@ -5,7 +5,7 @@ export const login = async (req, res) => {
     const login = await loginService.login(req, res);
     console.log("loginService.login(): login = " + login);  
     if(!login) return res.status(404).json({error: 'Wrong username or password'});
-     res.status(200).json(login);
+     res.status(200).json({login});
 };
 
 
