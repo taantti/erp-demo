@@ -5,24 +5,24 @@ import { User } from '../../../models/index.js';
 
 export const createUser = async (req, res) => {
     console.log("userService.js: createUser(): ");
-    const {username, plain_text_password, first_name, last_name,email, role, active} = req.body;
+    const {username, password, first_name: firstName, last_name: lastName, email, role, active} = req.body;
     const saltRounds = config.BCRYPT_SALT_ROUNDS | 10;
 
     try {
         
         //tenant = get from request user
         console.log("username = " + username);
-        console.log("plain_text_password = " + plain_text_password);
-        console.log("first_name = " + first_name);
-        console.log("last_name = " + last_name);
+        console.log("password = " + password);
+        console.log("firstName = " + firstName);
+        console.log("lastName = " + lastName);
         console.log("email = " + email);
         console.log("role = " + role);
         console.log("active = " + active);
 
         const salt = bcrypt.genSaltSync(saltRounds);
-        const password = bcrypt.hashSync(plain_text_password, salt);
+        const hashedPassword = bcrypt.hashSync(password, salt);
 
-        const user = new User({username, password, first_name, last_name, email, role, active});
+        const user = new User({username, password: hashedPassword, first_name: firstName, last_name: lastName, email, role, active});
         return user.save();
     } catch (error) {
         res.status(500).json({ error: error.message});
@@ -62,18 +62,26 @@ export const readUsers = async (req, res) => {
 
 export const updateUser = async (req, res) => {
     console.log("userService.js: updateUser(" + req.params.id + "): ");
-    try {
-        const {firstname, lastname, username, password} = req.body;
+
+        const {username, password, first_name: firstName, last_name: lastName, email, role, active} = req.body;
+        const saltRounds = config.BCRYPT_SALT_ROUNDS | 10;
         const { id } = req.params;
-        console.log("id = " + id);
-        console.log("firstname = " + firstname);
-        console.log("lastname = " + lastname);
+    try {
+        //tenant = get from request user
         console.log("username = " + username);
         console.log("password = " + password);
+        console.log("firstName = " + firstName);
+        console.log("lastName = " + lastName);
+        console.log("email = " + email);
+        console.log("role = " + role);
+        console.log("active = " + active);
+
+        const salt = bcrypt.genSaltSync(saltRounds);
+        const hashedPassword = bcrypt.hashSync(password, salt);
 
         const user = await User.findByIdAndUpdate(
             id,
-            {name, username, password},
+            {username, password: hashedPassword, first_name: firstName, last_name: lastName, email, role, active},
             { new: true }
         );
 

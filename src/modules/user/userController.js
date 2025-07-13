@@ -37,7 +37,7 @@ export const deleteUser =  (req, res) => {
     console.log("userService.deleteUser(): ");
     const deletedUser = userService.deleteUser(req, res);
     if(!deletedUser) res.status(404).json({error: 'User not found'});
-    res.status(404).json({error: 'User deleted'});
+    res.status(200).json({msg: 'User deleted'});
 };
 
 
