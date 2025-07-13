@@ -6,11 +6,11 @@ import { User } from '../../../models/index.js';
 export const login = async (req, res) => {
     console.log("req.body", req.body);
     console.log("loginService.js: login(): ");
-    const {username, plain_text_password} = req.body;
+    const {username, password} = req.body;
 
     try {
         console.log("username = " + username);
-        console.log("plain_text_password = " + plain_text_password);
+        console.log("password = " + password);
 
         const user = await User.findOne({username: username});
         if(!user) return false;
@@ -18,7 +18,7 @@ export const login = async (req, res) => {
         console.log("user.username", user.username);
         console.log("user.password", user.password);
 
-        return bcrypt.compareSync(plain_text_password,  user.password);
+        return bcrypt.compareSync(password,  user.password);
     } catch (error) {
         res.status(500).json({ error: error.message});
     }
