@@ -29,10 +29,8 @@ app.use('/login', routes.login);
 
 /* Middlewares */
 // auth
-app.use('/users', routes.users);
-app.use('/user', routes.user);
 
-app.use('/tenants', routes.tenants);
+app.use('/user', routes.user);
 app.use('/tenant', routes.tenant);
 
 mongoose.connect(`mongodb://${config.DATABASE_HOST}:${config.DATABASE_PORT}/${config.DATABASE_NAME}`).then(() => {

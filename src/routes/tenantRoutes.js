@@ -1,7 +1,8 @@
 import express from 'express';
 const router = express.Router();
-import { readTenant, createTenant, updateTenant, deleteTenant } from '../modules/tenant/tenantController.js';
+import { readTenants, readTenant, createTenant, updateTenant, deleteTenant } from '../modules/tenant/tenantController.js';
 
+router.get('/search/:ids', readTenants);
 router.get('/:id', readTenant);
 router.post('/', createTenant);
 router.put('/:id', updateTenant);
