@@ -2,7 +2,7 @@ import { Tenant } from '../../../models/index.js';
 import { User } from '../../../models/index.js';
 
 export const createTenant = async (req, res) => {
-    console.log("tenantService.js: createUser(): ");
+    console.log("tenantService.js: createTenant(): ");
     try {
         const {name, admin, first_name, last_name, username, password} = req.body;
         const status = TRUE;
@@ -32,7 +32,7 @@ export const createTenant = async (req, res) => {
 };
 
 export const deleteTenant = async (req, res) => {
-    console.log("tenantService.js: deleteUser(" + req.params.id + "): ");
+    console.log("tenantService.js: deleteTenant(" + req.params.id + "): ");
     try {
         //res.status(501).json({ message: 'Not Implemented yet'});
         const { id } = req.params;
@@ -44,7 +44,7 @@ export const deleteTenant = async (req, res) => {
 };
 
 export const readTenant = async (req, res) => {
-    console.log("tenantService.js: readUser(" + req.params.id + "): ");
+    console.log("tenantService.js: readTenant(" + req.params.id + "): ");
     try {
         return Tenant.findById(req.params.id);
     } catch (error) {
@@ -55,7 +55,7 @@ export const readTenant = async (req, res) => {
 export const readTenants = async (req, res) => {  
     try {
         const ids = req.params.ids.split(',');
-        console.log("tenantService.js: readUsers(" + ids + "): ");
+        console.log("tenantService.js: readTenants(" + ids + "): ");
         return await Tenant.find({ _id: { $in: ids } });
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -63,7 +63,7 @@ export const readTenants = async (req, res) => {
 };
 
 export const updateTenant = async (req, res) => {
-    console.log("tenantService.js: updateUser(" + req.params.id + "): ");
+    console.log("tenantService.js: updateTenant(" + req.params.id + "): ");
     try {
          const {name, admin} = req.body;
         const { id } = req.params;

@@ -33,7 +33,7 @@ export const updateUser = async (req, res) => {
     res.status(201).json(updatedUser);
 };
 
-export const deleteUser =  (req, res) => {
+export const deleteUser = async (req, res) => {
     console.log("userService.deleteUser(): ");
     const deletedUser = userService.deleteUser(req, res);
     if(!deletedUser) res.status(404).json({error: 'User not found'});

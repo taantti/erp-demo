@@ -32,7 +32,6 @@ export const createUser = async (req, res) => {
 export const deleteUser = async (req, res) => {
     console.log("userService.js: deleteUser(" + req.params.id + "): ");
     try {
-        //res.status(501).json({ message: 'Not Implemented yet'});
         const { id } = req.params;
         const user = await User.findByIdAndDelete(id);
         return user;
@@ -44,7 +43,7 @@ export const deleteUser = async (req, res) => {
 export const readUser = async (req, res) => {
     console.log("userService.js: readUser(" + req.params.id + "): ");
     try {
-        return User.findById(req.params.id);
+        return await User.findById(req.params.id);
     } catch (error) {
         res.status(500).json({ error: error.message});
     }
