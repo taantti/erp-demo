@@ -1,6 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import config from './config.js';
+import authMiddleware from './middleware/authMiddleware.js';
 import routes from './routes/index.js';
 import aux from "./utils/auxiliary.js";
 //import dotenv from 'dotenv';
@@ -22,14 +23,12 @@ app.use(express.json());
 app.use(aux.logRequest); // Todo: Siirra middleware kansioon ja omaan logger.js tiedostoon.
 
 /* Public routes */
-//app.use('/login', routes.login);
-//app.use('/help', routes.help);
-
 app.use('/login', routes.login);
 
 /* Middlewares */
-// auth
+app.use(authMiddleware);
 
+/* Protected routes */
 app.use('/user', routes.user);
 app.use('/tenant', routes.tenant);
 app.use('/role', routes.role);
