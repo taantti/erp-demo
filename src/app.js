@@ -32,6 +32,7 @@ app.use('/login', routes.login);
 
 app.use('/user', routes.user);
 app.use('/tenant', routes.tenant);
+app.use('/role', routes.role);
 
 mongoose.connect(`mongodb://${config.DATABASE_HOST}:${config.DATABASE_PORT}/${config.DATABASE_NAME}`).then(() => {
     aux.cLog(`Connected to mongodb://${config.DATABASE_HOST}:${config.DATABASE_PORT}/${config.DATABASE_NAME} database`);
