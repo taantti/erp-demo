@@ -11,7 +11,13 @@ const config = {
     JWT_SECRET_KEY: process.env.JWT_SECRET_KEY,
     JWT_PASSPHRASE: process.env.JWT_PASSPHRASE,  
     JWT_TOKEN_EXPIRATION: process.env.JWT_TOKEN_EXPIRATION,
-    BCRYPT_SALT_ROUNDS: process.env.BCRYPT_SALT_ROUNDS
+    BCRYPT_SALT_ROUNDS: process.env.BCRYPT_SALT_ROUNDS,
+    //INIT: process.env.INIT
+
+
+    INIT: (process.env.INIT.toLowerCase() === "true")
+
+
 }
 
 export default config;

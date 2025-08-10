@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo 'TODO: test scripts'",
     "start": "node src/app.js",
+    "init": "node src/init/init.js",
     "build": "echo 'TODO: Typescript build'"
   },
   "keywords": [],

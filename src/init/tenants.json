@@ -1,0 +1,7 @@
+[
+    {
+        "name": "Admin tenant",
+        "admin": true,
+        "active": true
+    }
+]

@@ -1,0 +1,28 @@
+[
+    {
+        "name": "Admin",
+        "role": "ADMIN",
+        "permissions": [
+            "createUser",
+            "readUser",
+            "updateUser",
+            "deleteUser"
+        ]
+    },
+    {
+        "name": "Writer",
+        "role": "WRITER",
+        "permissions": [
+            "createUser",
+            "readUser",
+            "updateUser"
+        ]
+    },
+    {
+        "name": "Reader",
+        "role": "READER",
+        "permissions": [
+            "readUser"
+        ]
+    }
+]
