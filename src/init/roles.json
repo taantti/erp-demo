@@ -2,27 +2,75 @@
     {
         "name": "Admin",
         "role": "ADMIN",
-        "permissions": [
-            "createUser",
-            "readUser",
-            "updateUser",
-            "deleteUser"
-        ]
+        "permissions": {
+            "product": [
+                "createProduct",
+                "readProduct",
+                "updateProduct",
+                "deleteProduct"
+            ],
+            "role": [
+                "createRole",
+                "readRole",
+                "updateRole",
+                "deleteRole"
+            ],
+            "tenant": [
+                "createTenant",
+                "readTenant",
+                "updateTenant",
+                "deleteTenant"
+            ],
+            "user": [
+                "createUser",
+                "readUser",
+                "updateUser",
+                "deleteUser"
+            ]
+        }
     },
     {
         "name": "Writer",
         "role": "WRITER",
-        "permissions": [
-            "createUser",
-            "readUser",
-            "updateUser"
-        ]
+        "permissions": {
+            "product": [
+                "createProduct",
+                "readProduct",
+                "updateProduct"
+            ],
+            "role": [
+                "createRole",
+                "readRole",
+                "updateRole"
+            ],
+            "tenant": [
+                "createTenant",
+                "readTenant",
+                "updateTenant"
+            ],
+            "user": [
+                "createUser",
+                "readUser",
+                "updateUser"
+            ]
+        }
     },
     {
         "name": "Reader",
         "role": "READER",
-        "permissions": [
-            "readUser"
-        ]
+        "permissions": {
+            "product": [
+                "readProduct"
+            ],
+            "role": [
+                "readRole"
+            ],
+            "tenant": [
+                "readTenant"
+            ],
+            "user": [
+                "readUser"
+            ]
+        }
     }
 ]

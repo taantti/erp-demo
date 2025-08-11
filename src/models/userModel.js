@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
     email: String,
     role: String,
     active: Boolean,
-    tenant: Number
+    tenant: {type: mongoose.Schema.Types.ObjectId, ref: 'Tenant'},
 });
 const User = mongoose.model('User', userSchema);
 export default User;
