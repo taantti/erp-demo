@@ -4,12 +4,7 @@ import config from './config.js';
 import authMiddleware from './middleware/authMiddleware.js';
 import routes from './routes/index.js';
 import aux from "./utils/auxiliary.js";
-//import dotenv from 'dotenv';
-
-//dotenv.config();
-//const { DATABASE_HOST, DATABASE_PORT, DATABASE_NAME, DATABASE_USERNAME, DATABASE_PASSWORD, PORT} = process.env;
-
-//console.log("DATABASE_HOST", DATABASE_HOST);
+import helmet from "helmet";
 
 aux.cLog("DATABASE_HOST = " + config.DATABASE_HOST);
 aux.cLog("DATABASE_PORT = " + config.DATABASE_PORT);
@@ -19,6 +14,7 @@ aux.cLog("DATABASE_PASSWORD = " + config.DATABASE_PASSWORD);
 aux.cLog("PORT = " + config.PORT);
 
 const app = express();
+app.use(helmet()); // Security middleware.
 app.use(express.json());
 app.use(aux.logRequest); // Todo: Siirra middleware kansioon ja omaan logger.js tiedostoon.
 
