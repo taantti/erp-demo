@@ -1,4 +1,13 @@
 [
+        {
+        "username": "overseer_user",
+        "password": "overseer_user_password",
+        "first_name": "Overseer-Firstname",
+        "last_name": "Overseer-Lastname",
+        "email": "taan.kehitys@gmail.com",
+        "role": "OVERSEER",
+        "active": true
+    },
     {
         "username": "admin_user",
         "password": "admin_user_password",
@@ -13,7 +22,7 @@
         "password": "writer_user_password",
         "first_name": "Writer-Firstname",
         "last_name": "Writer-Lastname",
-        "email": "",
+        "email": "taan.kehitys@gmail.com",
         "role": "WRITER",
         "active": true
     },
@@ -22,7 +31,7 @@
         "password": "reader_user_password",
         "first_name": "Reader-Firstname",
         "last_name": "Reader-Lastname",
-        "email": "",
+        "email": "taan.kehitys@gmail.com",
         "role": "READER",
         "active": true
     }

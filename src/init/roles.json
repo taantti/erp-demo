@@ -1,76 +1,18 @@
 [
     {
+        "name": "Overseer",
+        "role": "OVERSEER"
+    },
+    {
         "name": "Admin",
-        "role": "ADMIN",
-        "permissions": {
-            "product": [
-                "createProduct",
-                "readProduct",
-                "updateProduct",
-                "deleteProduct"
-            ],
-            "role": [
-                "createRole",
-                "readRole",
-                "updateRole",
-                "deleteRole"
-            ],
-            "tenant": [
-                "createTenant",
-                "readTenant",
-                "updateTenant",
-                "deleteTenant"
-            ],
-            "user": [
-                "createUser",
-                "readUser",
-                "updateUser",
-                "deleteUser"
-            ]
-        }
+        "role": "ADMIN"
     },
     {
         "name": "Writer",
-        "role": "WRITER",
-        "permissions": {
-            "product": [
-                "createProduct",
-                "readProduct",
-                "updateProduct"
-            ],
-            "role": [
-                "createRole",
-                "readRole",
-                "updateRole"
-            ],
-            "tenant": [
-                "createTenant",
-                "readTenant",
-                "updateTenant"
-            ],
-            "user": [
-                "createUser",
-                "readUser",
-                "updateUser"
-            ]
-        }
+        "role": "WRITER"
     },
     {
         "name": "Reader",
-        "role": "READER",
-        "permissions": {
-            "product": [
-                "readProduct"
-            ],
-            "role": [
-                "readRole"
-            ],
-            "tenant": [
-                "readTenant"
-            ],
-            "user": [
-                "readUser"
-            ]
-        }
+        "role": "READER"
     }
 ]

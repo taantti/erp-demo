@@ -1,0 +1,90 @@
+{
+    "product": {
+        "createProduct": {
+            "access": false,
+            "adminTenantOnly": false,
+            "immutable": false
+        },
+        "readProduct": {
+            "access": true,
+            "adminTenantOnly": false,
+            "immutable": false
+        },
+        "updateProduct": {
+            "access": false,
+            "adminTenantOnly": false,
+            "immutable": false
+        },
+        "deleteProduct": {
+            "access": false,
+            "adminTenantOnly": false,
+            "immutable": false
+        }
+    },
+    "role": {
+        "createRole": {
+            "access": false,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "readRole": {
+            "access": false,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "updateRole": {
+            "access": false,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "deleteRole": {
+            "access": false,
+            "adminTenantOnly": true,
+            "immutable": true
+        }
+    },
+    "tenant": {
+        "createTenant": {
+            "access": false,
+            "adminTenantOnly": true,
+            "immutable": false
+        },
+        "readTenant": {
+            "access": true,
+            "adminTenantOnly": false,
+            "immutable": false
+        },
+        "updateTenant": {
+            "access": false,
+            "adminTenantOnly": false,
+            "immutable": false
+        },
+        "deleteTenant": {
+            "access": false,
+            "adminTenantOnly": true,
+            "immutable": true
+        }
+    },
+    "user": {
+        "createUser": {
+            "access": false,
+            "adminTenantOnly": false,
+            "immutable": false
+        },
+        "readUser": {
+            "access": true,
+            "adminTenantOnly": false,
+            "immutable": false
+        },
+        "updateUser": {
+            "access": false,
+            "adminTenantOnly": false,
+            "immutable": false
+        },
+        "deleteUser": {
+            "access": false,
+            "adminTenantOnly": false,
+            "immutable": false
+        }
+    }
+}
