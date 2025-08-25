@@ -1,7 +1,9 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import config from './config.js';
-import authMiddleware from './middleware/authMiddleware.js';
+import sanitizationMiddleware  from './middleware/sanitizationMiddleware.js';
+import authenticationMiddleware from './middleware/authenticationMiddleware.js';
+//import authzMiddleware from './middleware/authzMiddleware.js';
 import routes from './routes/index.js';
 import aux from "./utils/auxiliary.js";
 import helmet from "helmet";
@@ -18,17 +20,27 @@ app.use(helmet()); // Security middleware.
 app.use(express.json());
 app.use(aux.logRequest); // Todo: Siirra middleware kansioon ja omaan logger.js tiedostoon.
 
+/* Sanitization middleware */
+app.use(sanitizationMiddleware);
+
 /* Public routes */
 app.use('/login', routes.login);
 
-/* Middlewares */
-app.use(authMiddleware);
+/* Authentication middleware */
+app.use(authenticationMiddleware);
+
+/* Authorization middleware */
+//app.use(authzMiddleware);
 
 /* Protected routes */
 app.use('/user', routes.user);
 app.use('/tenant', routes.tenant);
 app.use('/role', routes.role);
 
+/* TODO: Error handling middleware */
+
+
+/* Connect to MongoDB and start the server */
 mongoose.connect(`mongodb://${config.DATABASE_HOST}:${config.DATABASE_PORT}/${config.DATABASE_NAME}`).then(() => {
     aux.cLog(`Connected to mongodb://${config.DATABASE_HOST}:${config.DATABASE_PORT}/${config.DATABASE_NAME} database`);
 

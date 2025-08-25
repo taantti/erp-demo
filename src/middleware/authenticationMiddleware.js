@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
-import config from './../config.js';
-import { User } from './../models/index.js';
+import config from '../config.js';
+import { User } from '../models/index.js';
 
 const auth = async (req, res, next) => {
     const token = req.headers['authorization'].split(' ')[1]; // Catch token_string from 'Bearer token_string'
