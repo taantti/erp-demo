@@ -9,21 +9,15 @@ const auth = async (req, res, next) => {
 
     try {
         const decodedToken = jwt.verify(token, config.JWT_SECRET_KEY);
-        console.log("authMiddleware.js: --------------------------");
-        console.log("authMiddleware.js: decodedToken.user_id = " + decodedToken.user_id);
-        console.log("authMiddleware.js: --------------------------");
-        console.log("authMiddleware.js: decodedToken.active = " + decodedToken.active);
-
         const user = await User.findById(decodedToken.user_id);
         if (!user || !user.active) return res.status(403).json({ error: 'No active user found.' });
 
         req.user = {
             userId: user._id,
+            username: user.username,
             role: user.role,
-            tenantId: user.tenant_id
+            tenantId: user.tenant
         }
-
-        console.log("authMiddleware.js: req.user = " + req.user);
 
         return next();
     } catch (err) {
