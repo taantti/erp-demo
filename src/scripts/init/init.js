@@ -8,9 +8,9 @@
 import mongoose from 'mongoose';
 import fs from 'fs';
 import bcrypt from "bcrypt";
-import config from './../config.js';
-import aux from "./../utils/auxiliary.js";
-import { User, Tenant, Role } from './../models/index.js';
+import config from '../../config.js';
+import aux from "../../utils/auxiliary.js";
+import { User, Tenant, Role } from '../../models/index.js';
 
 /*
 * Connect to MongoDB database.
@@ -54,13 +54,13 @@ const loadRolePermissions = async (role) => {
     aux.cLog("loadRolePermissions: role = " + role);
     switch (role) {
         case 'OVERSEER':
-            return await loadJsonData(new URL('./overseerPermissions.json', import.meta.url));
+            return await loadJsonData(new URL('./initOverseerPermissions.json', import.meta.url));
         case 'ADMIN':
-            return await loadJsonData(new URL('./adminPermissions.json', import.meta.url));
+            return await loadJsonData(new URL('./initAdminPermissions.json', import.meta.url));
         case 'WRITER':
-            return await loadJsonData(new URL('./writerPermissions.json', import.meta.url));
+            return await loadJsonData(new URL('./initWriterPermissions.json', import.meta.url));
         case 'READER':
-            return await loadJsonData(new URL('./readerPermissions.json', import.meta.url));
+            return await loadJsonData(new URL('./initReaderPermissions.json', import.meta.url));
         default:
             return false;
     };
@@ -197,8 +197,8 @@ if (config.INIT !== true) { // Skip init if not explicitly enabled in .env
     aux.cLog(`connected = ${connected}`);
     if (!connected) process.exit(1); // 1 = error
 
-    await saveRoleData(await loadJsonData(new URL('./roles.json', import.meta.url)));
-    const tenantModel = await saveTenantData(await loadJsonData(new URL('./tenants.json', import.meta.url)));
-    await saveUserData(await loadJsonData(new URL('./users.json', import.meta.url)), tenantModel);
+    await saveRoleData(await loadJsonData(new URL('./initRoles.json', import.meta.url)));
+    const tenantModel = await saveTenantData(await loadJsonData(new URL('./initTenants.json', import.meta.url)));
+    await saveUserData(await loadJsonData(new URL('./initUsers.json', import.meta.url)), tenantModel);
     process.exit(0); // 0 = success
 })();

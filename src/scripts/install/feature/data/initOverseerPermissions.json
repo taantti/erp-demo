@@ -1,0 +1,9 @@
+{
+    "module": {
+        "featureName": {
+            "access": true,
+            "adminTenantOnly": false,
+            "immutable": false
+        }
+    }
+}
