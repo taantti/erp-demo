@@ -10,6 +10,11 @@
             "adminTenantOnly": false,
             "immutable": false
         },
+        "readProducts": {
+            "access": true,
+            "adminTenantOnly": false,
+            "immutable": false
+        },
         "updateProduct": {
             "access": true,
             "adminTenantOnly": false,
@@ -28,6 +33,11 @@
             "immutable": true
         },
         "readRole": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "readRoles": {
             "access": true,
             "adminTenantOnly": true,
             "immutable": true
@@ -54,6 +64,11 @@
             "adminTenantOnly": false,
             "immutable": false
         },
+        "readTenants": {
+            "access": false,
+            "adminTenantOnly": false,
+            "immutable": false
+        },
         "updateTenant": {
             "access": false,
             "adminTenantOnly": false,
@@ -72,6 +87,11 @@
             "immutable": false
         },
         "readUser": {
+            "access": true,
+            "adminTenantOnly": false,
+            "immutable": false
+        },
+        "readUsers": {
             "access": true,
             "adminTenantOnly": false,
             "immutable": false
