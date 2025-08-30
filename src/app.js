@@ -3,7 +3,6 @@ import mongoose from 'mongoose';
 import config from './config.js';
 import sanitizationMiddleware  from './middleware/sanitizationMiddleware.js';
 import authenticationMiddleware from './middleware/authenticationMiddleware.js';
-//import authzMiddleware from './middleware/authzMiddleware.js';
 import routes from './routes/index.js';
 import aux from "./utils/auxiliary.js";
 import helmet from "helmet";
@@ -29,16 +28,12 @@ app.use('/login', routes.login);
 /* Authentication middleware */
 app.use(authenticationMiddleware);
 
-/* Authorization middleware */
-//app.use(authzMiddleware);
-
 /* Protected routes */
 app.use('/user', routes.user);
 app.use('/tenant', routes.tenant);
 app.use('/role', routes.role);
 
 /* TODO: Error handling middleware */
-
 
 /* Connect to MongoDB and start the server */
 mongoose.connect(`mongodb://${config.DATABASE_HOST}:${config.DATABASE_PORT}/${config.DATABASE_NAME}`).then(() => {
@@ -51,5 +46,5 @@ mongoose.connect(`mongodb://${config.DATABASE_HOST}:${config.DATABASE_PORT}/${co
 }).catch((error) => {
     aux.cLog(`Connection to mongodb://${config.DATABASE_HOST}:${config.DATABASE_PORT}/${config.DATABASE_NAME} database failed`);
     aux.cLog(`${error.name}: ${error.message}`);
-    process.exit(1);
+    process.exit(1); // Exit the application if database connection fails. 1 = failure.
 });
