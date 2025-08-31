@@ -1,5 +1,5 @@
 import sanitizeHtml from "sanitize-html";
-import aux from ".//auxiliary.js";
+import { log } from "./logger.js";
 
 /*
 * Sanitize an array of values
@@ -38,6 +38,26 @@ export const sanitizeValue = (value) => {
         }).trim(); // Remove leading/trailing whitespaces
     }
     return value;
+}
+
+/*
+* Validate if a value is a string and within specified length limits
+* @param {String} value - The value to validate.
+* @param {Number} minLength - The minimum length (inclusive).
+* @param {Number} maxLength - The maximum length (inclusive).
+* @returns {Boolean} - True if valid, false otherwise.
+*/
+export const isValidString = (value, minLength, maxLength) => {
+    if (typeof value !== 'string') {
+        log('ERROR', `isValidString(): Value is not a string.`);
+        return false;
+
+    }
+    if (minLength < 0 || maxLength < 0 || minLength > maxLength) {
+        log('ERROR', `isValidString(): Invalid minLength or maxLength values.`);
+        return false;
+    }
+    return value.length >= minLength && value.length <= maxLength;
 }
 
 /*
