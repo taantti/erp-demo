@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import config from './config.js';
 import sanitizationMiddleware  from './middleware/sanitizationMiddleware.js';
 import authenticationMiddleware from './middleware/authenticationMiddleware.js';
+import errorHandler from './middleware/errorMiddleware.js';
 import routes from './routes/index.js';
 import aux from "./utils/auxiliary.js";
 import helmet from "helmet";
@@ -14,9 +15,15 @@ aux.cLog("DATABASE_USERNAME = " + config.DATABASE_USERNAME);
 aux.cLog("DATABASE_PASSWORD = " + config.DATABASE_PASSWORD);
 aux.cLog("PORT = " + config.PORT);
 
+/* Initialize Express app */
 const app = express();
-app.use(helmet()); // Security middleware.
+
+/* Security middleware */
+app.use(helmet()); 
+
+/* Body parser middleware */
 app.use(express.json());
+
 app.use(aux.logRequest); // Todo: Siirra middleware kansioon ja omaan logger.js tiedostoon.
 
 /* Sanitization middleware */
@@ -33,7 +40,8 @@ app.use('/user', routes.user);
 app.use('/tenant', routes.tenant);
 app.use('/role', routes.role);
 
-/* TODO: Error handling middleware */
+/* Error handling middleware */
+app.use(errorHandler);
 
 /* Connect to MongoDB and start the server */
 mongoose.connect(`mongodb://${config.DATABASE_HOST}:${config.DATABASE_PORT}/${config.DATABASE_NAME}`).then(() => {
