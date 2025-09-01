@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
-import { logLevels, log } from  "../utils/logger.js";
-
+import { log } from  "../utils/logger.js";
 export const msgMinLength = 1;
 export const msgMaxLength = 1200;
+const logLevels = ['DEBUG', 'INFO', 'WARN', 'ERROR'];
 
 const LogSchema = new mongoose.Schema({
     level: { type: String, required: true, enum: logLevels, default: 'INFO' },

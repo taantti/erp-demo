@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import config from '../config.js';
 import { Role } from '../models/index.js';
-import aux from "../utils/auxiliary.js";
+import { log } from '../utils/logger.js';
 
 /*
 * Authorization middleware for checking user permissions.
@@ -12,61 +12,61 @@ import aux from "../utils/auxiliary.js";
 const authorize = (module, feature) => {
     return async (req, res, next) => {
 
-        aux.cLog("authorizationMiddleware.js: module = " + module);
-        aux.cLog("authorizationMiddleware.js: feature = " + feature);
-        aux.cLog("authorizationMiddleware.js: req.user.userId = " + req.user.userId);
-        aux.cLog("authorizationMiddleware.js: req.user.role = " + req.user.role);
-        aux.cLog("authorizationMiddleware.js: req.user.tenantId = " + req.user.tenantId);
+        log("INFO", "authorizationMiddleware.js: module = " + module, req);
+        log("INFO", "authorizationMiddleware.js: feature = " + feature, req);
+        log("INFO", "authorizationMiddleware.js: req.user.userId = " + req.user.userId, req);
+        log("INFO", "authorizationMiddleware.js: req.user.role = " + req.user.role, req);
+        log("INFO", "authorizationMiddleware.js: req.user.tenantId = " + req.user.tenantId, req);
 
         if (!module) {
-            aux.cLog(`authorizationMiddleware.js: Missing module.`);
+            log("ERROR", `authorizationMiddleware.js: Missing module.`, req);
             return res.status(500).json({ error:  `Internal Server Error` });
         }
 
         if (!feature) {
-            aux.cLog(`authorizationMiddleware.js: Missing feature.`);
+            log("ERROR", `authorizationMiddleware.js: Missing feature.`, req);
             return res.status(500).json({ error:  `Internal Server Error` });
         }
 
 
         if (!req.user.userId) {
-            aux.cLog(`authorizationMiddleware.js: Missing userId.`);
+            log("ERROR", `authorizationMiddleware.js: Missing userId.`, req);
             return res.status(500).json({ error:  `Internal Server Error` });
         }
 
         if (!req.user.role) {
-            aux.cLog(`authorizationMiddleware.js: Missing role.`);
+            log("ERROR", `authorizationMiddleware.js: Missing role.`, req);
             return res.status(500).json({ error:  `Internal Server Error` });
         }
 
         try {
             const role = await Role.findOne({ role: req.user.role }).lean(); // lean() returns a plain JavaScript object instead of a Mongoose document
             if (!role) {
-                aux.cLog(`authorizationMiddleware.js: No role: ${req.user.role } found.`);
+                log("ERROR", `authorizationMiddleware.js: No role: ${req.user.role } found.`, req);
                 return res.status(403).json({ error: 'Access denied.'});
             }
 
             const modulePermissions = role.rolePermission?.[module];
             if (!modulePermissions) {
-                aux.cLog(`authorizationMiddleware.js: Module ${module} not found in rolePermission.`);
+                log("ERROR", `authorizationMiddleware.js: Module ${module} not found in rolePermission.`, req);
                 return res.status(403).json({ error: 'Access denied.'});
             }
 
             const featurePermissions = modulePermissions?.[feature];
             if (!featurePermissions) {
-                aux.cLog(`authorizationMiddleware.js: Feature '${feature}' not found in module ${module}.`);
+                log("ERROR", `authorizationMiddleware.js: Feature '${feature}' not found in module ${module}.`, req);
                 return res.status(403).json({ error: 'Access denied.'});
             }
 
             if (!featurePermissions.access) {
-                aux.cLog(`authorizationMiddleware.js: Access false. Module: ${module} Feature: ${feature}.`);
+                log("ERROR", `authorizationMiddleware.js: Access false. Module: ${module} Feature: ${feature}.`, req);
                 return res.status(403).json({ error: 'Access denied.' });
             }
 
-            aux.cLog("authorizationMiddleware.js: Access true.");
+            log("INFO", "authorizationMiddleware.js: Access true.", req);
             return next();
         } catch (err) {
-            aux.cLog("authorizationMiddleware.js: error = " + err.message);
+            log("ERROR", "authorizationMiddleware.js: error = " + err.message, req);
             return res.status(500).json({ error:  `Internal Server Error` });
         }
     };

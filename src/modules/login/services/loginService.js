@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken';
 import config from './../../../config.js';
 import { User } from '../../../models/index.js';
-import log from '../../../utils/logger.js';
+import { log } from '../../../utils/logger.js';
 
 
 export const login = async (req, res, next) => {

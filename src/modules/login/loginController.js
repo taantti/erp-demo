@@ -1,5 +1,5 @@
 import loginService from './services/index.js';
-import log from '../../utils/logger.js';
+import { log } from '../../utils/logger.js';
 
 export const login = async (req, res) => {
     log("INFO", "loginService.login(): ");

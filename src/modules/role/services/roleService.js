@@ -1,5 +1,5 @@
 import { Role } from '../../../models/index.js';
-import log from '../../../utils/logger.js';
+import { log } from '../../../utils/logger.js';
 
 export const createRole = async (req, res, next) => {
     log("INFO", "roleService.js: createRole(): ", req);

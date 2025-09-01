@@ -1,6 +1,6 @@
 import { Tenant } from '../../../models/index.js';
 import { User } from '../../../models/index.js';
-import log from '../../../utils/logger.js';
+import { log } from '../../../utils/logger.js';
 
 export const createTenant = async (req, res, next) => {
     log("INFO", "tenantService.js: createTenant(): ", req);

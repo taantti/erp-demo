@@ -1,7 +1,7 @@
 import config from './../../../config.js';
 import bcrypt from "bcrypt";
 import { User } from '../../../models/index.js';
-import log from '../../../utils/logger.js';
+import { log } from '../../../utils/logger.js';
 
 export const createUser = async (req, res, next) => {
     log("INFO", "userService.js: createUser(): ", req);

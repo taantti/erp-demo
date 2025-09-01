@@ -1,19 +1,14 @@
-function cLog(text) {
-    if (!text.length) return;
-    console.log(getCurrentLocalTime() + ": " + text);
-}
 
-function logRequest(req, res, next) {
-    cLog(`${req.method}: ${req.url}`);
-    next();
-}
 
-function getCurrentLocalTime(locale = 'fi-FI') {
+/*
+* Utility functions
+*/
+
+
+
+/*
+* Get the current local time
+*/
+export const getCurrentLocalTime = (locale = 'fi-FI') => {
     return new Date().toLocaleString(locale);
-}
-
-export default {
-    cLog,
-    logRequest,
-    getCurrentLocalTime
 }

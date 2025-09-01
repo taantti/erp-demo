@@ -1,4 +1,26 @@
-import mongoose, { MongooseError } from 'mongoose';
+import { mongoose,  MongooseError } from 'mongoose';
+export const roles = ['OVERSEER', 'ADMIN', 'WRITER', 'READER'];
+
+const newRole = (req, allTenants = false) => {
+
+}
+
+
+const findRole = (req, allTenants = false) => {
+
+}
+
+const findOneRole = (req, allTenants = false) => {
+    
+}
+
+const findRoleByIdAndDelete = (req, allTenants = false) => {
+    
+}
+
+const findRoleById = (req, allTenants = false) => {
+    
+}
 
 const PermissionSchema = new mongoose.Schema({   
     access: { type: Boolean, required: true },
@@ -8,7 +30,7 @@ const PermissionSchema = new mongoose.Schema({
 
 const RoleSchema = new mongoose.Schema({
     name: { type: String, required: true, minlength: 3, maxlength: 30 },
-    role: { type: String, required: true, enum: ['OVERSEER', 'ADMIN', 'WRITER', 'READER'] },
+    role: { type: String, required: true, enum: roles },
     rolePermission: {
         product: { type: Map, of: PermissionSchema },
         role: { type: Map, of: PermissionSchema },
@@ -17,6 +39,6 @@ const RoleSchema = new mongoose.Schema({
     }
 });
 
-const Role = mongoose.model('Role', RoleSchema);
+export const Role = mongoose.model('Role', RoleSchema);
 
-export default Role;
+//export default Role;
