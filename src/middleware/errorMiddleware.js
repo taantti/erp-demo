@@ -1,7 +1,13 @@
 //import { log } from '../utils/logger.js';
 import config from './../config.js';
 
-
+/**
+ * Error handling middleware
+ * @param {Object} err - The error object.
+ * @param {Object} req - The Express request object.
+ * @param {Object} res - The Express response object.
+ * @returns {Object} - The Express response object with error message.
+ */
 const errorHandler = (err, req, res) => {
     //log('ERROR', `${err.stack} | ${req.method} ${req.url}`, req);
     const status = err.statusCode || 500;

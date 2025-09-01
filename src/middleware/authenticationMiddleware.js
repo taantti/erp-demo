@@ -2,6 +2,12 @@ import jwt from 'jsonwebtoken';
 import config from '../config.js';
 import { User } from '../models/index.js';
 
+/*
+* Authentication middleware for verifying JWT tokens.
+* @param {Object} req - The request object.
+* @param {Object} res - The response object.
+* @param {Function} next - The next middleware function.
+*/
 const auth = async (req, res, next) => {
     const token = req.headers['authorization'].split(' ')[1]; // Catch token_string from 'Bearer token_string'
     console.log("authMiddleware.js: token = " + token);

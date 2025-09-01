@@ -40,7 +40,7 @@ const authorize = (module, feature) => {
         }
 
         try {
-            const role = await Role.findOne({ role: req.user.role }).lean();
+            const role = await Role.findOne({ role: req.user.role }).lean(); // lean() returns a plain JavaScript object instead of a Mongoose document
             if (!role) {
                 aux.cLog(`authorizationMiddleware.js: No role: ${req.user.role } found.`);
                 return res.status(403).json({ error: 'Access denied.'});

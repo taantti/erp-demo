@@ -12,20 +12,20 @@ const sanitizeRequest = (req, res, next) => {
         if (!req.body) return res.status(400).json({ error: `Missing ${req.method} request body.` });
     }
 
-    // Body sanitation
+    // Body sanitation. Example: { "name": "John", "age": 30, "address": { "city": "New York" } }
     req.body = sanitizeNestedJson(req.body);
 
     // Authorization header sanitation.
     if (req.headers && req.headers['authorization']) req.headers.authorization = sanitizeValue(req.headers['authorization']);
 
-    // Http query sanitation
+    // Http query sanitation. Example: ?name=John&age=30
     if (req.query) {
         for (const key in req.query) {
            if (typeof req.query[key] === 'string') req.query[key] = sanitizeValue(req.query[key]);
         }
     }
-    
-    // Http params sanitation
+
+    // Http params sanitation. Example: /api/user/:id
     if (req.params) {
         for (const key in req.params) {
             if (typeof req.params[key] === 'string') req.params[key] = sanitizeValue(req.params[key]);
