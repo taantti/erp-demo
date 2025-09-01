@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import { User } from '../../../models/index.js';
 
 
-export const createUser = async (req, res) => {
+export const createUser = async (req, res, next) => {
     console.log("userService.js: createUser(): ");
     const {username, password, first_name: firstName, last_name: lastName, email, role, active} = req.body;
     const saltRounds = config.BCRYPT_SALT_ROUNDS | 10;
@@ -25,41 +25,41 @@ export const createUser = async (req, res) => {
         const user = new User({username, password: hashedPassword, first_name: firstName, last_name: lastName, email, role, active});
         return await user.save();
     } catch (error) {
-        res.status(500).json({ error: error.message});
+        next(error);
     }
 };
 
-export const deleteUser = async (req, res) => {
+export const deleteUser = async (req, res, next) => {
     console.log("userService.js: deleteUser(" + req.params.id + "): ");
     try {
         const { id } = req.params;
         const user = await User.findByIdAndDelete(id);
         return user;
     } catch (error) {
-        res.status(500).json({ error: error.message});
+        next(error);
     }
 };
 
-export const readUser = async (req, res) => {
+export const readUser = async (req, res, next) => {
     console.log("userService.js: readUser(" + req.params.id + "): ");
     try {
         return await User.findById(req.params.id);
     } catch (error) {
-        res.status(500).json({ error: error.message});
+        next(error);
     }
 };
 
-export const readUsers = async (req, res) => {  
+export const readUsers = async (req, res, next) => {
     try {
         const ids = req.params.ids.split(',');
         console.log("userService.js: readUsers(" + ids + "): ");
         return await User.find({ _id: { $in: ids } });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        next(error);
     }
 };
 
-export const updateUser = async (req, res) => {
+export const updateUser = async (req, res, next) => {
     console.log("userService.js: updateUser(" + req.params.id + "): ");
 
         const {username, password, first_name: firstName, last_name: lastName, email, role, active} = req.body;
@@ -87,7 +87,7 @@ export const updateUser = async (req, res) => {
         return user;
 
     } catch (error) {
-        res.status(500).json({ error: error.message});
+        next(error);
     }
 };
 

@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import config from './../../../config.js';
 import { User } from '../../../models/index.js';
 
-export const login = async (req, res) => {
+export const login = async (req, res, next) => {
     console.log("req.body", req.body);
     console.log("loginService.js: login(): ");
     const {username, password} = req.body;
@@ -34,9 +34,8 @@ export const login = async (req, res) => {
 
         return token;
 
-        //res.status(200).json({ token });
     } catch (error) {
-        res.status(500).json({ error: error.message});
+        next(error);
     }
 
 

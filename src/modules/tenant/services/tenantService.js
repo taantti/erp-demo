@@ -1,7 +1,7 @@
 import { Tenant } from '../../../models/index.js';
 import { User } from '../../../models/index.js';
 
-export const createTenant = async (req, res) => {
+export const createTenant = async (req, res, next) => {
     console.log("tenantService.js: createTenant(): ");
     try {
         const {name, admin, first_name, last_name, username, password} = req.body;
@@ -17,21 +17,12 @@ export const createTenant = async (req, res) => {
         console.log("last_name = " + last_name);
         console.log("username = " + username);
         console.log("password = " + password);
-
-
-        //const user = new User({username, password, first_name, last_name, email, "ADMIN", TRUE, tenant['_id']});
-        //if(!user.save()) return false;
-
-        const newTenantAndUser = {};
-
-
-
     } catch (error) {
-        res.status(500).json({ error: error.message});
+        next(error);
     }
 };
 
-export const deleteTenant = async (req, res) => {
+export const deleteTenant = async (req, res, next) => {
     console.log("tenantService.js: deleteTenant(" + req.params.id + "): ");
     try {
         //res.status(501).json({ message: 'Not Implemented yet'});
@@ -39,30 +30,30 @@ export const deleteTenant = async (req, res) => {
         const tenant = await Tenant.findByIdAndDelete(id);
         return tenant;
     } catch (error) {
-        res.status(500).json({ error: error.message});
+        next(error);
     }
 };
 
-export const readTenant = async (req, res) => {
+export const readTenant = async (req, res, next) => {
     console.log("tenantService.js: readTenant(" + req.params.id + "): ");
     try {
         return await Tenant.findById(req.params.id);
     } catch (error) {
-        res.status(500).json({ error: error.message});
+        next(error);
     }
 };
 
-export const readTenants = async (req, res) => {  
+export const readTenants = async (req, res, next) => {
     try {
         const ids = req.params.ids.split(',');
         console.log("tenantService.js: readTenants(" + ids + "): ");
         return await Tenant.find({ _id: { $in: ids } });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        next(error);
     }
 };
 
-export const updateTenant = async (req, res) => {
+export const updateTenant = async (req, res, next) => {
     console.log("tenantService.js: updateTenant(" + req.params.id + "): ");
     try {
          const {name, admin} = req.body;
@@ -81,7 +72,7 @@ export const updateTenant = async (req, res) => {
         return tenant;
 
     } catch (error) {
-        res.status(500).json({ error: error.message});
+        next(error);
     }
 };
 
