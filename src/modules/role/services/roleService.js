@@ -6,9 +6,9 @@ export const createRole = async (req, res) => {
         const {name, level} = req.body;
         const status = TRUE;
         console.log("name = " + name);
-        console.log("level = " + level);
+        console.log("role = " + role);
         const role = new Role({name, level});
-        if(!role.save()) return false;
+        if(!await role.save()) return false;
     } catch (error) {
         res.status(500).json({ error: error.message});
     }
@@ -17,7 +17,7 @@ export const createRole = async (req, res) => {
 export const readRole = async (req, res) => {
     console.log("roleService.js: readRole(" + req.params.id + "): ");
     try {
-        return Role.findById(req.params.id);
+        return await Role.findById(req.params.id);
     } catch (error) {
         res.status(500).json({ error: error.message});
     }
@@ -41,11 +41,11 @@ export const updateRole = async (req, res) => {
         console.log("id = " + id);
        
         console.log("name = " + name);
-        console.log("level = " + level);
+        console.log("role = " + role);
 
         const role = await Role.findByIdAndUpdate(
             id,
-            {name, admin},
+            {role, role},
             { new: true }
         );
 

@@ -11,7 +11,7 @@ export const createTenant = async (req, res) => {
         console.log("status = " + status);
         const tenant = new Tenant({name, admin, status})
         //return tenant.save();
-        if(!tenant.save()) return false;
+        if(!await tenant.save()) return false;
 
         console.log("first_name = " + first_name);
         console.log("last_name = " + last_name);
@@ -46,7 +46,7 @@ export const deleteTenant = async (req, res) => {
 export const readTenant = async (req, res) => {
     console.log("tenantService.js: readTenant(" + req.params.id + "): ");
     try {
-        return Tenant.findById(req.params.id);
+        return await Tenant.findById(req.params.id);
     } catch (error) {
         res.status(500).json({ error: error.message});
     }

@@ -23,7 +23,7 @@ export const createUser = async (req, res) => {
         const hashedPassword = bcrypt.hashSync(password, salt);
 
         const user = new User({username, password: hashedPassword, first_name: firstName, last_name: lastName, email, role, active});
-        return user.save();
+        return await user.save();
     } catch (error) {
         res.status(500).json({ error: error.message});
     }
