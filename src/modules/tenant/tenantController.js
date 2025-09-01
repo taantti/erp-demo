@@ -31,7 +31,7 @@ export const updateTenant = async (req, res) => {
 export const deleteTenant =  (req, res) => {
     const deletedUser = tenantService.deleteTenant(req, res);
     if(!deletedUser) res.status(404).json({error: 'Tenant not found'});
-    res.status(404).json({error: 'Tenant deleted'});
+    res.status(404).send('Tenant deleted');
 };
 
 

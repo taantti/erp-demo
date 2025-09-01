@@ -27,7 +27,7 @@ export const createUser = async (req, res) => {
 };
 
 export const updateUser = async (req, res) => {
-    console.log("userService.readUsers(): ");
+    console.log("userService.updateUser(): ");
     const updatedUser = await userService.updateUser(req, res);
     if(!updatedUser) res.status(404).json({error: 'User not found'});
     res.status(201).json(updatedUser);

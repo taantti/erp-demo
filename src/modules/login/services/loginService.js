@@ -2,24 +2,27 @@ import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken';
 import config from './../../../config.js';
 import { User } from '../../../models/index.js';
+import log from '../../../utils/logger.js';
+
 
 export const login = async (req, res, next) => {
-    console.log("req.body", req.body);
-    console.log("loginService.js: login(): ");
+    log("INFO", "loginService.js: login(): ");
+    log("INFO", "req.body = " + JSON.stringify(req.body));
+ 
     const {username, password} = req.body;
 
     try {
-        console.log("username = " + username);
-        console.log("password = " + password);
+        log("INFO", "username = " + username);
+        log("INFO", "password = " + password);
+        if(!username || !password) return false;
 
         const user = await User.findOne({username: username});
         if(!user) return false;
-        console.log("User exist");
-        console.log("user.username", user.username);
-        console.log("user.password", user.password);
-
-        console.log("config.JWT_SECRET_KEY", config.JWT_SECRET_KEY);
-        console.log("config.JWT_TOKEN_EXPIRATION", config.JWT_TOKEN_EXPIRATION);
+        log("INFO", "User exist");
+        log("INFO", "user.username = " + user.username);
+        log("INFO", "user.password = " + user.password);
+        log("INFO", "config.JWT_SECRET_KEY = " + config.JWT_SECRET_KEY);
+        log("INFO", "config.JWT_TOKEN_EXPIRATION = " + config.JWT_TOKEN_EXPIRATION);
         
 
         //return bcrypt.compareSync(password,  user.password);

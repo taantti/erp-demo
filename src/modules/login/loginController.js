@@ -1,11 +1,12 @@
 import loginService from './services/index.js';
+import log from '../../utils/logger.js';
 
 export const login = async (req, res) => {
-    console.log("loginService.login(): ");
+    log("INFO", "loginService.login(): ");
     const login = await loginService.login(req, res);
-    console.log("loginService.login(): login = " + login);  
-    if(!login) return res.status(404).json({error: 'Wrong username or password'});
-     res.status(200).json({login});
+    log("INFO", "loginService.login(): login = " + login);
+    if (!login) return res.status(404).json({ error: 'Wrong username or password' });
+    res.status(200).json({ login });
 };
 
 

@@ -31,7 +31,7 @@ export const updateRole = async (req, res) => {
 export const deleteRole =  (req, res) => {
     const deletedRole = roleService.deleteRole(req, res);
     if(!deletedRole) res.status(404).json({error: 'Role not found'});
-    res.status(404).json({error: 'Role deleted'});
+    res.status(404).json( 'Role deleted');
 };
 
 

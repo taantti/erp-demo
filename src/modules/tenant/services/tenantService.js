@@ -1,29 +1,30 @@
 import { Tenant } from '../../../models/index.js';
 import { User } from '../../../models/index.js';
+import log from '../../../utils/logger.js';
 
 export const createTenant = async (req, res, next) => {
-    console.log("tenantService.js: createTenant(): ");
+    log("INFO", "tenantService.js: createTenant(): ", req);
     try {
         const {name, admin, first_name, last_name, username, password} = req.body;
         const status = TRUE;
-        console.log("name = " + name);
-        console.log("admin = " + admin);
-        console.log("status = " + status);
+        log("INFO", "name = " + name, req);
+        log("INFO", "admin = " + admin, req);
+        log("INFO", "status = " + status, req);
         const tenant = new Tenant({name, admin, status})
         //return tenant.save();
         if(!await tenant.save()) return false;
 
-        console.log("first_name = " + first_name);
-        console.log("last_name = " + last_name);
-        console.log("username = " + username);
-        console.log("password = " + password);
+        log("INFO", "first_name = " + first_name, req);
+        log("INFO", "last_name = " + last_name, req);
+        log("INFO", "username = " + username, req);
+        log("INFO", "password = " + password, req);
     } catch (error) {
         next(error);
     }
 };
 
 export const deleteTenant = async (req, res, next) => {
-    console.log("tenantService.js: deleteTenant(" + req.params.id + "): ");
+    log("INFO", "tenantService.js: deleteTenant(" + req.params.id + "): ", req);
     try {
         //res.status(501).json({ message: 'Not Implemented yet'});
         const { id } = req.params;
@@ -35,7 +36,7 @@ export const deleteTenant = async (req, res, next) => {
 };
 
 export const readTenant = async (req, res, next) => {
-    console.log("tenantService.js: readTenant(" + req.params.id + "): ");
+    log("INFO", "tenantService.js: readTenant(" + req.params.id + "): ", req);
     try {
         return await Tenant.findById(req.params.id);
     } catch (error) {
@@ -44,9 +45,10 @@ export const readTenant = async (req, res, next) => {
 };
 
 export const readTenants = async (req, res, next) => {
+    log("INFO", "tenantService.js: readTenants(): ", req);
     try {
         const ids = req.params.ids.split(',');
-        console.log("tenantService.js: readTenants(" + ids + "): ");
+        log("INFO", "tenantService.js: readTenants(" + ids + "): ", req);
         return await Tenant.find({ _id: { $in: ids } });
     } catch (error) {
         next(error);
@@ -54,14 +56,14 @@ export const readTenants = async (req, res, next) => {
 };
 
 export const updateTenant = async (req, res, next) => {
-    console.log("tenantService.js: updateTenant(" + req.params.id + "): ");
+    log("INFO", "tenantService.js: updateTenant(" + req.params.id + "): ", req);
     try {
          const {name, admin} = req.body;
         const { id } = req.params;
-        console.log("id = " + id);
-       
-        console.log("name = " + name);
-        console.log("admin = " + admin);
+        log("INFO", "id = " + id, req);
+
+        log("INFO", "name = " + name, req);
+        log("INFO", "admin = " + admin, req);
 
         const tenant = await Tenant.findByIdAndUpdate(
             id,
