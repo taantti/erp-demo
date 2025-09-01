@@ -1,7 +1,7 @@
 [
     {
-        "name": "Admin tenant",
-        "admin": true,
+        "name": "New tenant",
+        "admin": false,
         "active": true
     }
 ]
