@@ -9,7 +9,7 @@ import config from './../config.js';
  * @returns {Object} - The Express response object with error message.
  */
 const errorHandler = (err, req, res) => {
-    //log('ERROR', `${err.stack} | ${req.method} ${req.url}`, req);
+    log('ERROR', `${err.stack} | ${req.method} ${req.url}`, false, req);
     const status = err.statusCode || 500;
     const isDevelopment = config.NODE_ENV === 'development';
     return res.status(status).json({ error: isDevelopment ? err.stack : 'Internal Server Error' });

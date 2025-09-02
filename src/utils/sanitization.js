@@ -49,12 +49,12 @@ export const sanitizeValue = (value) => {
 */
 export const isValidString = (value, minLength, maxLength) => {
     if (typeof value !== 'string') {
-        log('ERROR', `isValidString(): Value is not a string.`);
+        log('ERROR', `isValidString(): Value is not a string.`, true);
         return false;
 
     }
     if (minLength < 0 || maxLength < 0 || minLength > maxLength) {
-        log('ERROR', `isValidString(): Invalid minLength or maxLength values.`);
+        log('ERROR', `isValidString(): Invalid minLength or maxLength values.`, true);
         return false;
     }
     return value.length >= minLength && value.length <= maxLength;

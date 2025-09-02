@@ -21,10 +21,10 @@ const getTenant = (req) => {
  * @param {String} msg - The message to log.
  * @param {String|null} tenantId - The tenant ID (optional).
  */
-const writeLog = (logLevel, msg, tenantId) => {
+const writeLog = (logLevel, msg, consoleOnly = false, tenantId) => {
     if (!logLevel) return;
     consoleLog(logLevel, msg);
-    databaseLog(logLevel, msg, tenantId);
+    if (!consoleOnly) databaseLog(logLevel, msg, tenantId);
 }
 
 /*
@@ -59,9 +59,16 @@ const databaseLog = async (logLevel, msg, tenantId = null) => {
  */
 const getLogLevelIndex = () => logLevels.indexOf(logLevel);
 
-export const log = (level, msg, req = null) => {
+/*
+ * Log a message if the log level is sufficient
+ * @param {String} level - The log level of the message ('DEBUG', 'INFO', 'WARN', 'ERROR').
+ * @param {String} msg - The message to log.
+ * @param {Boolean} consoleOnly - If true, log only to console, not to database.
+ * @param {Object|null} req - The request object (optional).
+ */
+export const log = (level, msg, consoleOnly = false, req = null) => {
     if (logLevels.indexOf(level) < getLogLevelIndex()) return;
-    writeLog(level, msg, getTenant(req));
+    writeLog(level, msg, consoleOnly, getTenant(req));
 }
 
 

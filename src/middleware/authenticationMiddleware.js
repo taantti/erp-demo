@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import config from '../config.js';
 import { User } from '../models/index.js';
+import { log } from '../utils/logger.js';
 
 /*
 * Authentication middleware for verifying JWT tokens.
@@ -10,7 +11,7 @@ import { User } from '../models/index.js';
 */
 const auth = async (req, res, next) => {
     const token = req.headers['authorization'].split(' ')[1]; // Catch token_string from 'Bearer token_string'
-    console.log("authMiddleware.js: token = " + token);
+    log("INFO", "authMiddleware.js: token = " + token, true);
     if (!token) return res.status(401).json({ error: 'No token.' });
 
     try {

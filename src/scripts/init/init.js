@@ -9,22 +9,22 @@ import mongoose from 'mongoose';
 import fs from 'fs';
 import bcrypt from "bcrypt";
 import config from '../../config.js';
-import aux from "../../utils/auxiliary.js";
 import { User, Tenant, Role } from '../../models/index.js';
+import { log } from '../../utils/logger.js';
 
 /*
 * Connect to MongoDB database.
 * @returns {Boolean} - Returns true if connection was successful, otherwise false.
 */
 const connectMongoose = async () => {
-    aux.cLog("connectMongoose(): ");
+    log("INFO", "connectMongoose(): ", true);
     try {
         await mongoose.connect(`mongodb://${config.DATABASE_HOST}:${config.DATABASE_PORT}/${config.DATABASE_NAME}`);
-        aux.cLog(`Connected to mongodb://${config.DATABASE_HOST}:${config.DATABASE_PORT}/${config.DATABASE_NAME} database`);
+        log(`Connected to mongodb://${config.DATABASE_HOST}:${config.DATABASE_PORT}/${config.DATABASE_NAME} database`, true);
         return true;
     } catch (error) {
-        aux.cLog(`Connection to mongodb://${config.DATABASE_HOST}:${config.DATABASE_PORT}/${config.DATABASE_NAME} database failed`);
-        aux.cLog(`${error.name}: ${error.message}`);
+        log(`Connection to mongodb://${config.DATABASE_HOST}:${config.DATABASE_PORT}/${config.DATABASE_NAME} database failed`, true);
+        log(`${error.name}: ${error.message}`, true);
         return false;
     }
 }
@@ -35,12 +35,12 @@ const connectMongoose = async () => {
 * @returns {Object|Boolean} - Returns the parsed JSON object if successful, otherwise false
 */
 const loadJsonData = async (filePath) => {
-    aux.cLog("loadJsonData: filePath = " + filePath);
+    log("INFO", "loadJsonData: filePath = " + filePath, true);
 
     try {
         return JSON.parse(await fs.promises.readFile(filePath));
     } catch (error) {
-        aux.cLog("saveTenantData(): Error reading file " + filePath + ". Error: " + error);
+        log("saveTenantData(): Error reading file " + filePath + ". Error: " + error, true);
         return false;
     }
 }
@@ -51,7 +51,7 @@ const loadJsonData = async (filePath) => {
 * @returns {Object|Boolean} - Returns the role permissions object if successful, otherwise false.
 */
 const loadRolePermissions = async (role) => {
-    aux.cLog("loadRolePermissions: role = " + role);
+    log("INFO", "loadRolePermissions: role = " + role, true);
     switch (role) {
         case 'OVERSEER':
             return await loadJsonData(new URL('./initOverseerPermissions.json', import.meta.url));
@@ -72,36 +72,36 @@ const loadRolePermissions = async (role) => {
 * @returns {Boolean} - Returns true if saving was successful, otherwise false.
 */
 const saveRoleData = async (roles) => {
-    aux.cLog("saveRoleData: roles = " + roles);
+    log("INFO", "saveRoleData: roles = " + roles, true);
     if (!Array.isArray(roles)) return false;
-    //aux.cLog("saveRoleData: roles = " + JSON.stringify(roles, null, 2));
+
 
     for (const roleData of roles) {
 
         const { name, role } = roleData;
 
-        aux.cLog("saveRoleData: name = " + name);
-        aux.cLog("saveRoleData: role = " + role);
+        log("INFO", "saveRoleData: name = " + name, true);
+        log("INFO", "saveRoleData: role = " + role, true);
 
         const rolePermissions = await loadRolePermissions(role);
 
         if (!rolePermissions) {
-            aux.cLog("saveRoleData(): Error loading role permissions for role " + role);
+            log("ERROR", "saveRoleData(): Error loading role permissions for role " + role, true);
             return false;
         }
 
-        //aux.cLog("saveRoleData: rolePermissions = " + JSON.stringify(rolePermissions, null, 2));
+        //log("INFO", "saveRoleData: rolePermissions = " + JSON.stringify(rolePermissions, null, 2), true);
 
 
         for (const [feature, featureObj] of Object.entries(rolePermissions)) {
-            aux.cLog(`Feature: ${feature}`);
+            log("INFO", `Feature: ${feature}`, true);
             for (const [permissionName, permissionDetails] of Object.entries(featureObj)) {
-                //aux.cLog(`  Permission: ${permissionName}, Details: ${JSON.stringify(permissionDetails)}`);
+                //log("INFO", `  Permission: ${permissionName}, Details: ${JSON.stringify(permissionDetails)}`, true);
                 /*
-                aux.cLog(`Permission: ${permissionName}:`);
-                aux.cLog(`  access: ${permissionDetails.access}`);
-                aux.cLog(`  adminTenantOnly: ${permissionDetails.adminTenantOnly}`);
-                aux.cLog(`  immutable: ${permissionDetails.immutable}`);
+                log("INFO", `Permission: ${permissionName}:`, true);
+                log("INFO", `  access: ${permissionDetails.access}`, true);
+                log("INFO", `  adminTenantOnly: ${permissionDetails.adminTenantOnly}`, true);
+                log("INFO", `  immutable: ${permissionDetails.immutable}`, true);
                 */
             }
         }
@@ -122,7 +122,7 @@ const saveRoleData = async (roles) => {
             const roleModel = new Role({ name: name, role: role, rolePermission: rolePermissions });
             if (!roleModel.save()) return false;
         } catch (error) {
-            aux.cLog("saveRoleData(): error " + error.message);
+            log("ERROR", "saveRoleData(): error " + error.message, true);
             return false;
         }
 
@@ -137,21 +137,21 @@ const saveRoleData = async (roles) => {
 @returns {Object|Boolean} - Returns the saved tenant model if successful, otherwise false.
 */
 const saveTenantData = async (tenants) => {
-    aux.cLog("saveTenantData(): tenant = " + JSON.stringify(tenants));
+    log("INFO", "saveTenantData(): tenant = " + JSON.stringify(tenants), true);
 
     for (const tenantData of tenants) {
         const { name, admin, active } = tenantData;
 
-        aux.cLog("saveTenantData(): tenant name = " + name);
-        aux.cLog("saveTenantData(): tenant admin = " + admin);
-        aux.cLog("saveTenantData(): tenant active = " + active);
+        log("INFO", "saveTenantData(): tenant name = " + name, true);
+        log("INFO", "saveTenantData(): tenant admin = " + admin, true);
+        log("INFO", "saveTenantData(): tenant active = " + active, true);
 
         try {
             const tenantModel = new Tenant({ name, admin, active });
             if (!tenantModel.save()) return false;
             return tenantModel;
         } catch (error) {
-            aux.cLog("saveTenantData(): error " + error.message);
+            log("ERROR", "saveTenantData(): error " + error.message, true);
             return false;
         }
     }
@@ -165,7 +165,7 @@ const saveTenantData = async (tenants) => {
 */
 const saveUserData = async (users, tenantModel) => {
 
-    aux.cLog("saveUserData(): tenant = " + JSON.stringify(users));
+    log("INFO", "saveUserData(): tenant = " + JSON.stringify(users), true);
 
 
     for (const userData of users) {
@@ -179,7 +179,7 @@ const saveUserData = async (users, tenantModel) => {
             const userModel = new User({ username, password: hashedPassword, first_name, last_name, email, role, active, tenant });
             if (!await userModel.save()) return false;
         } catch (error) {
-            aux.cLog("saveUserData(): error " + error.message);
+            log("ERROR", "saveUserData(): error " + error.message, true);
             return false;
         }
     }
@@ -188,13 +188,13 @@ const saveUserData = async (users, tenantModel) => {
 }
 
 if (config.INIT !== true) { // Skip init if not explicitly enabled in .env
-    aux.cLog("Skip init. Use .env:  INIT = TRUE to continue.");
+    log("INFO", "Skip init. Use .env:  INIT = TRUE to continue.", true);
     process.exit(1);
 }
 
 (async () => {
     const connected = await connectMongoose();
-    aux.cLog(`connected = ${connected}`);
+    log("INFO", `connected = ${connected}`, true);
     if (!connected) process.exit(1); // 1 = error
 
     await saveRoleData(await loadJsonData(new URL('./initRoles.json', import.meta.url)));

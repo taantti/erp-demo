@@ -9,12 +9,12 @@ import routes from './routes/index.js';
 import { log } from './utils/logger.js';
 import helmet from "helmet";
 
-log("INFO", "DATABASE_HOST = " + config.DATABASE_HOST);
-log("INFO", "DATABASE_PORT = " + config.DATABASE_PORT);
-log("INFO", "DATABASE_NAME = " + config.DATABASE_NAME);
-log("INFO", "DATABASE_USERNAME = " + config.DATABASE_USERNAME);
-log("INFO", "DATABASE_PASSWORD = " + config.DATABASE_PASSWORD);
-log("INFO", "PORT = " + config.PORT);
+log("INFO", "DATABASE_HOST = " + config.DATABASE_HOST, true);
+log("INFO", "DATABASE_PORT = " + config.DATABASE_PORT, true);
+log("INFO", "DATABASE_NAME = " + config.DATABASE_NAME, true);
+log("INFO", "DATABASE_USERNAME = " + config.DATABASE_USERNAME, true);
+log("INFO", "DATABASE_PASSWORD = " + config.DATABASE_PASSWORD, true);
+log("INFO", "PORT = " + config.PORT, true);
 
 /* Initialize Express app */
 const app = express();
@@ -44,14 +44,14 @@ app.use(errorHandler);
 
 /* Connect to MongoDB and start the server */
 mongoose.connect(`mongodb://${config.DATABASE_HOST}:${config.DATABASE_PORT}/${config.DATABASE_NAME}`).then(() => {
-    log("INFO", `Connected to mongodb://${config.DATABASE_HOST}:${config.DATABASE_PORT}/${config.DATABASE_NAME} database`);
+    log("INFO", `Connected to mongodb://${config.DATABASE_HOST}:${config.DATABASE_PORT}/${config.DATABASE_NAME} database`, true);
 
     app.listen(config.PORT, () => {
-        log("INFO", `Server running on port ${config.PORT}`);
+        log("INFO", `Server running on port ${config.PORT}`, true);
     });
 
 }).catch((error) => {
-    log("ERROR", `Connection to mongodb://${config.DATABASE_HOST}:${config.DATABASE_PORT}/${config.DATABASE_NAME} database failed`, req);
-    log("ERROR", `${error.name}: ${error.message}`, req);
+    log("ERROR", `Connection to mongodb://${config.DATABASE_HOST}:${config.DATABASE_PORT}/${config.DATABASE_NAME} database failed`, true);
+    log("ERROR", `${error.name}: ${error.message}`, true);
     process.exit(1); // Exit the application if database connection fails. 1 = failure.
 });

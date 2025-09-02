@@ -1,5 +1,14 @@
 import mongoose from 'mongoose';
 import { roles } from  "./roleModel.js";
+import { log } from  "../utils/logger.js";
+
+const checkAdmin = (req) => {
+    if(!req?.user?.tenant?.admin) {
+        log("ERROR", `userModel.js: checkAdmin: User is not an admin.`, true, req);
+        return false;
+    }
+    return true;
+}
 
 const newUser = (req, allTenants = false, lean = true) => {
 
@@ -7,12 +16,12 @@ const newUser = (req, allTenants = false, lean = true) => {
     // Mihin fileen nämä alla olevat tarkistukset? modelService.js?
 
     if(!allTenants && !req?.user?.tenant) {
-        aux.cLog(`userModel.js: newUser: ${allTenants }, req.tenant.admin: ${req?.user?.tenant}.`);
+        log("ERROR", `userModel.js: newUser: ${allTenants }, req.tenant.admin: ${req?.user?.tenant}.`, true, req);
         return false;
     }
 
     if(allTenants && !req?.tenant?.admin) {
-        aux.cLog(`userModel.js: newUser: ${allTenants }, req.tenant.admin: ${req?.tenant?.admin}.`);
+        log("ERROR", `userModel.js: newUser: ${allTenants }, req.tenant.admin: ${req?.tenant?.admin}.`, true, req);
         return false;
     }
 
@@ -31,7 +40,6 @@ const findOneUser = (req, allTenants = false, lean = true) => {
 const findOneUserAndUpdate = (req, allTenants = false, lean = true) => {
     
 }
-
 const findUserByIdAndDelete = (req, allTenants = true) => {
     
 }

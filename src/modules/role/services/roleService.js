@@ -2,12 +2,12 @@ import { Role } from '../../../models/index.js';
 import { log } from '../../../utils/logger.js';
 
 export const createRole = async (req, res, next) => {
-    log("INFO", "roleService.js: createRole(): ", req);
+    log("INFO", "roleService.js: createRole(): ", true, req);
     try {
         const {name, level} = req.body
         const status = TRUE;
-        log("INFO", "name = " + name, req);
-        log("INFO", "level = " + level, req);
+        log("INFO", "name = " + name, true, req);
+        log("INFO", "level = " + level, true, req);
         const role = new Role({name, level});
         if(!await role.save()) return false;
     } catch (error) {
@@ -16,7 +16,7 @@ export const createRole = async (req, res, next) => {
 };
 
 export const readRole = async (req, res, next) => {
-    log("INFO", "roleService.js: readRole(" + req.params.id + "): ", req);
+    log("INFO", "roleService.js: readRole(" + req.params.id + "): ", true, req);
     try {
         return await Role.findById(req.params.id);
     } catch (error) {
@@ -25,10 +25,10 @@ export const readRole = async (req, res, next) => {
 };
 
 export const readRoles = async (req, res, next) => {
-    log("INFO", "roleService.js: readRoles(): ", req);
+    log("INFO", "roleService.js: readRoles(): ", true, req);
     try {
         const ids = req.params.ids.split(',');
-        log("INFO", "roleService.js: readRoles(" + ids + "): ", req);
+        log("INFO", "roleService.js: readRoles(" + ids + "): ", true, req);
         return await Role.find({ _id: { $in: ids } });
     } catch (error) {
         next(error);
@@ -36,14 +36,14 @@ export const readRoles = async (req, res, next) => {
 };
 
 export const updateRole = async (req, res, next) => {
-    log("INFO", "roleService.js: updateRole(" + req.params.id + "): ", req);
+    log("INFO", "roleService.js: updateRole(" + req.params.id + "): ", true, req);
     try {
          const {name, admin} = req.body;
         const { id } = req.params;
-        log("INFO", "id = " + id);
+        log("INFO", "id = " + id, true, req);
 
-        log("INFO", "name = " + name);
-        log("INFO", "role = " + role);
+        log("INFO", "name = " + name, true, req);
+        log("INFO", "role = " + role, true, req);
 
         const role = await Role.findByIdAndUpdate(
             id,
@@ -60,7 +60,7 @@ export const updateRole = async (req, res, next) => {
 
 
 export const deleteRole = async (req, res, next) => {
-    log("INFO", "roleService.js: deleteRole(" + req.params.id + "): ", req);
+    log("INFO", "roleService.js: deleteRole(" + req.params.id + "): ", true, req);
     try {
         const { id } = req.params;
         const role = await Role.findByIdAndDelete(id);
