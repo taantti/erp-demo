@@ -7,7 +7,13 @@ export const getCurrentLocalTime = (locale = 'fi-FI') => {
 }
 
 /*
-* Get the relative path from a meta URL
+* Get the relative path of a module from its import.meta.url
 * @param {String} metaUrl - The import.meta.url of the module.
 */
-export const getRelativePath = (metaUrl) => new URL(metaUrl).pathname;
+import path from "path";
+import { fileURLToPath } from "url";
+
+export const getRelativePath = (metaUrl) => {
+    const absPath = fileURLToPath(metaUrl);
+    return path.relative(process.cwd(), absPath);
+};
