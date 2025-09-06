@@ -2,6 +2,18 @@ import sanitizeHtml from "sanitize-html";
 import { log } from "./logger.js";
 
 /*
+* Sanitize an object's fields by removing specified protected fields
+* @param {Object} obj - The object to sanitize.
+* @param {Array} protectedFields - The fields to remove from the object.
+* @returns {Object} - The sanitized object.
+*/
+export const sanitizeObjectFields = (obj, protectedFields = []) => {
+    const sanitized = { ...obj }; // Shallow copy. Only first-level properties are copied.
+    protectedFields.forEach(field => delete sanitized[field]); // Remove each protected field.
+    return sanitized;
+};
+
+/*
 * Sanitize an array of values
 * @param {Array} arr - The array to sanitize.
 * @returns {Array} - The sanitized array.
