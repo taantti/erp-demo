@@ -23,7 +23,9 @@ const auth = async (req, res, next) => {
             userId: user._id,
             username: user.username,
             role: user.role,
-            tenantId: user.tenant
+            tenantId: user.tenant.toString()
+            
+            // TODO: tenantin admin tieto. Ehkä koko tenant objekti.
         }
 
         return next();

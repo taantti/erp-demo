@@ -1,5 +1,6 @@
 //import { log } from '../utils/logger.js';
 import config from './../config.js';
+import { log } from '../utils/logger.js';
 
 /**
  * Error handling middleware
@@ -8,7 +9,7 @@ import config from './../config.js';
  * @param {Object} res - The Express response object.
  * @returns {Object} - The Express response object with error message.
  */
-const errorHandler = (err, req, res) => {
+const errorHandler = (err, req, res, next) => {
     log('ERROR', `${err.stack} | ${req.method} ${req.url}`, false, req);
     const status = err.statusCode || 500;
     const isDevelopment = config.NODE_ENV === 'development';
