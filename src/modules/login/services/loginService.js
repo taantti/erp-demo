@@ -7,48 +7,27 @@ import { log } from '../../../utils/logger.js';
 
 export const login = async (req, res, next) => {
     log("INFO", "loginService.js: login(): ", true, req);
-    log("INFO", "req.body = " + JSON.stringify(req.body), true, req);
-
-    const {username, password} = req.body;
+    const { username, password } = req.body;
 
     try {
-        log("INFO", "username = " + username, true, req);
-        log("INFO", "password = " + password, true, req);
-        if(!username || !password) return false;
+        if (!username || !password) return next(Object.assign(new Error(`Invalid credentials`), { statusCode: 401 }));
+        const user = await User.findOne({ username: username });
+        if (!user) return next(Object.assign(new Error(`Invalid credentials`), { statusCode: 401 }));
 
-        const user = await User.findOne({username: username});
-        if(!user) return false;
-        log("INFO", "User exist", true, req);
-        log("INFO", "user.username = " + user.username, true, req);
-        log("INFO", "user.password = " + user.password, true, req);
-        log("INFO", "config.JWT_SECRET_KEY = " + config.JWT_SECRET_KEY, true, req);
-        log("INFO", "config.JWT_TOKEN_EXPIRATION = " + config.JWT_TOKEN_EXPIRATION, true, req);
+        if (!bcrypt.compareSync(password, user.password)) {
+            return next(Object.assign(new Error(`Invalid credentials`), { statusCode: 401 }));
+        }
 
+        if (!user.active) return next(Object.assign(new Error('User is not active.'), { statusCode: 403 }));
+        if (!user.role) return next(Object.assign(new Error('User has no role.'), { statusCode: 403 }));
 
-        //return bcrypt.compareSync(password,  user.password);
-        if(!bcrypt.compareSync(password,  user.password)) return false;
         const payload = {
             user_id: user._id
+            // TODO: User role and permissions
         }
-        //const token = jwt.sign({user_id: user._id}, config.JWT_SECRET_KEY, {
-        const token = jwt.sign(payload, config.JWT_SECRET_KEY, {
-           expiresIn:  config.JWT_TOKEN_EXPIRATION
-        });
 
-        return token;
-
+        return jwt.sign(payload, config.JWT_SECRET_KEY, { expiresIn: config.JWT_TOKEN_EXPIRATION });
     } catch (error) {
-        next(error);
+        return next(error);
     }
-
-
-
-
-
-
-
-
-
-
-
 };
