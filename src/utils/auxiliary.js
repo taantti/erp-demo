@@ -1,12 +1,12 @@
-/*
-* Get the current local time.
-* @param {String} locale - The locale string for formatting (default is 'fi-FI').
-*/
+/**
+ * Get the current local time.
+ * @param {String} locale - The locale string for formatting (default is 'fi-FI').
+ */
 export const getCurrentLocalTime = (locale = 'fi-FI') => {
     return new Date().toLocaleString(locale);
 }
 
-/*
+/**
 * Get the relative path of a module from its import.meta.url
 * @param {String} metaUrl - The import.meta.url of the module.
 */
@@ -17,3 +17,13 @@ export const getRelativePath = (metaUrl) => {
     const absPath = fileURLToPath(metaUrl);
     return path.relative(process.cwd(), absPath);
 };
+
+/**
+ * Convert a string or value to boolean.
+ * Accepts 'true' (string) as true, otherwise false.
+ * @param {any} value - The value to convert.
+ * @returns {boolean}
+ */
+export function convertToBoolean(value) {
+    return value === true || value === 'true';
+}

@@ -4,7 +4,7 @@ import { getRelativePath } from './auxiliary.js';
 
 const relativePath = getRelativePath(import.meta.url);
 
-/*
+/**
 * Sanitize an object's fields by removing specified protected fields
 * @param {Object} obj - The object to sanitize.
 * @param {Array} protectedFields - The fields to remove from the object.
@@ -16,7 +16,7 @@ export const sanitizeObjectFields = (obj, protectedFields = []) => {
     return sanitized;
 };
 
-/*
+/**
 * Sanitize an array of values
 * @param {Array} arr - The array to sanitize.
 * @returns {Array} - The sanitized array.
@@ -25,7 +25,7 @@ export const sanitizeArray = (arr) => {
     return arr.map(item => sanitizeValue(item));
 }
 
-/*
+/**
 * Sanitize an object with key-value pairs
 * @param {Object} obj - The object to sanitize.
 * @returns {Object} - The sanitized object.
@@ -40,7 +40,7 @@ export const sanitizeObject = (obj) => {
     return sanitizedObj;
 }
 
-/* 
+/**
 * Sanitize a single value
 * @param {String} value - The value to sanitize.
 * @returns {String} - The sanitized value.
@@ -57,6 +57,13 @@ export const sanitizeValue = (value) => {
     return value;
 }
 
+/**
+* Validate if a value is a number and within specified limits
+* @param {Number} value - The value to validate.
+* @param {Number|null} min - The minimum value (inclusive). Null means no minimum.
+* @param {Number|null} max - The maximum value (inclusive). Null means no maximum.
+* @returns {Boolean} - True if valid, false otherwise.
+*/
 export const isValidNumber = (value, min = null, max = null) => {
     if (typeof value !== 'number' || !Number.isFinite(value)) {
         log('WARN', `${relativePath}: isValidNumber(): Value is not a valid number.`, true);
@@ -73,7 +80,7 @@ export const isValidNumber = (value, min = null, max = null) => {
     return true;
 }
 
-/*
+/**
 * Validate if a value is a string and within specified length limits
 * @param {String} value - The value to validate.
 * @param {Number} minLength - The minimum length (inclusive).
@@ -93,7 +100,7 @@ export const isValidString = (value, minLength, maxLength) => {
     return value.length >= minLength && value.length <= maxLength;
 }
 
-/*
+/**
 * Recursively sanitize nested JSON structures (objects and arrays)
 * @param {Object|Array} data - The JSON data to sanitize.
 * @returns {Object|Array} - The sanitized JSON data.
