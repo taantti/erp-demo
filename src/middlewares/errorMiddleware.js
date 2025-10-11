@@ -1,5 +1,4 @@
-//import { log } from '../utils/logger.js';
-import config from './../config.js';
+import config from '../config.js';
 import { log } from '../utils/logger.js';
 
 /**
@@ -13,7 +12,14 @@ const errorHandler = (err, req, res, next) => {
     log('ERROR', `${err.stack} | ${req.method} ${req.url}`, false, req);
     const status = err.statusCode || 500;
     const isDevelopment = config.NODE_ENV === 'development';
-    return res.status(status).json({ error: isDevelopment ? err.stack : 'Internal Server Error' });
+
+    const response = {
+        error: isDevelopment ? err.message + err.stack : err.message || 'Internal Server Error'
+    };
+    if (err.validationErrors) {
+        response.errors = err.validationErrors;
+    }
+    return res.status(status).json(response);
 }
 
 export default errorHandler;

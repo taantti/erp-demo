@@ -69,12 +69,61 @@ export const isValidNumber = (value, min = null, max = null) => {
         log('WARN', `${relativePath}: isValidNumber(): Value is not a valid number.`, true);
         return false;
     }
-    if (min !== null && value < min) {
-        log('WARN', `${relativePath}: isValidNumber(): Value is less than minimum (${min}).`, true);
+
+    if (!isValidMinValue(value, min)) return false;
+    if (!isValidMaxValue(value, max)) return false; 
+    return true;
+}
+
+/**
+ * Check if a value is less than or equal to a maximum value.
+ * @param {Number} value - The value to check.
+ * @param {Number} max - The maximum value.
+ * @returns {Boolean} - True if valid, false otherwise.
+ */
+export const isValidMaxValue = (value, max) => {
+    if (max !== null && value > max) {
+        log('WARN', `${relativePath}: isValidMaxValue(): Value is greater than maximum (${max}).`, true);
         return false;
     }
-    if (max !== null && value > max) {
-        log('WARN', `${relativePath}: isValidNumber(): Value is greater than maximum (${max}).`, true);
+    return true;
+}
+
+/** Check if a value is greater than or equal to a minimum value.
+ * @param {Number} value - The value to check.
+ * @param {Number} min - The minimum value.
+ * @returns {Boolean} - True if valid, false otherwise.
+ */
+export const isValidMinValue = (value, min) => {
+    if (min !== null && value < min) {
+        log('WARN', `${relativePath}: isValidMinValue(): Value is less than minimum (${min}).`, true);
+        return false;
+    }
+    return true;
+}
+
+/**
+ * Check if a value is less than or equal to a maximum length.
+ * @param {String} value - The value to check.
+ * @param {Number} max - The maximum length.
+ * @returns {Boolean} - True if valid, false otherwise.
+ */
+export const isValidMaxLength = (value, max = null) => {
+    if (max !== null && value.length > max) {
+        log('WARN', `${relativePath}: isValidMaxLength(): Value is greater than maximum (${max}).`, true);
+        return false;
+    }
+    return true;
+}
+
+/** Check if a value is greater than or equal to a minimum length.
+ * @param {String} value - The value to check.
+ * @param {Number} min - The minimum length.
+ * @returns {Boolean} - True if valid, false otherwise.
+ */
+export const isValidMinLength = (value, min = null) => {
+    if (min !== null && value.length < min) {
+        log('WARN', `${relativePath}: isValidMinLength(): Value is less than minimum (${min}).`, true);
         return false;
     }
     return true;
