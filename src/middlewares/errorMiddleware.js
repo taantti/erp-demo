@@ -9,12 +9,13 @@ import { log } from '../utils/logger.js';
  * @returns {Object} - The Express response object with error message.
  */
 const errorHandler = (err, req, res, next) => {
-    log('ERROR', `${err.stack} | ${req.method} ${req.url}`, false, req);
+    const logId = log('ERROR', `${err.stack} | ${req.method} ${req.url}`, false, req);
     const status = err.statusCode || 500;
     const isDevelopment = config.NODE_ENV === 'development';
 
     const response = {
-        error: isDevelopment ? err.message + err.stack : err.message || 'Internal Server Error'
+        error: isDevelopment ? err.message + err.stack : err.message || 'Internal Server Error',
+        logId: logId
     };
     if (err.validationErrors) {
         response.errors = err.validationErrors;
