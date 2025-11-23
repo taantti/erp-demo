@@ -1,15 +1,15 @@
 import express from 'express';
 const router = express.Router();
-import { readUsers, createUser, readUser, updateUser, deleteUser, readUserReport } from '../modules/user/userController.js';
-import authorizationMiddleware from '../middleware/authorizationMiddleware.js';
+import { readUsers, createUser, readUser, updateUserPassword, updateUser, deleteUser } from '../modules/user/userController.js';
+import authorizationMiddleware from '../middlewares/authorizationMiddleware.js';
 
-router.get('/report/:id', authorizationMiddleware('user', 'readUserReport'), readUserReport);
-
-router.get('/search/:ids', authorizationMiddleware('user', 'readUsers'), readUsers);
-//router.get('/search/:ids', authorizationMiddleware('user', 'readUser'), readUsers);
+//router.get('/search', authorizationMiddleware('user', 'readUsers'), readUsers);
+router.get('/search', authorizationMiddleware('user', 'readUser'), readUsers);
 
 router.get('/:id', authorizationMiddleware('user', 'readUser'), readUser);
 router.post('/', authorizationMiddleware('user', 'createUser'), createUser);
+//router.post('/:id/reset-password', authorizationMiddleware('user', 'resetUserPassword'), resetUserPassword);
+router.put('/:id/updata-password', authorizationMiddleware('user', 'updateUserPassword'), updateUserPassword);
 router.put('/:id', authorizationMiddleware('user', 'updateUser'), updateUser);
 router.delete('/:id', authorizationMiddleware('user', 'deleteUser'), deleteUser);
 
