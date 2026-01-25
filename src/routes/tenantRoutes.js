@@ -1,7 +1,7 @@
 import express from 'express';
 const router = express.Router();
 import { readTenants, readTenant, createTenant, updateTenant, deleteTenant } from '../modules/tenant/tenantController.js';
-import authorizationMiddleware from '../middleware/authorizationMiddleware.js';
+import authorizationMiddleware from '../middlewares/authorizationMiddleware.js';
 
 router.get('/search/:ids', authorizationMiddleware('tenant', 'readTenants'), readTenants);
 router.get('/:id', authorizationMiddleware('tenant', 'readTenant'), readTenant);

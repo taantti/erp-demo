@@ -24,14 +24,14 @@ export const createRole = async (req, res) => {
 
 export const updateRole = async (req, res) => {
     const updatedRole = await roleService.updateRole(req, res);
-    if(!updatedRole) res.status(404).json({error: 'Role not found'});
+    if(!updatedRole) return res.status(404).json({error: 'Role not found'});
     res.status(201).json(updatedRole);
 };
 
 export const deleteRole =  (req, res) => {
     const deletedRole = roleService.deleteRole(req, res);
-    if(!deletedRole) res.status(404).json({error: 'Role not found'});
-    res.status(404).json( 'Role deleted');
+    if(!deletedRole) return res.status(404).json({error: 'Role not found'});
+    res.status(404).send('Role deleted');
 };
 
 

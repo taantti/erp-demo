@@ -13,30 +13,16 @@ const protectedModelFields = ['password', '__v'];
 
 const UserSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true, trim: true, lowercase: true, minlength: 3, maxlength: 30 },
-    password: { type: String, required: true, minlength: 3, maxlength: 256 },
+    password: { type: String, required: true, minlength: 8, maxlength: 256 },
     first_name: { type: String, required: true, minlength: 1, maxlength: 50 },
     last_name: { type: String, required: true, minlength: 1, maxlength: 50 },
-    //email: { type: String, required: true, minlength: 5, maxlength: 80 },
-
-    email: {
-        type: String,
-        required: true,
-        validate: {
-            validator: validateEmail,
-            message: props => `${props.value} ei ole kelvollinen sähköpostiosoite!`
-        },
-        minlength: 5, maxlength: 80
-    },
-
+    email: { type: String, required: true, minlength: 5, maxlength: 80 },
     role: { type: String, required: true, enum: roles },
     active: { type: Boolean, required: true },
     updatedAt: Date,
     createdAt: { type: Date, default: Date.now },
     tenant: { type: mongoose.Schema.Types.ObjectId, ref: 'Tenant', required: true },
 });
-
-
-
 
 /**
  * Create a new user.
@@ -56,9 +42,6 @@ export const newUser = async (req, userData, allTenants = false, sanitize = true
         //const hashedPassword = bcrypt.hashSync(userData.password, salt);
         const salt = await bcrypt.genSalt(Number(config.BCRYPT_SALT_ROUNDS));
         const hashedPassword = await bcrypt.hash(userData.password, salt);
-
-
-
         userData = setTenantForData(req, userData, allTenants);
         let newUser = await new User({ ...userData, password: hashedPassword }).save();
 
@@ -97,10 +80,7 @@ export const findUserById = async (req, userId, allTenants = false, sanitize = t
 }
 
 /**
- * Find users based on the provided parameters.
- * If allTenants is false, only users from the requester's tenant are returned.
- * If lean is true, return plain JavaScript objects instead of Mongoose documents.
- * If permission is denied or an error occurs, the function throws an exception.
+ * Find users based on query parameters.
  * @param {Object} req - The request object containing user and tenant information.
  * @param {Object} params - The query parameters to filter users.
  * @param {boolean} allTenants - (Optional) Whether to include all tenants or not.
@@ -126,7 +106,16 @@ export const findUsers = async (req, params, allTenants = false, sanitize = true
     }
 }
 
-
+/**
+ * Find a user by ID and update their information.
+ * @param {Object} req - The request object.
+ * @param {string} userId - The ID of the user to update.
+ * @param {Object} userData - The new data to update the user with.
+ * @param {boolean} allTenants - (Optional) Whether to include all tenants or not.
+ * @param {boolean} sanitize - (Optional) Whether to sanitize the output by removing protected fields.
+ * @param {boolean} lean - (Optional) Whether to return plain JavaScript objects or Mongoose documents.
+ * @returns {Promise<Object|null>} - The updated user object if found and updated, otherwise null.
+ */
 export const findOneUserAndUpdate = async (req, userId, userData, allTenants = false, sanitize = true, lean = true) => {
     log("INFO", `${relativePath}: findOneUserAndUpdate(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
 
@@ -144,6 +133,12 @@ export const findOneUserAndUpdate = async (req, userId, userData, allTenants = f
     }
 
 }
+
+/**
+ * Find a user by ID and delete them.
+ * @param {Object} req - The request object.
+ * @param {boolean} allTenants - (Optional) Whether to include all tenants or not.
+ */
 const findUserByIdAndDelete = (req, allTenants = true) => {
     log("INFO", `${relativePath}: findUserByIdAndDelete(): allTenants = ${allTenants}`, true, req);
 
@@ -154,47 +149,99 @@ const findUserByIdAndDelete = (req, allTenants = true) => {
     }
 }
 
-// Instanssimetodit
+/**
+ * Model instance methods, static methods, and virtual properties are documented using JSDoc.
+ * - Instance methods: @method @instance (available on user objects)
+ * - Static methods: @static (available on the User class)
+ * - Virtual properties: @virtual (computed properties, not stored in DB)
+ * This structure improves code clarity, maintainability, and IDE support.
+ */
+
+/**
+ * Compare the provided password with the user's password.
+ * @param {string} candidatePassword - The password to compare.
+ * @returns {Promise<boolean>} True if the passwords match, false otherwise.
+ * @method
+ * @instance
+ */
 UserSchema.methods.comparePassword = async function (candidatePassword) {
     return bcrypt.compare(candidatePassword, this.password);
 };
 
+/**
+ * Get the user's full name.
+ * @returns {string} The full name of the user.
+ * @method
+ * @instance
+ */
 UserSchema.methods.getFullName = function () {
     return `${this.first_name} ${this.last_name}`.trim();
 };
 
+/**
+ * Activate the user.
+ * @returns {Promise<User>} The updated user instance.
+ * @method
+ * @instance
+ */
 UserSchema.methods.activate = async function () {
     this.active = true;
     return this.save();
 };
+
+/**
+ * Deactivate the user.
+ * @returns {Promise<User>} The updated user instance.
+ * @method
+ * @instance
+ */
 UserSchema.methods.deactivate = async function () {
     this.active = false;
     return this.save();
 };
 
-// Staattiset metodit
+/**
+ * Find a user by email.
+ * @param {string} email - The email address of the user to find.
+ * @returns {Promise<User|null>} The user object if found, null otherwise.
+ * @static
+ */
 UserSchema.statics.findByEmail = function (email) {
     return this.findOne({ email: email.toLowerCase() });
 };
 
-// Virtuaaliset ominaisuudet
+/**
+ * Get the user's full name (virtual property).
+ * @returns {string} The full name of the user.
+ * @virtual
+ */
 UserSchema.virtual('fullName').get(function () {
     return this.getFullName();
 });
 
+/**
+ * Validate the user's email address.
+ */
 UserSchema.path('email').validate(function (value) {
     return /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value);
-}, 'Sähköpostiosoite ei ole kelvollinen');
+},
+    props => `${props.value} is not a valid email address.`
+);
 
+/**
+ * Validate the user's password.
+ */
 UserSchema.path('password').validate(function (value) {
-    // Vähintään yksi iso kirjain, yksi numero ja yksi erikoismerkki (laajennettu erikoismerkkijoukko)
     return /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~`])[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~`]{8,}$/.test(value);
-}, 'Password must contain at least one uppercase letter, one number, and one special character');
+},
+    'Password must contain at least one uppercase letter, one number, and one special character'
+);
 
+/**
+ * Update the user's updatedAt field before saving.
+ */
 UserSchema.pre('save', async function (next) {
     const user = this;
-
-    // Päivitä updatedAt-kenttä
     user.updatedAt = new Date();
     return next();
 });
