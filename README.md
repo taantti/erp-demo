@@ -80,12 +80,12 @@ A modular Node.js backend for ERP-style applications, built with Express and Mon
 
 Swagger/OpenAPI documentation is planned and will be added in a future update.
 
-## Initial Setup: Create Tenants and Users
+## Initial Setup: Create Tenants and Users. ⚠️ All scripts are under refactoring. 
 
 Before first use, run the install script to create initial tenants and users:
 
 ```sh
-node src/scripts/install/feature/installFeature.js
+node src\scripts\init\init.js
 ```
 
 This script will populate the database with required tenants and user accounts.
