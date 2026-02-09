@@ -124,4 +124,4 @@ ProductCategorySchema.pre('save', async function (next) {
     return next();
 });
 
-export const ProductCategory = mongoose.model('ProductCategory', ProductCategorySchema);
+export default mongoose.model('ProductCategory', ProductCategorySchema);

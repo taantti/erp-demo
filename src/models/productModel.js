@@ -142,4 +142,4 @@ ProductSchema.pre('save', async function (next) {
     return next();
 });
 
-export const Product = mongoose.model('Product', ProductSchema);
+export default mongoose.model('Product', ProductSchema);
