@@ -42,7 +42,6 @@ export const sanitizeAndValidateRequest = (req, res, next) => {
         // Header sanitation. Example: Authorization: bearer token_string
         req.headers = sanitizeHeaders(req);
 
-        console.log("UnSanitized req.body:", req.body);
         // Body sanitation. Example: { "name": "John", "age": 30, "address": { "city": "New York" } }
         if (isBodyRequired(req) && req.body) {
             const { errorMsgs } = validateAndSanitizeObject(req.body);
@@ -53,8 +52,6 @@ export const sanitizeAndValidateRequest = (req, res, next) => {
                 return next(err);
             }
         }
-
-        console.log("Sanitized req.body:", req.body);
 
         return next();
     } catch (err) {
@@ -266,6 +263,7 @@ const validateAndSanitizeObject = (originalObject) => {
                 break;
             case 'valueMax':
                 message = `Exceeded maximum value: The value at path '${path}' is ${currentLength}, which exceeds the maximum allowed value of ${maxLength}.`;
+                break;
             default:
                 message = 'Unknown error';
         }

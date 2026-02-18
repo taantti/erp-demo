@@ -3,7 +3,6 @@ import mongoose from 'mongoose';
 import bcrypt from "bcrypt";
 import { roles } from "./roleModel.js";
 import { log } from "../utils/logger.js";
-import { validateEmail } from "../utils/validation.js";
 import { checkUserTenantPermissions, getTenantIdForQuery, getTenantQueryCondition, setTenantForData, toPlainObjectIfLean } from './modelService.js';
 import { sanitizeObjectFields } from '../utils/sanitization.js';
 import { getRelativePath, convertToBoolean } from '../utils/auxiliary.js';
@@ -38,8 +37,9 @@ export const newUser = async (req, userData, allTenants = false, sanitize = true
 
     try {
         checkUserTenantPermissions(req, allTenants, `${relativePath}: newUser()`);
-        //const salt = bcrypt.genSaltSync(Number(config.BCRYPT_SALT_ROUNDS));
-        //const hashedPassword = bcrypt.hashSync(userData.password, salt);
+        if (!isValidRawPassword(userData.password)) {
+            throw Object.assign(new Error('Password must contain at least one uppercase letter, one number, and one special character, and be at least 8 characters long.'), { statusCode: 400 });
+        }
         const salt = await bcrypt.genSalt(Number(config.BCRYPT_SALT_ROUNDS));
         const hashedPassword = await bcrypt.hash(userData.password, salt);
         userData = setTenantForData(req, userData, allTenants);
@@ -135,21 +135,6 @@ export const findOneUserAndUpdate = async (req, userId, userData, allTenants = f
 }
 
 /**
- * Find a user by ID and delete them.
- * @param {Object} req - The request object.
- * @param {boolean} allTenants - (Optional) Whether to include all tenants or not.
- */
-const findUserByIdAndDelete = (req, allTenants = true) => {
-    log("INFO", `${relativePath}: findUserByIdAndDelete(): allTenants = ${allTenants}`, true, req);
-
-    try {
-        checkUserTenantPermissions(req, allTenants, `${relativePath}: findUserByIdAndDelete()`);
-    } catch (error) {
-        throw error;
-    }
-}
-
-/**
  * Model instance methods, static methods, and virtual properties are documented using JSDoc.
  * - Instance methods: @method @instance (available on user objects)
  * - Static methods: @static (available on the User class)
@@ -229,13 +214,14 @@ UserSchema.path('email').validate(function (value) {
 );
 
 /**
- * Validate the user's password.
+ * Validate a raw (unhashed) password.
+ * @param {string} password - The raw password to validate.
+ * @returns {boolean} True if the password is valid, false otherwise.
  */
-UserSchema.path('password').validate(function (value) {
-    return /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~`])[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~`]{8,}$/.test(value);
-},
-    'Password must contain at least one uppercase letter, one number, and one special character'
-);
+const isValidRawPassword = (password) => {
+    if (typeof password !== 'string') return false;
+    return /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~`])[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~`]{8,}$/.test(password);
+};
 
 /**
  * Update the user's updatedAt field before saving.

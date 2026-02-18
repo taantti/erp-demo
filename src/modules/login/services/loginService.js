@@ -14,7 +14,7 @@ export const login = async (req, res, next) => {
         const user = await User.findOne({ username: username });
         if (!user) return next(Object.assign(new Error(`Invalid credentials`), { statusCode: 401 }));
 
-        if (!bcrypt.compareSync(password, user.password)) {
+        if (!await bcrypt.compare(password, user.password)) {
             return next(Object.assign(new Error(`Invalid credentials`), { statusCode: 401 }));
         }
 

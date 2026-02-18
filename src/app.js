@@ -13,8 +13,6 @@ import helmet from "helmet";
 log("INFO", "DATABASE_HOST = " + config.DATABASE_HOST);
 log("INFO", "DATABASE_PORT = " + config.DATABASE_PORT);
 log("INFO", "DATABASE_NAME = " + config.DATABASE_NAME);
-log("INFO", "DATABASE_USERNAME = " + config.DATABASE_USERNAME);
-log("INFO", "DATABASE_PASSWORD = " + config.DATABASE_PASSWORD);
 log("INFO", "PORT = " + config.PORT);
 
 /* Initialize Express app */
@@ -46,7 +44,11 @@ app.use(validationErrorMiddleware);
 app.use(errorHandler);
 
 /* Connect to MongoDB and start the server */
-mongoose.connect(`mongodb://${config.DATABASE_HOST}:${config.DATABASE_PORT}/${config.DATABASE_NAME}`).then(() => {
+const dbUri = config.DATABASE_USERNAME && config.DATABASE_PASSWORD
+    ? `mongodb://${config.DATABASE_USERNAME}:${config.DATABASE_PASSWORD}@${config.DATABASE_HOST}:${config.DATABASE_PORT}/${config.DATABASE_NAME}`
+    : `mongodb://${config.DATABASE_HOST}:${config.DATABASE_PORT}/${config.DATABASE_NAME}`;
+
+mongoose.connect(dbUri).then(() => {
     log("INFO", `Connected to mongodb://${config.DATABASE_HOST}:${config.DATABASE_PORT}/${config.DATABASE_NAME} database`);
 
     app.listen(config.PORT, () => {
@@ -54,7 +56,7 @@ mongoose.connect(`mongodb://${config.DATABASE_HOST}:${config.DATABASE_PORT}/${co
     });
 
 }).catch((error) => {
-    log("ERROR", `Connection to mongodb://${config.DATABASE_HOST}:${config.DATABASE_PORT}/${config.DATABASE_NAME} database failed`, req);
-    log("ERROR", `${error.name}: ${error.message}`, req);
+    log("ERROR", `Connection to mongodb://${config.DATABASE_HOST}:${config.DATABASE_PORT}/${config.DATABASE_NAME} database failed`);
+    log("ERROR", `${error.name}: ${error.message}`);
     process.exit(1); // Exit the application if database connection fails. 1 = failure.
 });
