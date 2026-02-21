@@ -1,9 +1,8 @@
-import config from './../config.js';
 import mongoose from 'mongoose';
 import { log } from "../utils/logger.js";
 import { checkUserTenantPermissions, getTenantIdForQuery, getTenantQueryCondition, setTenantForData, toPlainObjectIfLean } from './modelService.js';
 import { sanitizeObjectFields } from '../utils/sanitization.js';
-import { getRelativePath, convertToBoolean } from '../utils/auxiliary.js';
+import { getRelativePath } from '../utils/auxiliary.js';
 
 const relativePath = getRelativePath(import.meta.url);
 const protectedModelFields = ['__v'];
@@ -119,7 +118,8 @@ export const findProductById = async (req, productId, allTenants = false, saniti
 export const updateProductById = async (req, productId, productData, allTenants = false, sanitize = true, lean = true) => {
     log("INFO", `${relativePath}: updateProductById(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
     checkUserTenantPermissions(req, allTenants, `${relativePath}: updateProductById()`);
-    let updatedProduct = await Product.findByIdAndUpdate(productId, productData, { new: true }).lean(lean).exec();
+    const tenantCondition = getTenantQueryCondition(req, req.user.tenant?.id, allTenants);
+    let updatedProduct = await Product.findOneAndUpdate({ _id: productId, ...tenantCondition }, productData, { new: true }).lean(lean).exec();
     if (sanitize) updatedProduct = sanitizeObjectFields(updatedProduct, protectedModelFields);
     return updatedProduct;
 };
@@ -134,7 +134,8 @@ export const updateProductById = async (req, productId, productData, allTenants 
 export const deleteProductById = async (req, productId, allTenants = false) => {
     log("INFO", `${relativePath}: deleteProductById(): allTenants = ${allTenants}`, true, req);
     checkUserTenantPermissions(req, allTenants, `${relativePath}: deleteProductById()`);
-    return await Product.findByIdAndDelete(productId);
+    const tenantCondition = getTenantQueryCondition(req, req.user.tenant?.id, allTenants);
+    return await Product.findOneAndDelete({ _id: productId, ...tenantCondition });
 };
 
 ProductSchema.pre('save', async function (next) {

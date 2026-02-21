@@ -1,9 +1,8 @@
-import config from '../config.js';
 import mongoose from 'mongoose';
 import { log } from "../utils/logger.js";
 import { checkUserTenantPermissions, getTenantIdForQuery, getTenantQueryCondition, setTenantForData, toPlainObjectIfLean } from './modelService.js';
 import { sanitizeObjectFields } from '../utils/sanitization.js';
-import { getRelativePath, convertToBoolean } from '../utils/auxiliary.js';
+import { getRelativePath } from '../utils/auxiliary.js';
 
 const relativePath = getRelativePath(import.meta.url);
 const protectedModelFields = ['__v'];
@@ -101,7 +100,8 @@ export const findCategoryById = async (req, categoryId, allTenants = false, sani
 export const updateCategoryById = async (req, categoryId, categoryData, allTenants = false, sanitize = true, lean = true) => {
     log("INFO", `${relativePath}: updateCategoryById(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
     checkUserTenantPermissions(req, allTenants, `${relativePath}: updateCategoryById()`);
-    let updatedCategory = await ProductCategory.findByIdAndUpdate(categoryId, categoryData, { new: true }).lean(lean).exec();
+    const tenantCondition = getTenantQueryCondition(req, req.user.tenant?.id, allTenants);
+    let updatedCategory = await ProductCategory.findOneAndUpdate({ _id: categoryId, ...tenantCondition }, categoryData, { new: true }).lean(lean).exec();
     if (sanitize) updatedCategory = sanitizeObjectFields(updatedCategory, protectedModelFields);
     return updatedCategory;
 };
@@ -116,7 +116,8 @@ export const updateCategoryById = async (req, categoryId, categoryData, allTenan
 export const deleteCategoryById = async (req, categoryId, allTenants = false) => {
     log("INFO", `${relativePath}: deleteCategoryById(): allTenants = ${allTenants}`, true, req);
     checkUserTenantPermissions(req, allTenants, `${relativePath}: deleteCategoryById()`);
-    return await ProductCategory.findByIdAndDelete(categoryId);
+    const tenantCondition = getTenantQueryCondition(req, req.user.tenant?.id, allTenants);
+    return await ProductCategory.findOneAndDelete({ _id: categoryId, ...tenantCondition });
 };
 
 ProductCategorySchema.pre('save', async function (next) {
