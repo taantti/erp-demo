@@ -171,7 +171,7 @@ const saveUserData = async (users, tenantModel) => {
     for (const userData of users) {
         const { username, password, first_name, last_name, email, role, active } = userData;
         const tenant = tenantModel._id;
-        const saltRounds = config.BCRYPT_SALT_ROUNDS | 10;
+        const saltRounds = config.BCRYPT_SALT_ROUNDS || 10;
 
         try {
             const salt = bcrypt.genSaltSync(saltRounds);

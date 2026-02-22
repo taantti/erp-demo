@@ -53,7 +53,7 @@ const databaseLog = async (logLevel, msg, tenantId = null) => {
     try {
         const sanitizedMsg = sanitizeValue(msg);
         if (!sanitizedMsg.length) return;
-        const logEntry = await new Log({ message: msg, level: logLevel, tenant: tenantId, timestamp: new Date() }).save();
+        const logEntry = await new Log({ message: sanitizedMsg, level: logLevel, tenant: tenantId, timestamp: new Date() }).save();
         return logEntry._id;
     } catch (error) {
         consoleLog('ERROR', `${relativePath}: Failed to log message to database: ${error.message}`);
@@ -77,9 +77,3 @@ export const log = (level, msg, consoleOnly = false, req = null) => {
     if (logLevels.indexOf(level) < getLogLevelIndex()) return;
     writeLog(level, msg, consoleOnly, getTenant(req));
 }
-
-
-
-
-
-

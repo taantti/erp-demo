@@ -15,8 +15,6 @@ const relativePath = getRelativePath(import.meta.url);
 export const checkUserTenantPermissions = (req, allTenants, context = "") => {
     log("INFO", `${relativePath}: checkUserTenantPermissions(): allTenants = ${allTenants}`, true, req);
 
-    if (0) throw new Error("Testi"); // For testing error handling
-
     if (allTenants && !isAdminTenant(req)) {
         log("CRITICAL", `${context}: Admin tenant access required to access all tenants documents. This should not happen!`, true, req);
         throw new Error("Permission denied");
@@ -121,7 +119,7 @@ export const setTenantForData = (req, data, allTenants = false) => {
  * @returns {*} - The plain JavaScript object or the original document. (JSDoc type * means "any type")
  */
 export const toPlainObjectIfLean = (document, lean) => {
-    if(!document || !lean) return document;
+    if(!document || lean) return document;
     return document.toObject();
 }
 
