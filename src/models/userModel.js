@@ -96,7 +96,7 @@ export const findUsers = async (req, params, allTenants = false, sanitize = true
     try {
         checkUserTenantPermissions(req, allTenants, `${relativePath}: findUsers()`);
         params.tenant = getTenantIdForQuery(req, params.tenant, allTenants); // Initialize the tenant condition parameter for queries.
-        if (params.active) params.active = convertToBoolean(params.active);
+        if (params.active) params.active = convertToBoolean(params.active); // TODO: move to example sanitize orr other early function. All boolean fields should be converted before being used in queries.
 
         let users = await User.find(params).lean(lean).exec();
         if (sanitize) users = users.map(user => sanitizeObjectFields(user, protectedModelFields));

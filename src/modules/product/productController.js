@@ -111,27 +111,3 @@ export const deleteCategory = async (req, res, next) => {
         return next(error);
     }
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

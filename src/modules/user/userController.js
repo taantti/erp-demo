@@ -68,27 +68,3 @@ export const deleteUser = async (req, res, next) => {
         return next(error);
     }
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

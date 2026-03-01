@@ -1,3 +1,18 @@
-// Central export for product and category services
-export * as productService from './productService.js';
-export * as categoryService from './categoryService.js';
+import { createProduct, readProduct, readProducts, updateProduct, deleteProduct } from './productService.js';
+import { createCategory, readCategory, readCategories, updateCategory, deleteCategory } from './categoryService.js';
+
+export const productService = {
+    createProduct,
+    readProduct,
+    readProducts,
+    updateProduct,
+    deleteProduct
+};
+
+export const categoryService = {
+    createCategory,
+    readCategory,
+    readCategories,
+    updateCategory,
+    deleteCategory
+};

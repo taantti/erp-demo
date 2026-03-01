@@ -1,65 +1,55 @@
-import { Product } from '../../../models/index.js';
+import { findProducts, findProductById, createProduct as modelCreateProduct, updateProductById, deleteProductById } from '../../../models/index.js';
+import { log } from '../../../utils/logger.js';
+import { getRelativePath } from '../../../utils/auxiliary.js';
 
-/**
- * Get all products
- * @param {Object} req - The request object
- * @param {Object} params - Query params
- * @param {boolean} allTenants
- * @param {boolean} sanitize
- * @param {boolean} lean
- * @returns {Promise<Array>}
- */
-export const readProducts = async (req, params = {}, allTenants = false, sanitize = true, lean = true) => {
-    return await Product.findProducts(req, params, allTenants, sanitize, lean);
+const relativePath = getRelativePath(import.meta.url);
+
+export const createProduct = async (req, res, next) => {
+    log("INFO", `${relativePath}: createProduct(): `, true, req);
+    try {
+        const product = await modelCreateProduct(req, req.body, false, true, true);
+        return product;
+    } catch (error) {
+        return next(error);
+    }
 };
 
-/**
- * Get a product by ID
- * @param {Object} req
- * @param {string} productId
- * @param {boolean} allTenants
- * @param {boolean} sanitize
- * @param {boolean} lean
- * @returns {Promise<Object|null>}
- */
-export const readProduct = async (req, productId, allTenants = false, sanitize = true, lean = true) => {
-    return await Product.findProductById(req, productId, allTenants, sanitize, lean);
+export const readProduct = async (req, res, next) => {
+    log("INFO", `${relativePath}: readProduct(${req.params.id}): `, true, req);
+    try {
+        const product = await findProductById(req, req.params.id, false, true, true);
+        return product;
+    } catch (error) {
+        return next(error);
+    }
 };
 
-/**
- * Create a new product
- * @param {Object} req
- * @param {Object} productData
- * @param {boolean} allTenants
- * @param {boolean} sanitize
- * @param {boolean} lean
- * @returns {Promise<Object>}
- */
-export const createProduct = async (req, productData, allTenants = false, sanitize = true, lean = true) => {
-    return await Product.createProduct(req, productData, allTenants, sanitize, lean);
+export const readProducts = async (req, res, next) => {
+    log("INFO", `${relativePath}: readProducts(): `, true, req);
+    try {
+        const products = await findProducts(req, req.query, false, true, true);
+        return products;
+    } catch (error) {
+        return next(error);
+    }
 };
 
-/**
- * Update a product by ID
- * @param {Object} req
- * @param {string} productId
- * @param {Object} productData
- * @param {boolean} allTenants
- * @param {boolean} sanitize
- * @param {boolean} lean
- * @returns {Promise<Object|null>}
- */
-export const updateProduct = async (req, productId, productData, allTenants = false, sanitize = true, lean = true) => {
-    return await Product.updateProductById(req, productId, productData, allTenants, sanitize, lean);
+export const updateProduct = async (req, res, next) => {
+    log("INFO", `${relativePath}: updateProduct(${req.params.id}): `, true, req);
+    try {
+        const product = await updateProductById(req, req.params.id, req.body, false, true, true);
+        return product;
+    } catch (error) {
+        return next(error);
+    }
 };
 
-/**
- * Delete a product by ID
- * @param {Object} req
- * @param {string} productId
- * @param {boolean} allTenants
- * @returns {Promise<Object|null>}
- */
-export const deleteProduct = async (req, productId, allTenants = false) => {
-    return await Product.deleteProductById(req, productId, allTenants);
+export const deleteProduct = async (req, res, next) => {
+    log("INFO", `${relativePath}: deleteProduct(${req.params.id}): `, true, req);
+    try {
+        const product = await deleteProductById(req, req.params.id, false);
+        return product;
+    } catch (error) {
+        return next(error);
+    }
 };

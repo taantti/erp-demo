@@ -1,76 +1,56 @@
-import { Role } from '../../../models/index.js';
+import { newRole as modelNewRole, findRoleById, findRoles as modelFindRoles, findOneRoleAndUpdate, deleteRoleById } from '../../../models/index.js';
 import { log } from '../../../utils/logger.js';
+import { getRelativePath } from '../../../utils/auxiliary.js';
+
+const relativePath = getRelativePath(import.meta.url);
 
 export const createRole = async (req, res, next) => {
-    log("INFO", "roleService.js: createRole(): ", true, req);
+    log("INFO", `${relativePath}: createRole(): `, true, req);
     try {
-        const {name, level} = req.body
-        const status = TRUE;
-        log("INFO", "name = " + name, true, req);
-        log("INFO", "level = " + level, true, req);
-        const role = new Role({name, level});
-        if(!await role.save()) return false;
+        const role = await modelNewRole(req, req.body, true, true, true);
+        return role;
     } catch (error) {
-        res.status(500).json({ error: error.message});
+        return next(error);
     }
 };
 
 export const readRole = async (req, res, next) => {
-    log("INFO", "roleService.js: readRole(" + req.params.id + "): ", true, req);
+    log("INFO", `${relativePath}: readRole(${req.params.id}): `, true, req);
     try {
-        return await Role.findById(req.params.id);
+        const role = await findRoleById(req, req.params.id, true, true, true);
+        return role;
     } catch (error) {
-        next(error);
+        return next(error);
     }
 };
 
 export const readRoles = async (req, res, next) => {
-    log("INFO", "roleService.js: readRoles(): ", true, req);
+    log("INFO", `${relativePath}: readRoles(): `, true, req);
     try {
         const ids = req.params.ids.split(',');
-        log("INFO", "roleService.js: readRoles(" + ids + "): ", true, req);
-        return await Role.find({ _id: { $in: ids } });
+        const roles = await modelFindRoles(req, { _id: { $in: ids } }, true, true, true);
+        return roles;
     } catch (error) {
-        next(error);
+        return next(error);
     }
 };
 
 export const updateRole = async (req, res, next) => {
-    log("INFO", "roleService.js: updateRole(" + req.params.id + "): ", true, req);
+    log("INFO", `${relativePath}: updateRole(${req.params.id}): `, true, req);
     try {
-         const {name, admin} = req.body;
-        const { id } = req.params;
-        log("INFO", "id = " + id, true, req);
-
-        log("INFO", "name = " + name, true, req);
-        log("INFO", "role = " + role, true, req);
-
-        const role = await Role.findByIdAndUpdate(
-            id,
-            {role, role},
-            { new: true }
-        );
-
+        const role = await findOneRoleAndUpdate(req, req.params.id, req.body, true, true, true);
         return role;
-
     } catch (error) {
-        next(error);
+        return next(error);
     }
 };
-
 
 export const deleteRole = async (req, res, next) => {
-    log("INFO", "roleService.js: deleteRole(" + req.params.id + "): ", true, req);
+    log("INFO", `${relativePath}: deleteRole(${req.params.id}): `, true, req);
     try {
-        const { id } = req.params;
-        const role = await Role.findByIdAndDelete(id);
+        const role = await deleteRoleById(req, req.params.id, true);
         return role;
     } catch (error) {
-        next(error);
+        return next(error);
     }
 };
-
-
-
-
-

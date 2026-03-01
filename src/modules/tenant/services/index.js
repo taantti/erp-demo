@@ -1,14 +1,9 @@
-import {createTenant}  from './tenantService.js';
-import {readTenant}  from './tenantService.js';
-import {readTenants}  from './tenantService.js';
-import {updateTenant}  from './tenantService.js';
-import {deleteTenant}  from './tenantService.js';
+import { createTenant, readTenant, readTenants, updateTenant, deleteTenant } from './tenantService.js';
 
 export default {
     createTenant,
-    readTenant ,
+    readTenant,
     readTenants,
     updateTenant,
     deleteTenant
 }
-

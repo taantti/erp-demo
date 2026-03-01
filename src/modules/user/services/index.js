@@ -1,14 +1,10 @@
-import {createUser}  from './userService.js';
-import {readUser}  from './userService.js';
-import {readUsers}  from './userService.js';
-import {updateUser}  from './userService.js';
-import {deleteUser}  from './userService.js';
+import { createUser, readUser, readUsers, updateUser, updateUserPassword, deleteUser } from './userService.js';
 
 export default {
     createUser,
-    readUser ,
+    readUser,
     readUsers,
     updateUser,
+    updateUserPassword,
     deleteUser
 }
-

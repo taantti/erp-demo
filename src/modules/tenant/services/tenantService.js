@@ -1,81 +1,57 @@
-import { Tenant } from '../../../models/index.js';
-import { User } from '../../../models/index.js';
+import { newTenant as modelNewTenant, findTenantById, findTenants as modelFindTenants, findOneTenantAndUpdate, deleteTenantById } from '../../../models/index.js';
 import { log } from '../../../utils/logger.js';
+import { getRelativePath } from '../../../utils/auxiliary.js';
+
+const relativePath = getRelativePath(import.meta.url);
 
 export const createTenant = async (req, res, next) => {
-    log("INFO", "tenantService.js: createTenant(): ", true, req);
+    log("INFO", `${relativePath}: createTenant(): `, true, req);
     try {
-        const {name, admin, first_name, last_name, username, password} = req.body;
-        const status = true;
-        log("INFO", "name = " + name, true, req);
-        log("INFO", "admin = " + admin, true, req);
-        log("INFO", "status = " + status, true, req);
-        const tenant = new Tenant({name, admin, status})
-        //return tenant.save();
-        if(!await tenant.save()) return false;
-
-        log("INFO", "first_name = " + first_name, true, req);
-        log("INFO", "last_name = " + last_name, true, req);
-        log("INFO", "username = " + username, true, req);
-        log("INFO", "password = " + password, true, req);
-    } catch (error) {
-        next(error);
-    }
-};
-
-export const deleteTenant = async (req, res, next) => {
-    log("INFO", "tenantService.js: deleteTenant(" + req.params.id + "): ", true, req);
-    try {
-        //res.status(501).json({ message: 'Not Implemented yet'});
-        const { id } = req.params;
-        const tenant = await Tenant.findByIdAndDelete(id);
+        const tenantData = { ...req.body, active: true };
+        const tenant = await modelNewTenant(req, tenantData, true, true, true);
         return tenant;
     } catch (error) {
-        next(error);
+        return next(error);
     }
 };
 
 export const readTenant = async (req, res, next) => {
-    log("INFO", "tenantService.js: readTenant(" + req.params.id + "): ", true, req);
+    log("INFO", `${relativePath}: readTenant(${req.params.id}): `, true, req);
     try {
-        return await Tenant.findById(req.params.id);
+        const tenant = await findTenantById(req, req.params.id, false, true, true);
+        return tenant;
     } catch (error) {
-        next(error);
+        return next(error);
     }
 };
 
 export const readTenants = async (req, res, next) => {
-    log("INFO", "tenantService.js: readTenants(): ", true, req);
+    log("INFO", `${relativePath}: readTenants(): `, true, req);
     try {
         const ids = req.params.ids.split(',');
-        log("INFO", "tenantService.js: readTenants(" + ids + "): ", true, req);
-        return await Tenant.find({ _id: { $in: ids } });
+        const tenants = await modelFindTenants(req, { _id: { $in: ids } }, false, true, true);
+        return tenants;
     } catch (error) {
-        next(error);
+        return next(error);
     }
 };
 
 export const updateTenant = async (req, res, next) => {
-    log("INFO", "tenantService.js: updateTenant(" + req.params.id + "): ", true, req);
+    log("INFO", `${relativePath}: updateTenant(${req.params.id}): `, true, req);
     try {
-         const {name, admin} = req.body;
-        const { id } = req.params;
-        log("INFO", "id = " + id, true, req);
-
-        log("INFO", "name = " + name, true, req);
-        log("INFO", "admin = " + admin, true, req);
-
-        const tenant = await Tenant.findByIdAndUpdate(
-            id,
-            {name, admin},
-            { new: true }
-        );
-
+        const tenant = await findOneTenantAndUpdate(req, req.params.id, req.body, false, true, true);
         return tenant;
-
     } catch (error) {
-        next(error);
+        return next(error);
     }
 };
 
-
+export const deleteTenant = async (req, res, next) => {
+    log("INFO", `${relativePath}: deleteTenant(${req.params.id}): `, true, req);
+    try {
+        const tenant = await deleteTenantById(req, req.params.id, true);
+        return tenant;
+    } catch (error) {
+        return next(error);
+    }
+};

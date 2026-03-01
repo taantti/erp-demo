@@ -125,4 +125,4 @@ ProductCategorySchema.pre('save', async function (next) {
     return next();
 });
 
-export default mongoose.model('ProductCategory', ProductCategorySchema);
+export const ProductCategory = mongoose.model('ProductCategory', ProductCategorySchema);
