@@ -5,11 +5,8 @@ import { sanitizeAndValidateRequest }   from './middlewares/sanitizationMiddlewa
 import authenticationMiddleware from './middlewares/authenticationMiddleware.js';
 import validationErrorMiddleware from './middlewares/validationErrorMiddleware.js';
 import errorHandler from './middlewares/errorMiddleware.js';
-
-//import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from './swagger.js';
-
 import routes from './routes/index.js';
 import { log } from './utils/logger.js';
 import helmet from "helmet";

@@ -2,7 +2,6 @@ import express from 'express';
 const router = express.Router();
 import { login } from '../modules/login/loginController.js';
 
-
 /**
  * @swagger 
  * /login:
@@ -14,8 +13,5 @@ import { login } from '../modules/login/loginController.js';
  *         description: OK
  */
 router.post('/', login);
-
-
-
 
 export default router;
