@@ -1,8 +1,6 @@
 import express from 'express';
 const router = express.Router();
 import { login } from '../modules/login/loginController.js';
-// git commit -m "docs: add swagger documentation for login route"
-
 
 /**
  * @swagger 
@@ -10,6 +8,18 @@ import { login } from '../modules/login/loginController.js';
  *   post:
  *     summary: Login
  *     description: Login
+ *     tags: [Login]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *               password:
+ *                 type: string
  *     responses:
  *       200:
  *         description: OK

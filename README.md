@@ -30,7 +30,7 @@ A modular Node.js backend for ERP-style applications, built with Express and Mon
 │   │   │       └── categoryService.js
 │   │   └── ...
 │   ├── routes/               # Express route definitions
-│   ├── middleware/           # Custom middleware (auth, error, sanitization, ...)
+│   ├── middlewares/          # Custom middleware (auth, error, sanitization, ...)
 │   └── utils/                # Utility functions (logger, auxiliary, ...)
 ├── package.json
 ├── README.md
@@ -58,10 +58,6 @@ A modular Node.js backend for ERP-style applications, built with Express and Mon
    ```sh
    npm start
    ```
-   or (for development with auto-reload):
-   ```sh
-   npm run dev
-   ```
 
 ## Environment Variables
 
@@ -78,7 +74,8 @@ A modular Node.js backend for ERP-style applications, built with Express and Mon
 
 ## API Documentation
 
-Swagger/OpenAPI documentation is planned and will be added in a future update.
+Initial Swagger/OpenAPI documentation is available at `/api-docs` when the server is running.
+More endpoints and documentation will be added in future updates.
 
 ## Initial Setup: Create Tenants and Users. ⚠️ All scripts are under refactoring. 
 
