@@ -17,6 +17,7 @@ A modular Node.js backend for ERP-style applications, built with Express and Mon
 ├── src/
 │   ├── app.js                # Main Express app
 │   ├── config.js             # Configuration
+│   ├── swagger.js            # Swagger configuration
 │   ├── models/               # Mongoose models (userModel.js, productModel.js, ...)
 │   ├── modules/              # Business logic modules
 │   │   ├── user/
@@ -32,8 +33,10 @@ A modular Node.js backend for ERP-style applications, built with Express and Mon
 │   ├── routes/               # Express route definitions
 │   ├── middlewares/          # Custom middleware (auth, error, sanitization, ...)
 │   └── utils/                # Utility functions (logger, auxiliary, ...)
-├── package.json
-├── README.md
+├── .env-example              # Example environment variables
+├── package-lock.json         # Package lock file
+├── package.json              # Package dependencies
+├── README.md                 # This file
 └── ...
 ```
 
@@ -41,10 +44,15 @@ A modular Node.js backend for ERP-style applications, built with Express and Mon
 - [Node.js](https://nodejs.org/)
 - [Express](https://expressjs.com/)
 - [Mongoose](https://mongoosejs.com/)
+- [MongoDB](https://www.mongodb.com/)
 - [bcrypt](https://www.npmjs.com/package/bcrypt) (password hashing)
+- [dotenv](https://www.npmjs.com/package/dotenv) (environment variables)
 - [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken) (JWT auth)
+- [sanitize-html](https://www.npmjs.com/package/sanitize-html) (HTML sanitization)
 - [helmet](https://www.npmjs.com/package/helmet) (security headers)
 - [JSDoc](https://jsdoc.app/) (documentation)
+- [swagger-jsdoc](https://www.npmjs.com/package/swagger-jsdoc) (API documentation)
+- [swagger-ui-express](https://www.npmjs.com/package/swagger-ui-express) (API documentation UI)
 
 ## Getting Started
 
