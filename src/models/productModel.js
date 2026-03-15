@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { log } from "../utils/logger.js";
-import { checkUserTenantPermissions, getTenantIdForQuery, getTenantQueryCondition, setTenantForData, toPlainObjectIfLean } from './modelService.js';
+import { checkUserTenantPermissions, getTenantIdForQuery, getTenantQueryCondition, setTenantForData, setAutoField, AutoField } from './modelService.js';
 import { sanitizeObjectFields } from '../utils/sanitization.js';
 import { getRelativePath } from '../utils/auxiliary.js';
 
@@ -34,6 +34,8 @@ export const ProductUnits = {
  * @property {Date} updatedAt
  * @property {Date} createdAt
  * @property {ObjectId} tenant
+ * @property {ObjectId} createdBy
+ * @property {ObjectId} updatedBy
  */
 const ProductSchema = new mongoose.Schema({
     name: { type: String, required: true },
@@ -47,6 +49,8 @@ const ProductSchema = new mongoose.Schema({
     active: { type: Boolean, required: true },
     updatedAt: Date,
     createdAt: { type: Date, default: Date.now },
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     tenant: { type: mongoose.Schema.Types.ObjectId, ref: 'Tenant', required: true }
 });
 
@@ -63,6 +67,7 @@ export const createProduct = async (req, productData, allTenants = false, saniti
     log("INFO", `${relativePath}: createProduct(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
     checkUserTenantPermissions(req, allTenants, `${relativePath}: createProduct()`);
     productData = setTenantForData(req, productData, allTenants);
+    productData = setAutoField(req, productData, AutoField.CREATED_BY);
     let newProduct = await new Product({ ...productData }).save();
     if (lean) newProduct = newProduct.toObject();
     if (sanitize) newProduct = sanitizeObjectFields(newProduct, protectedModelFields);
@@ -118,6 +123,7 @@ export const findProductById = async (req, productId, allTenants = false, saniti
 export const updateProductById = async (req, productId, productData, allTenants = false, sanitize = true, lean = true) => {
     log("INFO", `${relativePath}: updateProductById(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
     checkUserTenantPermissions(req, allTenants, `${relativePath}: updateProductById()`);
+    productData = setAutoField(req, productData, AutoField.UPDATED_BY);
     const tenantCondition = getTenantQueryCondition(req, req.user.tenant?.id, allTenants);
     let updatedProduct = await Product.findOneAndUpdate({ _id: productId, ...tenantCondition }, productData, { new: true }).lean(lean).exec();
     if (sanitize) updatedProduct = sanitizeObjectFields(updatedProduct, protectedModelFields);

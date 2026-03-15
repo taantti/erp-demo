@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { log } from "../utils/logger.js";
-import { checkUserTenantPermissions, getTenantIdForQuery, getTenantQueryCondition, setTenantForData, toPlainObjectIfLean } from './modelService.js';
+import { checkUserTenantPermissions, getTenantIdForQuery, getTenantQueryCondition, setTenantForData, toPlainObjectIfLean, setAutoField, AutoField } from './modelService.js';
 import { sanitizeObjectFields } from '../utils/sanitization.js';
 import { getRelativePath } from '../utils/auxiliary.js';
 
@@ -29,6 +29,8 @@ const ProductCategorySchema = new mongoose.Schema({
     active: { type: Boolean, required: true },
     updatedAt: Date,
     createdAt: { type: Date, default: Date.now },
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     tenant: { type: mongoose.Schema.Types.ObjectId, ref: 'Tenant', required: true }
 });
 
@@ -45,6 +47,7 @@ export const createCategory = async (req, categoryData, allTenants = false, sani
     log("INFO", `${relativePath}: createCategory(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
     checkUserTenantPermissions(req, allTenants, `${relativePath}: createCategory()`);
     categoryData = setTenantForData(req, categoryData, allTenants);
+    categoryData = setAutoField(req, categoryData, AutoField.CREATED_BY);
     let newCategory = await new ProductCategory({ ...categoryData }).save();
     if (lean) newCategory = newCategory.toObject();
     if (sanitize) newCategory = sanitizeObjectFields(newCategory, protectedModelFields);
@@ -100,6 +103,7 @@ export const findCategoryById = async (req, categoryId, allTenants = false, sani
 export const updateCategoryById = async (req, categoryId, categoryData, allTenants = false, sanitize = true, lean = true) => {
     log("INFO", `${relativePath}: updateCategoryById(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
     checkUserTenantPermissions(req, allTenants, `${relativePath}: updateCategoryById()`);
+    categoryData = setAutoField(req, categoryData, AutoField.UPDATED_BY);
     const tenantCondition = getTenantQueryCondition(req, req.user.tenant?.id, allTenants);
     let updatedCategory = await ProductCategory.findOneAndUpdate({ _id: categoryId, ...tenantCondition }, categoryData, { new: true }).lean(lean).exec();
     if (sanitize) updatedCategory = sanitizeObjectFields(updatedCategory, protectedModelFields);

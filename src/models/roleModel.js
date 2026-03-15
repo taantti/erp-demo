@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { log } from "../utils/logger.js";
-import { checkUserTenantPermissions, toPlainObjectIfLean } from './modelService.js';
+import { checkUserTenantPermissions, toPlainObjectIfLean, setAutoField, AutoField } from './modelService.js';
 import { sanitizeObjectFields } from '../utils/sanitization.js';
 import { getRelativePath } from '../utils/auxiliary.js';
 
@@ -23,7 +23,9 @@ const RoleSchema = new mongoose.Schema({
         role: { type: Map, of: PermissionSchema },
         tenant: { type: Map, of: PermissionSchema },
         user: { type: Map, of: PermissionSchema }
-    }
+    },
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 });
 
 /**
@@ -40,6 +42,7 @@ export const newRole = async (req, roleData, allTenants = false, sanitize = true
 
     try {
         checkUserTenantPermissions(req, allTenants, `${relativePath}: newRole()`);
+        roleData = setAutoField(req, roleData, AutoField.CREATED_BY);
         let role = await new Role({ ...roleData }).save();
         if (lean) role = role.toObject();
         if (sanitize) role = sanitizeObjectFields(role, protectedModelFields);
@@ -111,6 +114,7 @@ export const findOneRoleAndUpdate = async (req, roleId, roleData, allTenants = f
         let role = await findRoleById(req, roleId, allTenants, false, false);
         if (!role) throw Object.assign(new Error(`Role with id ${roleId} not found.`), { statusCode: 404 });
 
+        roleData = setAutoField(req, roleData, AutoField.UPDATED_BY);
         Object.assign(role, roleData);
         await role.save();
         role = toPlainObjectIfLean(role, lean);

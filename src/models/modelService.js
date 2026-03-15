@@ -6,7 +6,7 @@ const relativePath = getRelativePath(import.meta.url);
 
 /**
  * Check user's tenant permissions.
- * @param {Object} req - Express request object
+ * @param {Object} req - The request object
  * @param {boolean} allTenants - Is admin access required for all tenants
  * @param {string} context - (Optional) Context description for logging
  * @returns {void}
@@ -109,6 +109,41 @@ export const getTenantQueryCondition = (req, tenantId, allTenants) => {
     */
 export const setTenantForData = (req, data, allTenants = false) => {
     if (!allTenants) data.tenant = req.user.tenant.id;
+    return data;
+};
+
+/**
+ * Enum for auto-populated fields.
+ * Used with setAutoField to centralize field population from request context.
+ */
+export const AutoField = Object.freeze({
+    PERFORMED_BY: 'PERFORMED_BY',
+    CREATED_BY: 'CREATED_BY',
+    UPDATED_BY: 'UPDATED_BY',
+});
+
+/**
+ * Set a field on the data object based on the AutoField enum value.
+ * @param {Object} req - The request object
+ * @param {Object} data - The data object to modify
+ * @param {string} field - AutoField enum value
+ * @returns {Object} - The modified data object
+ */
+export const setAutoField = (req, data, field) => {
+    switch (field) {
+        case AutoField.PERFORMED_BY:
+            data.performedBy = req.user.userId;
+            break;
+        case AutoField.CREATED_BY:
+            data.createdBy = req.user.userId;
+            break;
+        case AutoField.UPDATED_BY:
+            data.updatedBy = req.user.userId;
+            break;
+        default:
+            log("ERROR", `${relativePath}: setAutoField(): Unknown AutoField value: ${field}`, false, req);
+            break;
+    }
     return data;
 };
 

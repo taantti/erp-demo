@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import bcrypt from "bcrypt";
 import { roles } from "./roleModel.js";
 import { log } from "../utils/logger.js";
-import { checkUserTenantPermissions, getTenantIdForQuery, getTenantQueryCondition, setTenantForData, toPlainObjectIfLean } from './modelService.js';
+import { checkUserTenantPermissions, getTenantIdForQuery, getTenantQueryCondition, setTenantForData, toPlainObjectIfLean, setAutoField, AutoField } from './modelService.js';
 import { sanitizeObjectFields } from '../utils/sanitization.js';
 import { getRelativePath, convertToBoolean } from '../utils/auxiliary.js';
 
@@ -20,7 +20,9 @@ const UserSchema = new mongoose.Schema({
     active: { type: Boolean, required: true },
     updatedAt: Date,
     createdAt: { type: Date, default: Date.now },
-    tenant: { type: mongoose.Schema.Types.ObjectId, ref: 'Tenant', required: true },
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    tenant: { type: mongoose.Schema.Types.ObjectId, ref: 'Tenant', required: true }
 });
 
 /**
@@ -43,6 +45,7 @@ export const newUser = async (req, userData, allTenants = false, sanitize = true
         const salt = await bcrypt.genSalt(Number(config.BCRYPT_SALT_ROUNDS));
         const hashedPassword = await bcrypt.hash(userData.password, salt);
         userData = setTenantForData(req, userData, allTenants);
+        userData = setAutoField(req, userData, AutoField.CREATED_BY);
         let newUser = await new User({ ...userData, password: hashedPassword }).save();
 
         if (lean) newUser = newUser.toObject();
@@ -123,6 +126,7 @@ export const findOneUserAndUpdate = async (req, userId, userData, allTenants = f
         let user = await findUserById(req, userId, allTenants, false, false);
         if (!user) throw new Error(`User with id ${userId} not found.`);
 
+        userData = setAutoField(req, userData, AutoField.UPDATED_BY);
         Object.assign(user, userData); // Merge new data into the user object.
         await user.save();
         user = toPlainObjectIfLean(user, lean);

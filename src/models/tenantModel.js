@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { log } from "../utils/logger.js";
-import { checkUserTenantPermissions, toPlainObjectIfLean } from './modelService.js';
+import { checkUserTenantPermissions, toPlainObjectIfLean, setAutoField, AutoField } from './modelService.js';
 import { sanitizeObjectFields } from '../utils/sanitization.js';
 import { getRelativePath } from '../utils/auxiliary.js';
 
@@ -11,6 +11,8 @@ const TenantSchema = new mongoose.Schema({
     name: { type: String, required: true, minlength: 3, maxlength: 30 },
     admin: { type: Boolean, required: true },
     active: { type: Boolean, required: true },
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 });
 
 /**
@@ -27,6 +29,7 @@ export const newTenant = async (req, tenantData, allTenants = false, sanitize = 
 
     try {
         checkUserTenantPermissions(req, allTenants, `${relativePath}: newTenant()`);
+        tenantData = setAutoField(req, tenantData, AutoField.CREATED_BY);
         let tenant = await new Tenant({ ...tenantData }).save();
         if (lean) tenant = tenant.toObject();
         if (sanitize) tenant = sanitizeObjectFields(tenant, protectedModelFields);
@@ -112,6 +115,7 @@ export const findOneTenantAndUpdate = async (req, tenantId, tenantData, allTenan
         let tenant = await findTenantById(req, tenantId, allTenants, false, false);
         if (!tenant) throw Object.assign(new Error(`Tenant with id ${tenantId} not found.`), { statusCode: 404 });
 
+        tenantData = setAutoField(req, tenantData, AutoField.UPDATED_BY);
         Object.assign(tenant, tenantData);
         await tenant.save();
         tenant = toPlainObjectIfLean(tenant, lean);
