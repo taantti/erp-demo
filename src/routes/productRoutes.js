@@ -5,233 +5,503 @@ import authorizationMiddleware from '../middlewares/authorizationMiddleware.js';
 const router = express.Router();
 
 // Category routes (must be before /:id to avoid 'category' matching as an id)
+
 /**
- * @swagger 
+ * @swagger
  * /product/category:
  *   get:
  *     summary: Get all categories
- *     description: Get all categories
+ *     description: Retrieve all product categories within the caller's tenant. Supports query parameter filtering.
+ *     tags: [Product Categories]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: name
+ *         schema:
+ *           type: string
+ *         description: Filter by category name
+ *       - in: query
+ *         name: slug
+ *         schema:
+ *           type: string
+ *         description: Filter by slug
+ *       - in: query
+ *         name: active
+ *         schema:
+ *           type: boolean
+ *         description: Filter by active status
  *     responses:
  *       200:
- *         description: OK
+ *         description: Array of category objects
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 categories:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       _id:
- *                         type: string
- *                       name:
- *                         type: string
- *                       description:
- *                         type: string
- *                       active:
- *                         type: boolean
- *                       createdAt:
- *                         type: string
- *                       updatedAt:
- *                         type: string
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/ProductCategory'
+ *       401:
+ *         description: Unauthorized - invalid or missing token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       403:
+ *         description: Forbidden - insufficient permissions
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *   post:
+ *     summary: Create a new category
+ *     description: Create a new product category within the caller's tenant.
+ *     tags: [Product Categories]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/CategoryCreate'
+ *     responses:
+ *       201:
+ *         description: Category created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ProductCategory'
+ *       400:
+ *         description: Validation error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       401:
+ *         description: Unauthorized - invalid or missing token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       403:
+ *         description: Forbidden - insufficient permissions
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 router.get('/category', authorizationMiddleware('category', 'readCategories'), readCategories);
-
-/**
- * @swagger 
- * /product/category/{id}:
- *   get:
- *     summary: Get category by id
- *     description: Get category by id
- *     responses:
- *       200:
- *         description: OK
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 category:
- *                   type: object
- *                   properties:
- *                     _id:
- *                       type: string
- *                     name:
- *                       type: string
- *                     description:
- *                       type: string
- *                     active:
- *                       type: boolean
- *                     createdAt:
- *                       type: string
- *                     updatedAt:
- *                       type: string
- */
-router.get('/category/:id', authorizationMiddleware('category', 'readCategory'), readCategory);
-
-/**
- * @swagger 
- * /product/category:
- *   post:
- *     summary: Create category
- *     description: Create category
- *     responses:
- *       200:
- *         description: OK
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 category:
- *                   type: object
- *                   properties:
- *                     _id:
- *                       type: string
- *                     name:
- *                       type: string
- *                     description:
- *                       type: string
- *                     active:
- *                       type: boolean
- *                     createdAt:
- *                       type: string
- *                     updatedAt:
- *                       type: string
- */
 router.post('/category', authorizationMiddleware('category', 'createCategory'), createCategory);
 
 /**
- * @swagger 
+ * @swagger
  * /product/category/{id}:
- *   put:
- *     summary: Update category
- *     description: Update category
+ *   get:
+ *     summary: Get category by ID
+ *     description: Retrieve a single product category by its ID within the caller's tenant.
+ *     tags: [Product Categories]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Category ID
  *     responses:
  *       200:
- *         description: OK
+ *         description: Category object
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 category:
- *                   type: object
- *                   properties:
- *                     _id:
- *                       type: string
- *                     name:
- *                       type: string
- *                     description:
- *                       type: string
- *                     active:
- *                       type: boolean
- *                     createdAt:
- *                       type: string
- *                     updatedAt:
- *                       type: string
- */
-router.put('/category/:id', authorizationMiddleware('category', 'updateCategory'), updateCategory);
-
-/**
- * @swagger 
- * /product/category/{id}:
- *   delete:
- *     summary: Delete category
- *     description: Delete category
+ *               $ref: '#/components/schemas/ProductCategory'
+ *       401:
+ *         description: Unauthorized - invalid or missing token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       403:
+ *         description: Forbidden - insufficient permissions
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       404:
+ *         description: Category not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *   put:
+ *     summary: Update category
+ *     description: Update an existing product category by its ID within the caller's tenant.
+ *     tags: [Product Categories]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Category ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/CategoryUpdate'
  *     responses:
  *       200:
- *         description: OK
+ *         description: Updated category object
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ProductCategory'
+ *       401:
+ *         description: Unauthorized - invalid or missing token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       403:
+ *         description: Forbidden - insufficient permissions
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       404:
+ *         description: Category not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *   delete:
+ *     summary: Delete category
+ *     description: Delete a product category by its ID within the caller's tenant.
+ *     tags: [Product Categories]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Category ID
+ *     responses:
+ *       200:
+ *         description: Category deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/DeleteResponse'
+ *       401:
+ *         description: Unauthorized - invalid or missing token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       403:
+ *         description: Forbidden - insufficient permissions
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       404:
+ *         description: Category not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
+router.get('/category/:id', authorizationMiddleware('category', 'readCategory'), readCategory);
+router.put('/category/:id', authorizationMiddleware('category', 'updateCategory'), updateCategory);
 router.delete('/category/:id', authorizationMiddleware('category', 'deleteCategory'), deleteCategory);
 
 // Product routes
+
 /**
- * @swagger 
+ * @swagger
  * /product:
  *   get:
  *     summary: Get all products
- *     description: Get all products
+ *     description: Retrieve all products within the caller's tenant. Supports query parameter filtering.
+ *     tags: [Products]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: name
+ *         schema:
+ *           type: string
+ *         description: Filter by product name
+ *       - in: query
+ *         name: sku
+ *         schema:
+ *           type: string
+ *         description: Filter by SKU
+ *       - in: query
+ *         name: unit
+ *         schema:
+ *           type: string
+ *           enum: [piece, kilogram, gram, liter, meter, centimeter, millimeter, box, no unit]
+ *         description: Filter by unit
+ *       - in: query
+ *         name: active
+ *         schema:
+ *           type: boolean
+ *         description: Filter by active status
  *     responses:
  *       200:
- *         description: OK
+ *         description: Array of product objects
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 products:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       _id:
- *                         type: string
- *                       name:
- *                         type: string
- *                       description:
- *                         type: string
- *                       price:
- *                         type: number
- *                       category:
- *                         type: string
- *                       active:
- *                         type: boolean
- *                       createdAt:
- *                         type: string
- *                       updatedAt:
- *                         type: string
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Product'
+ *       401:
+ *         description: Unauthorized - invalid or missing token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       403:
+ *         description: Forbidden - insufficient permissions
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *   post:
+ *     summary: Create a new product
+ *     description: Create a new product within the caller's tenant.
+ *     tags: [Products]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/ProductCreate'
+ *     responses:
+ *       201:
+ *         description: Product created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Product'
+ *       400:
+ *         description: Validation error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       401:
+ *         description: Unauthorized - invalid or missing token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       403:
+ *         description: Forbidden - insufficient permissions
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 router.get('/', authorizationMiddleware('product', 'readProducts'), readProducts);
-
-/**
- * @swagger 
- * /product/{id}:
- *   get:
- *     summary: Get product by ID
- *     description: Get product by ID
- *     responses:
- *       200:
- *         description: OK
- */
-router.get('/:id', authorizationMiddleware('product', 'readProduct'), readProduct);
-
-/**
- * @swagger 
- * /product:
- *   post:
- *     summary: Create product
- *     description: Create product
- *     responses:
- *       200:
- *         description: OK
- */
 router.post('/', authorizationMiddleware('product', 'createProduct'), createProduct);
 
 /**
- * @swagger 
+ * @swagger
  * /product/{id}:
+ *   get:
+ *     summary: Get product by ID
+ *     description: Retrieve a single product by its ID within the caller's tenant.
+ *     tags: [Products]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Product ID
+ *     responses:
+ *       200:
+ *         description: Product object
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Product'
+ *       401:
+ *         description: Unauthorized - invalid or missing token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       403:
+ *         description: Forbidden - insufficient permissions
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       404:
+ *         description: Product not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  *   put:
  *     summary: Update product
- *     description: Update product
+ *     description: Update an existing product by its ID within the caller's tenant.
+ *     tags: [Products]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Product ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/ProductUpdate'
  *     responses:
  *       200:
- *         description: OK
- */
-router.put('/:id', authorizationMiddleware('product', 'updateProduct'), updateProduct);
-
-/**
- * @swagger 
- * /product/{id}:
+ *         description: Updated product object
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Product'
+ *       401:
+ *         description: Unauthorized - invalid or missing token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       403:
+ *         description: Forbidden - insufficient permissions
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       404:
+ *         description: Product not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  *   delete:
  *     summary: Delete product
- *     description: Delete product
+ *     description: Delete a product by its ID within the caller's tenant.
+ *     tags: [Products]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Product ID
  *     responses:
  *       200:
- *         description: OK
+ *         description: Product deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/DeleteResponse'
+ *       401:
+ *         description: Unauthorized - invalid or missing token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       403:
+ *         description: Forbidden - insufficient permissions
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       404:
+ *         description: Product not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
+router.get('/:id', authorizationMiddleware('product', 'readProduct'), readProduct);
+router.put('/:id', authorizationMiddleware('product', 'updateProduct'), updateProduct);
 router.delete('/:id', authorizationMiddleware('product', 'deleteProduct'), deleteProduct);
 
 export default router;
