@@ -139,6 +139,25 @@ export const findOneUserAndUpdate = async (req, userId, userData, allTenants = f
 }
 
 /**
+ * Delete a user by ID.
+ * @param {Object} req - The request object.
+ * @param {string} userId - The ID of the user to delete.
+ * @param {boolean} allTenants - (Optional) Whether to include all tenants or not.
+ * @returns {Promise<Object|null>} - The deleted user object if found, otherwise null.
+ */
+export const deleteUserById = async (req, userId, allTenants = false) => {
+    log("INFO", `${relativePath}: deleteUserById(): allTenants = ${allTenants}`, true, req);
+
+    try {
+        checkUserTenantPermissions(req, allTenants, `${relativePath}: deleteUserById()`);
+        const tenantCondition = getTenantQueryCondition(req, req.user.tenant.id, allTenants);
+        return await User.findOneAndDelete({ _id: userId, ...tenantCondition });
+    } catch (error) {
+        throw error;
+    }
+}
+
+/**
  * Model instance methods, static methods, and virtual properties are documented using JSDoc.
  * - Instance methods: @method @instance (available on user objects)
  * - Static methods: @static (available on the User class)

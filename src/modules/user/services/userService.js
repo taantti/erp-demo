@@ -1,6 +1,6 @@
 import config from './../../../config.js';
 import bcrypt from "bcrypt";
-import { findUsers, findUserById, newUser, findOneUserAndUpdate, User } from '../../../models/index.js';
+import { findUsers, findUserById, newUser, findOneUserAndUpdate, deleteUserById } from '../../../models/index.js';
 import { log } from '../../../utils/logger.js';
 import { getRelativePath } from '../../../utils/auxiliary.js';
 import { sanitizeObjectFields } from '../../../utils/sanitization.js';
@@ -87,10 +87,7 @@ export const updateUserPassword = async (req, res, next) => {
 export const deleteUser = async (req, res, next) => {
     log("INFO", `${relativePath}: deleteUser(${req.params.id}): `, true, req);
     try {
-        const { id } = req.params;
-        const user = await findUserById(req, id, false, false, false);
-        if (!user) return null;
-        await User.findByIdAndDelete(id);
+        const user = await deleteUserById(req, req.params.id, false);
         return user;
     } catch (error) {
         return next(error);
