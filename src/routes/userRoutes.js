@@ -54,10 +54,10 @@ router.post('/', authorizationMiddleware('user', 'createUser'), createUser);
 
 /**
  * @swagger
- * /user/search:
+ * /user:
  *   get:
- *     summary: Search users
- *     description: Search users within the caller's tenant using query parameters as filters.
+ *     summary: Get all users
+ *     description: Retrieve all users within the caller's tenant. Supports query parameter filtering.
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
@@ -121,7 +121,7 @@ router.post('/', authorizationMiddleware('user', 'createUser'), createUser);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/search', authorizationMiddleware('user', 'readUser'), readUsers);
+router.get('/', authorizationMiddleware('user', 'readUsers'), readUsers);
 
 /**
  * @swagger
