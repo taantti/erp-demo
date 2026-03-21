@@ -3,7 +3,7 @@
 A modular Node.js backend for ERP-style applications, built with Express and Mongoose. Supports multi-tenancy, role-based access control and validation/sanitization.
 
 ## Features
-- Modular architecture (user, product, role, tenant, etc.)
+- Modular architecture (user, product, stock, role, tenant, etc.)
 - Multi-tenant support
 - Role-based authentication and authorization (JWT)
 - Deep request validation and sanitization
@@ -29,6 +29,13 @@ A modular Node.js backend for ERP-style applications, built with Express and Mon
 │   │   │   └── services/
 │   │   │       ├── productService.js
 │   │   │       └── categoryService.js
+│   │   ├── stock/
+│   │   │   ├── stockController.js
+│   │   │   └── services/
+│   │   │       ├── stockService.js
+│   │   │       ├── eventService.js
+│   │   │       ├── inventoryService.js
+│   │   │       └── shelfService.js
 │   │   └── ...
 │   ├── routes/               # Express route definitions
 │   ├── middlewares/          # Custom middleware (auth, error, sanitization, ...)
@@ -76,7 +83,8 @@ A modular Node.js backend for ERP-style applications, built with Express and Mon
 - Edit `.env` as needed for your environment (database, JWT, etc).
 
 ## API Overview
-- All endpoints are under `/user`, `/product`, `/role`, `/tenant`, etc.
+- All endpoints are under `/user`, `/product`, `/stock`, `/role`, `/tenant`, etc.
+- Stock module includes sub-resources: `/stock/shelf`, `/stock/event`, `/stock/inventory`.
 - JWT authentication required for protected routes.
 - See `src/routes/` and controller files for details.
 
@@ -100,6 +108,7 @@ This script will populate the database with required tenants and user accounts.
 - Centralized logger with log levels and file output
 - All models and services documented with JSDoc
 - Multi-tenant and role-based access logic in all CRUD operations
+- Centralized auto-population of audit fields (createdBy, updatedBy, performedBy) via `setAutoField` helper
 
 ## Project Status ⚠️
 
