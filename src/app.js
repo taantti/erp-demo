@@ -42,6 +42,7 @@ app.use('/user', routes.user);
 app.use('/tenant', routes.tenant);
 app.use('/role', routes.role);
 app.use('/product', routes.product);
+app.use('/stock', routes.stock);
 
 /* Error handling middlewares */
 app.use(validationErrorMiddleware);
