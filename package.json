@@ -15,6 +15,7 @@
   "description": "A demo ERP-project.",
   "dependencies": {
     "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
     "dotenv": "^17.0.0",
     "express": "^5.1.0",
     "helmet": "^8.1.0",

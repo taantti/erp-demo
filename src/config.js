@@ -5,6 +5,7 @@ dotenv.config();
 const config = {
     NODE_ENV: process.env.NODE_ENV || 'development',
     DATABASE_HOST: process.env.DATABASE_HOST || 'localhost',
+    CORS_ORIGIN: process.env.CORS_ORIGIN || '*',
     DATABASE_PORT: process.env.DATABASE_PORT || '',
     DATABASE_NAME: process.env.DATABASE_NAME || '',
     DATABASE_USERNAME: process.env.DATABASE_USERNAME || '',

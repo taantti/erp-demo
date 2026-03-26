@@ -10,6 +10,7 @@ import { swaggerSpec } from './swagger.js';
 import routes from './routes/index.js';
 import { log } from './utils/logger.js';
 import helmet from "helmet";
+import cors from 'cors';
 
 log("INFO", "DATABASE_HOST = " + config.DATABASE_HOST);
 log("INFO", "DATABASE_PORT = " + config.DATABASE_PORT);
@@ -21,6 +22,11 @@ const app = express();
 
 /* Security middleware */
 app.use(helmet()); 
+
+/* CORS middleware. Allow all origins for development */
+app.use(cors({
+  origin: config.CORS_ORIGIN || 'http://localhost:5173',
+}));
 
 /* Body parser middleware */
 app.use(express.json());
