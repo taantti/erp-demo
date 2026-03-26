@@ -54,13 +54,13 @@ const loadRolePermissions = async (role) => {
     log("INFO", "loadRolePermissions: role = " + role, true);
     switch (role) {
         case 'OVERSEER':
-            return await loadJsonData(new URL('./initOverseerPermissions.json', import.meta.url));
+            return await loadJsonData(new URL('./data/initOverseerPermissions.json', import.meta.url));
         case 'ADMIN':
-            return await loadJsonData(new URL('./initAdminPermissions.json', import.meta.url));
+            return await loadJsonData(new URL('./data/initAdminPermissions.json', import.meta.url));
         case 'WRITER':
-            return await loadJsonData(new URL('./initWriterPermissions.json', import.meta.url));
+            return await loadJsonData(new URL('./data/initWriterPermissions.json', import.meta.url));
         case 'READER':
-            return await loadJsonData(new URL('./initReaderPermissions.json', import.meta.url));
+            return await loadJsonData(new URL('./data/initReaderPermissions.json', import.meta.url));
         default:
             return false;
     };
@@ -171,7 +171,7 @@ const saveUserData = async (users, tenantModel) => {
     for (const userData of users) {
         const { username, password, first_name, last_name, email, role, active } = userData;
         const tenant = tenantModel._id;
-        const saltRounds = config.BCRYPT_SALT_ROUNDS || 10;
+        const saltRounds = Number(config.BCRYPT_SALT_ROUNDS) || 10;
 
         try {
             const salt = bcrypt.genSaltSync(saltRounds);
@@ -197,8 +197,8 @@ if (config.INIT !== true) { // Skip init if not explicitly enabled in .env
     log("INFO", `connected = ${connected}`, true);
     if (!connected) process.exit(1); // 1 = error
 
-    await saveRoleData(await loadJsonData(new URL('./initRoles.json', import.meta.url)));
-    const tenantModel = await saveTenantData(await loadJsonData(new URL('./initTenants.json', import.meta.url)));
-    await saveUserData(await loadJsonData(new URL('./initUsers.json', import.meta.url)), tenantModel);
+    await saveRoleData(await loadJsonData(new URL('./data/initRoles.json', import.meta.url)));
+    const tenantModel = await saveTenantData(await loadJsonData(new URL('./data/initTenants.json', import.meta.url)));
+    await saveUserData(await loadJsonData(new URL('./data/initUsers.json', import.meta.url)), tenantModel);
     process.exit(0); // 0 = success
 })();
