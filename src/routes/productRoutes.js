@@ -102,8 +102,8 @@ const router = express.Router();
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/category', authorizationMiddleware('category', 'readCategories'), readCategories);
-router.post('/category', authorizationMiddleware('category', 'createCategory'), createCategory);
+router.get('/category', authorizationMiddleware('productCategory', 'readProductCategories'), readCategories);
+router.post('/category', authorizationMiddleware('productCategory', 'createProductCategory'), createCategory);
 
 /**
  * @swagger
@@ -247,9 +247,9 @@ router.post('/category', authorizationMiddleware('category', 'createCategory'), 
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/category/:id', authorizationMiddleware('category', 'readCategory'), readCategory);
-router.put('/category/:id', authorizationMiddleware('category', 'updateCategory'), updateCategory);
-router.delete('/category/:id', authorizationMiddleware('category', 'deleteCategory'), deleteCategory);
+router.get('/category/:id', authorizationMiddleware('productCategory', 'readProductCategory'), readCategory);
+router.put('/category/:id', authorizationMiddleware('productCategory', 'updateProductCategory'), updateCategory);
+router.delete('/category/:id', authorizationMiddleware('productCategory', 'deleteProductCategory'), deleteCategory);
 
 // Product routes
 

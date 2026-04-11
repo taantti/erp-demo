@@ -20,6 +20,7 @@ const RoleSchema = new mongoose.Schema({
     role: { type: String, required: true, enum: roles },
     rolePermission: {
         product: { type: Map, of: PermissionSchema },
+        productCategory: { type: Map, of: PermissionSchema },
         role: { type: Map, of: PermissionSchema },
         tenant: { type: Map, of: PermissionSchema },
         user: { type: Map, of: PermissionSchema }

@@ -106,5 +106,32 @@
             "adminTenantOnly": true,
             "immutable": true
         }
+    },
+    "productCategory": {
+        "createProductCategory": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "readProductCategory": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "readProductCategories": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "updateProductCategory": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "deleteProductCategory": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        }
     }
 }

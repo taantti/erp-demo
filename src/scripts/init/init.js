@@ -112,6 +112,7 @@ const saveRoleData = async (roles) => {
         */
         const rolePermission = {
             product: new Map(Object.entries(rolePermissions.product)),
+            productCategory: new Map(Object.entries(rolePermissions.productCategory)),
             role: new Map(Object.entries(rolePermissions.role)),
             tenant: new Map(Object.entries(rolePermissions.tenant)),
             user: new Map(Object.entries(rolePermissions.user))
@@ -119,7 +120,7 @@ const saveRoleData = async (roles) => {
 
 
         try {
-            const roleModel = new Role({ name: name, role: role, rolePermission: rolePermissions });
+            const roleModel = new Role({ name: name, role: role, rolePermission: rolePermission });
             if (!roleModel.save()) return false;
         } catch (error) {
             log("ERROR", "saveRoleData(): error " + error.message, true);
@@ -187,6 +188,24 @@ const saveUserData = async (users, tenantModel) => {
     return true;
 }
 
+const saveProductCategoryData = async (productCategories) => {
+    log("INFO", "saveProductCategoryData(): productCategories = " + JSON.stringify(productCategories), true);
+    
+    for (const productCategoryData of productCategories) {
+        const { name, description, active } = productCategoryData;
+        
+        try {
+            const productCategoryModel = new ProductCategory({ name, description, active });
+            if (!await productCategoryModel.save()) return false;
+        } catch (error) {
+            log("ERROR", "saveProductCategoryData(): error " + error.message, true);
+            return false;
+        }
+    }
+    
+    return true;
+}
+
 if (config.INIT !== true) { // Skip init if not explicitly enabled in .env
     log("INFO", "Skip init. Use .env:  INIT = TRUE to continue.", true);
     process.exit(1);
@@ -200,5 +219,6 @@ if (config.INIT !== true) { // Skip init if not explicitly enabled in .env
     await saveRoleData(await loadJsonData(new URL('./data/initRoles.json', import.meta.url)));
     const tenantModel = await saveTenantData(await loadJsonData(new URL('./data/initTenants.json', import.meta.url)));
     await saveUserData(await loadJsonData(new URL('./data/initUsers.json', import.meta.url)), tenantModel);
+    //await saveProductCategoryData(await loadJsonData(new URL('./data/initProductCategories.json', import.meta.url)));
     process.exit(0); // 0 = success
 })();
