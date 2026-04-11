@@ -16,7 +16,7 @@ export const ProductUnits = {
     CENTIMETER: "centimeter",
     MILLIMETER: "millimeter",
     BOX: "box",
-    NO_UNIT: "no unit"
+    NO_UNIT: "no_unit"
 };
 
 /**
