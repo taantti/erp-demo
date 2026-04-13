@@ -5,10 +5,10 @@ const router = express.Router();
 
 /**
  * @swagger
- * /asset/roles:
+ * /asset/user/roles:
  *   get:
- *     summary: Get available roles
- *     description: Returns a list of roles that the authenticated user can assign. Higher roles see more options based on role hierarchy.
+ *     summary: Get available user roles
+ *     description: Returns a list of user roles that the authenticated user can assign. Higher roles see more options based on role hierarchy.
  *     tags: [Assets]
  *     security:
  *       - bearerAuth: []
@@ -36,7 +36,7 @@ const router = express.Router();
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/roles', readRoles);
+router.get('/user/roles', readRoles);
 
 /**
  * @swagger
