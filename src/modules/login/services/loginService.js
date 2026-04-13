@@ -2,9 +2,16 @@ import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken';
 import config from './../../../config.js';
 import { User } from '../../../models/index.js';
+import { Role } from '../../../models/index.js';
 import { log } from '../../../utils/logger.js';
 
-
+/**
+ * Login service. Validates user credentials and generates JWT token
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ * @returns {string} - JWT token
+ */
 export const login = async (req, res, next) => {
     log("INFO", "loginService.js: login(): ", true, req);
     const { username, password } = req.body;
@@ -21,9 +28,16 @@ export const login = async (req, res, next) => {
         if (!user.active) return next(Object.assign(new Error('User is not active.'), { statusCode: 403 }));
         if (!user.role) return next(Object.assign(new Error('User has no role.'), { statusCode: 403 }));
 
+        const role = await Role.findOne({ name: user.role });
+        if (!role) return next(Object.assign(new Error('User role not found.'), { statusCode: 403 }));
+
         const payload = {
-            user_id: user._id
-            // TODO: User role and permissions
+            user_id: user._id,
+            username: user.username,
+            user_first_name: user.first_name,
+            user_last_name: user.last_name,
+            role: role.name,
+            rolePermission: role.rolePermission
         }
 
         return jwt.sign(payload, config.JWT_SECRET_KEY, { expiresIn: config.JWT_TOKEN_EXPIRATION });
