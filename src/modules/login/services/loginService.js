@@ -28,7 +28,7 @@ export const login = async (req, res, next) => {
         if (!user.active) return next(Object.assign(new Error('User is not active.'), { statusCode: 403 }));
         if (!user.role) return next(Object.assign(new Error('User has no role.'), { statusCode: 403 }));
 
-        const role = await Role.findOne({ name: user.role });
+        const role = await Role.findOne({ role: user.role });
         if (!role) return next(Object.assign(new Error('User role not found.'), { statusCode: 403 }));
 
         const payload = {
