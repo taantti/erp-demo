@@ -3,7 +3,7 @@
 A modular Node.js backend for ERP-style applications, built with Express and Mongoose. Supports multi-tenancy, role-based access control and validation/sanitization.
 
 ## Features
-- Modular architecture (user, product, stock, role, tenant)
+- Modular architecture (user, product, stock, role, tenant, asset)
 - Multi-tenant data isolation at model level
 - Role-based authentication and authorization (JWT)
 - Deep request validation and sanitization
@@ -95,6 +95,8 @@ Request → helmet → JSON parser → sanitization → [/login (public)] → au
 │   │   │       ├── eventService.js
 │   │   │       ├── inventoryService.js
 │   │   │       └── shelfService.js
+│   │   ├── asset/
+│   │   │   └── assetController.js
 │   │   ├── login/
 │   │   ├── role/
 │   │   └── tenant/
@@ -186,6 +188,13 @@ All protected routes require a valid JWT token in the `Authorization: Bearer <to
 | GET | `/role/:id` | Get role by ID |
 | PUT | `/role/:id` | Update role |
 | DELETE | `/role/:id` | Delete role |
+
+### Assets `/asset`
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/asset/roles` | Get available roles (filtered by user's role level) |
+| GET | `/asset/product/units` | Get available product measurement units |
 
 ## API Documentation
 

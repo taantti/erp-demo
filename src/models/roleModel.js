@@ -7,7 +7,7 @@ import { getRelativePath } from '../utils/auxiliary.js';
 const relativePath = getRelativePath(import.meta.url);
 const protectedModelFields = ['__v'];
 
-export const roles = ['OVERSEER', 'ADMIN', 'WRITER', 'READER'];
+export const roles = ['READER', 'WRITER', 'ADMIN', 'OVERSEER'];
 
 const PermissionSchema = new mongoose.Schema({   
     access: { type: Boolean, required: true },

@@ -4,6 +4,7 @@ import roleRoutes from './roleRoutes.js';
 import tenantRoutes from './tenantRoutes.js';
 import userRoutes from './userRoutes.js';
 import stockRoutes from './stockRoutes.js';
+import assetRoutes from './assetRoutes.js';
 
 const routes = {
     login: loginRoutes,
@@ -11,7 +12,8 @@ const routes = {
     role: roleRoutes,
     tenant: tenantRoutes,
     user: userRoutes,
-    stock: stockRoutes
+    stock: stockRoutes,
+    asset: assetRoutes
 }
 
 export default routes;
