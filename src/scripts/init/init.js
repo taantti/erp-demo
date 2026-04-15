@@ -115,7 +115,8 @@ const saveRoleData = async (roles) => {
             productCategory: new Map(Object.entries(rolePermissions.productCategory)),
             role: new Map(Object.entries(rolePermissions.role)),
             tenant: new Map(Object.entries(rolePermissions.tenant)),
-            user: new Map(Object.entries(rolePermissions.user))
+            user: new Map(Object.entries(rolePermissions.user)),
+            stock: new Map(Object.entries(rolePermissions.stock))
         };
 
 

@@ -6,7 +6,6 @@ A modular Node.js backend for ERP-style applications, built with Express and Mon
 - Modular architecture (user, product, stock, role, tenant, asset)
 - Multi-tenant data isolation at model level
 - Role-based authentication and authorization (JWT)
-- Deep request validation and sanitization
 - Centralized error handling and logging
 - Centralized auto-population of audit fields (createdBy, updatedBy, performedBy)
 - RESTful API with Swagger/OpenAPI documentation
