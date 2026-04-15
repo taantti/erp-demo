@@ -133,5 +133,57 @@
             "adminTenantOnly": true,
             "immutable": true
         }
+    },
+    "stock": {
+        "createStock": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "readStock": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "readStocks": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "updateStock": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "deleteStock": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "createShelf": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "readShelf": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "readShelves": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "updateShelf": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "deleteShelf": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        }
     }
 }
