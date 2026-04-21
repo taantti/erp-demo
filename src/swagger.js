@@ -85,9 +85,11 @@ const options = {
           description: 'Permission map per resource. Keys are action names (e.g. createUser, readUser).',
           properties: {
             product: { type: 'object', additionalProperties: { $ref: '#/components/schemas/Permission' } },
+            productCategory: { type: 'object', additionalProperties: { $ref: '#/components/schemas/Permission' } },
             role: { type: 'object', additionalProperties: { $ref: '#/components/schemas/Permission' } },
             tenant: { type: 'object', additionalProperties: { $ref: '#/components/schemas/Permission' } },
             user: { type: 'object', additionalProperties: { $ref: '#/components/schemas/Permission' } },
+            stock: { type: 'object', additionalProperties: { $ref: '#/components/schemas/Permission' } },
           },
         },
         Role: {
@@ -450,6 +452,7 @@ const options = {
           properties: {
             _id: { type: 'string', description: 'Shelf ID' },
             stockId: { type: 'string', description: 'Stock ObjectId' },
+            parentShelfId: { type: 'string', description: 'Parent shelf ObjectId' },
             name: { type: 'string', minLength: 1, maxLength: 100 },
             code: { type: 'string', minLength: 1, maxLength: 50 },
             location: { type: 'string', maxLength: 200 },
@@ -467,6 +470,7 @@ const options = {
           required: ['stockId', 'name', 'code'],
           properties: {
             stockId: { type: 'string', description: 'Stock (warehouse) ObjectId' },
+            parentShelfId: { type: 'string', description: 'Parent shelf ObjectId' },
             name: { type: 'string', minLength: 1, maxLength: 100, description: 'Shelf name' },
             code: { type: 'string', minLength: 1, maxLength: 50, description: 'Shelf code' },
             location: { type: 'string', maxLength: 200 },
@@ -478,6 +482,7 @@ const options = {
           type: 'object',
           properties: {
             stockId: { type: 'string' },
+            parentShelfId: { type: 'string' },
             name: { type: 'string', minLength: 1, maxLength: 100 },
             code: { type: 'string', minLength: 1, maxLength: 50 },
             location: { type: 'string', maxLength: 200 },

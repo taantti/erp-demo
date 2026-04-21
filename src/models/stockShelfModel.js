@@ -9,6 +9,7 @@ const protectedModelFields = ['__v'];
 
 const ShelfSchema = new mongoose.Schema({
   stockId: { type: mongoose.Schema.Types.ObjectId, ref: 'Stock', required: true },
+  parentShelfId: { type: mongoose.Schema.Types.ObjectId, ref: 'Shelf' },
   name: { type: String, required: true, minlength: 1, maxlength: 100 },
   code: { type: String, required: true, minlength: 1, maxlength: 50 },
   location: { type: String, maxlength: 200 },
