@@ -7,25 +7,38 @@ import { getRelativePath } from '../utils/auxiliary.js';
 const relativePath = getRelativePath(import.meta.url);
 const protectedModelFields = ['__v'];
 
+/**
+ * Stock event types
+ * @enum {'receipt'|'issue'|'transfer'|'adjustment'|'stocktake'}
+ * RECEIPT: A new stock entry (e.g., purchase order received)
+ * ISSUE: A stock exit (e.g., sales order fulfilled)
+ * TRANSFER: A stock transfer between shelves or locations
+ * ADJUSTMENT: A stock adjustment (e.g., inventory count)
+ * STOCKTAKE: A stock take (e.g., inventory count)
+ */
+export const StockEventTypes = {
+   RECEIPT: 'receipt',
+   ISSUE: 'issue',
+   TRANSFER: 'transfer',
+   ADJUSTMENT: 'adjustment',
+   STOCKTAKE: 'stocktake'
+};
+
 const StockEventSchema = new mongoose.Schema({
-  eventType: { 
-    type: String, 
-    enum: ['receipt', 'issue', 'transfer', 'adjustment', 'stocktake'],
-    required: true
-  },
-  sourceStockId: { type: mongoose.Schema.Types.ObjectId, ref: 'Stock' },
-  sourceShelfId: { type: mongoose.Schema.Types.ObjectId, ref: 'Shelf' },
-  destinationStockId: { type: mongoose.Schema.Types.ObjectId, ref: 'Stock' },
-  destinationShelfId: { type: mongoose.Schema.Types.ObjectId, ref: 'Shelf' },
-  productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
-  quantity: { type: Number, required: true },
-  purchaseOrderId: { type: mongoose.Schema.Types.ObjectId, ref: 'PurchaseOrder' },
-  reference: { type: String, maxlength: 200 },
-  notes: { type: String, maxlength: 500 },
-  performedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  timestamp: { type: Date, default: Date.now },
-  updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  tenant: { type: mongoose.Schema.Types.ObjectId, ref: 'Tenant', required: true }
+    eventType: { type: String, enum: Object.values(StockEventTypes), required: true },
+    sourceStockId: { type: mongoose.Schema.Types.ObjectId, ref: 'Stock' },
+    sourceShelfId: { type: mongoose.Schema.Types.ObjectId, ref: 'Shelf' },
+    destinationStockId: { type: mongoose.Schema.Types.ObjectId, ref: 'Stock' },
+    destinationShelfId: { type: mongoose.Schema.Types.ObjectId, ref: 'Shelf' },
+    productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
+    quantity: { type: Number, required: true },
+    purchaseOrderId: { type: mongoose.Schema.Types.ObjectId, ref: 'PurchaseOrder' },
+    reference: { type: String, maxlength: 200 },
+    notes: { type: String, maxlength: 500 },
+    performedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    timestamp: { type: Date, default: Date.now },
+    updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    tenant: { type: mongoose.Schema.Types.ObjectId, ref: 'Tenant', required: true }
 });
 
 /**

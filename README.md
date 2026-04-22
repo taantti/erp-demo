@@ -194,6 +194,7 @@ All protected routes require a valid JWT token in the `Authorization: Bearer <to
 |--------|------|-------------|
 | GET | `/asset/roles` | Get available roles (filtered by user's role level) |
 | GET | `/asset/product/units` | Get available product measurement units |
+| GET | `/asset/stock/event-types` | Get available stock event types |
 
 ## API Documentation
 
