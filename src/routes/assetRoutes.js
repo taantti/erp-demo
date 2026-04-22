@@ -90,7 +90,7 @@ router.get('/product/units', readProductUnits);
  *               type: array
  *               items:
  *                 type: string
- *             example: ["receipt", "issue", "transfer", "adjustment", "stocktake"]
+ *             example: ["receipt", "issue", "transfer", "adjustment"]
  *       401:
  *         description: Unauthorized
  *         content:

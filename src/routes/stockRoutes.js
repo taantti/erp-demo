@@ -7,6 +7,7 @@ import {
     readShelves, readShelf, createShelf, updateShelf, deleteShelf
 } from '../modules/stock/stockController.js';
 import authorizationMiddleware from '../middlewares/authorizationMiddleware.js';
+import { validateStockEvent } from '../utils/validation.js';
 
 // Shelf routes (must be before /:id to avoid 'shelf' matching as an id)
 
@@ -276,7 +277,7 @@ router.delete('/shelf/:id', authorizationMiddleware('stock', 'deleteShelf'), del
  *         name: eventType
  *         schema:
  *           type: string
- *           enum: [receipt, issue, transfer, adjustment, stocktake]
+ *           enum: [receipt, issue, transfer, adjustment]
  *         description: Filter by event type
  *       - in: query
  *         name: productId
@@ -365,7 +366,7 @@ router.delete('/shelf/:id', authorizationMiddleware('stock', 'deleteShelf'), del
  *               $ref: '#/components/schemas/Error'
  */
 router.get('/event', authorizationMiddleware('stock', 'readStockEvents'), readStockEvents);
-router.post('/event', authorizationMiddleware('stock', 'createStockEvent'), createStockEvent);
+router.post('/event', authorizationMiddleware('stock', 'createStockEvent'), validateStockEvent, createStockEvent);
 
 /**
  * @swagger
@@ -440,6 +441,12 @@ router.post('/event', authorizationMiddleware('stock', 'createStockEvent'), crea
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/StockEvent'
+ *       400:
+ *         description: Validation error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  *       401:
  *         description: Unauthorized - invalid or missing token
  *         content:
@@ -510,7 +517,7 @@ router.post('/event', authorizationMiddleware('stock', 'createStockEvent'), crea
  *               $ref: '#/components/schemas/Error'
  */
 router.get('/event/:id', authorizationMiddleware('stock', 'readStockEvent'), readStockEvent);
-router.put('/event/:id', authorizationMiddleware('stock', 'updateStockEvent'), updateStockEvent);
+router.put('/event/:id', authorizationMiddleware('stock', 'updateStockEvent'), validateStockEvent, updateStockEvent);
 router.delete('/event/:id', authorizationMiddleware('stock', 'deleteStockEvent'), deleteStockEvent);
 
 // Inventory routes

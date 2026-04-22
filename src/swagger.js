@@ -362,7 +362,7 @@ const options = {
           type: 'object',
           properties: {
             _id: { type: 'string', description: 'Stock event ID' },
-            eventType: { type: 'string', enum: ['receipt', 'issue', 'transfer', 'adjustment', 'stocktake'] },
+            eventType: { type: 'string', enum: ['receipt', 'issue', 'transfer', 'adjustment'] },
             sourceStockId: { type: 'string', description: 'Source stock ObjectId' },
             sourceShelfId: { type: 'string', description: 'Source shelf ObjectId' },
             destinationStockId: { type: 'string', description: 'Destination stock ObjectId' },
@@ -382,7 +382,7 @@ const options = {
           type: 'object',
           required: ['eventType', 'productId', 'quantity'],
           properties: {
-            eventType: { type: 'string', enum: ['receipt', 'issue', 'transfer', 'adjustment', 'stocktake'], description: 'Type of stock event' },
+            eventType: { type: 'string', enum: ['receipt', 'issue', 'transfer', 'adjustment'], description: 'Type of stock event' },
             sourceStockId: { type: 'string', description: 'Source stock ObjectId' },
             sourceShelfId: { type: 'string', description: 'Source shelf ObjectId' },
             destinationStockId: { type: 'string', description: 'Destination stock ObjectId' },
@@ -397,7 +397,7 @@ const options = {
         StockEventUpdate: {
           type: 'object',
           properties: {
-            eventType: { type: 'string', enum: ['receipt', 'issue', 'transfer', 'adjustment', 'stocktake'] },
+            eventType: { type: 'string', enum: ['receipt', 'issue', 'transfer', 'adjustment'] },
             sourceStockId: { type: 'string' },
             sourceShelfId: { type: 'string' },
             destinationStockId: { type: 'string' },

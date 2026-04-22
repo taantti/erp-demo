@@ -9,19 +9,17 @@ const protectedModelFields = ['__v'];
 
 /**
  * Stock event types
- * @enum {'receipt'|'issue'|'transfer'|'adjustment'|'stocktake'}
+ * @enum {'receipt'|'issue'|'transfer'|'adjustment'}
  * RECEIPT: A new stock entry (e.g., purchase order received)
  * ISSUE: A stock exit (e.g., sales order fulfilled)
  * TRANSFER: A stock transfer between shelves or locations
  * ADJUSTMENT: A stock adjustment (e.g., inventory count)
- * STOCKTAKE: A stock take (e.g., inventory count)
  */
 export const StockEventTypes = {
    RECEIPT: 'receipt',
    ISSUE: 'issue',
    TRANSFER: 'transfer',
    ADJUSTMENT: 'adjustment',
-   STOCKTAKE: 'stocktake'
 };
 
 const StockEventSchema = new mongoose.Schema({
