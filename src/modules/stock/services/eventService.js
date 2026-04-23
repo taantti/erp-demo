@@ -1,5 +1,7 @@
+import mongoose from 'mongoose';
 import { StockEventTypes } from '../../../models/stockEventModel.js';
 import { findStockEvents, findStockEventById, createStockEvent as modelCreateStockEvent, updateStockEventById, deleteStockEventById } from '../../../models/index.js';
+import { findInventories, createInventory } from '../../../models/index.js';
 import { log } from '../../../utils/logger.js';
 import { getRelativePath } from '../../../utils/auxiliary.js';
 
@@ -137,18 +139,77 @@ const processIssueStockEvent = async (req) => {
 /**
  * Process a transfer stock event.
  * @param {Object} req - The request object.
- * @returns 
+ * @throws {Error} If the transfer fails.
  */
 const processTransferStockEvent = async (req) => {
-    // TODO: Implement transfer stock event processing logic
-    // For now, just return a success response
-    return { success: true, message: "Transfer stock event processed successfully" };
+    const sourceParams = {
+        stockId: req.body.sourceStockId,
+        shelfId: req.body.sourceShelfId,
+        productId: req.body.productId
+    }
+
+    const destinationParams = {
+        stockId: req.body.destinationStockId,
+        shelfId: req.body.destinationShelfId,
+        productId: req.body.productId
+    }
+
+    const sourceInventoryes = await findInventories(req, sourceParams, false, false, false);
+
+    if (sourceInventoryes.length > 1) {
+        throw new Error("Multiple source inventories found");
+    }
+
+    if (sourceInventoryes.length === 0) {
+        throw new Error("Source inventory not found");
+    }
+
+    const destinationInventoryes = await findInventories(req, destinationParams, false, false, false);
+
+    if (destinationInventoryes.length > 1) {
+        throw new Error("Multiple destination inventories found");
+    }
+
+    let destinationInventory = null;
+    if (destinationInventoryes.length === 0) {
+        destinationInventory = await createInventory(req, {
+            stockId: req.body.destinationStockId,
+            shelfId: req.body.destinationShelfId,
+            productId: req.body.productId,
+            quantity: 0,
+        }, false, false, false);
+
+        destinationInventoryes[0] = destinationInventory;
+    }
+
+    if (sourceInventoryes[0].quantity - req.body.quantity < 0) {
+        throw new Error("Not enough stock to transfer");
+    }
+
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    try {
+        sourceInventoryes[0].quantity -= req.body.quantity;
+        destinationInventoryes[0].quantity += req.body.quantity;
+
+        await sourceInventoryes[0].save({ session });
+        await destinationInventoryes[0].save({ session });
+
+        await session.commitTransaction();
+    } catch (error) {
+        await session.abortTransaction();
+        if (destinationInventory) await destinationInventory.deleteOne();
+        throw error;
+    } finally {
+        session.endSession();
+    }
 };
 
 /**
  * Process an adjustment stock event.
  * @param {Object} req - The request object.
- * @returns 
+ * @returns  
  */
 const processAdjustmentStockEvent = async (req) => {
     // TODO: Implement adjustment stock event processing logic
@@ -156,6 +217,11 @@ const processAdjustmentStockEvent = async (req) => {
     return { success: true, message: "Adjustment stock event processed successfully" };
 };
 
+/**
+ * Process a stock event update.
+ * @param {Object} req - The request object.
+ * @returns  
+ */
 const processStockEventUpdate = async (req) => {
     switch (req.body.eventType) {
         case StockEventTypes.RECEIPT:

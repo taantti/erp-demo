@@ -36,6 +36,10 @@ export const validateStockEvent = (req, res, next) => {
         return next(new Error("Quantity is required"));
     }
 
+    if(typeof req.body.quantity !== "number") {
+        return next(new Error("Quantity must be a number"));
+    }
+
     let error = null;
 
     switch (req.body.eventType) {
