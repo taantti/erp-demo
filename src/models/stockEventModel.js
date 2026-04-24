@@ -9,7 +9,6 @@ const protectedModelFields = ['__v'];
 
 /**
  * Stock event types
- * @enum {'receipt'|'issue'|'transfer'|'adjustment'}
  * RECEIPT: A new stock entry (e.g., purchase order received)
  * ISSUE: A stock exit (e.g., sales order fulfilled)
  * TRANSFER: A stock transfer between shelves or locations

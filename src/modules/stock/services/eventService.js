@@ -208,13 +208,38 @@ const processTransferStockEvent = async (req) => {
 
 /**
  * Process an adjustment stock event.
- * @param {Object} req - The request object.
- * @returns  
+ * @param {Object} req - The request object. 
+ * @throws {Error} If the adjustment fails. 
  */
 const processAdjustmentStockEvent = async (req) => {
-    // TODO: Implement adjustment stock event processing logic
-    // For now, just return a success response
-    return { success: true, message: "Adjustment stock event processed successfully" };
+    const destinationParams = {
+        stockId: req.body.destinationStockId,
+        shelfId: req.body.destinationShelfId,
+        productId: req.body.productId
+    };
+
+    const destinationInventoryes = await findInventories(req, destinationParams, false, false, false);
+
+    if (destinationInventoryes.length > 1) {
+        throw new Error("Multiple destination inventories found");
+    }
+
+    if (destinationInventoryes.length === 0) {
+        throw new Error("Destination inventory not found");
+    }
+
+    if (req.body.quantity < 0) {
+        throw new Error("Quantity cannot be negative");
+    }
+
+    destinationInventoryes[0].quantity = req.body.quantity;
+
+    if (destinationInventoryes[0].quantity === 0) {
+        await destinationInventoryes[0].deleteOne();
+    } else {
+        await destinationInventoryes[0].save();
+    }
+
 };
 
 /**
