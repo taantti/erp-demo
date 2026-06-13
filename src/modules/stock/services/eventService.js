@@ -128,12 +128,40 @@ const processReceiptStockEvent = async (req) => {
 /**
  * Process an issue stock event.
  * @param {Object} req - The request object.
- * @returns 
+ * @throws {Error} If the issue fails.
  */
 const processIssueStockEvent = async (req) => {
-    // TODO: Implement issue stock event processing logic
-    // For now, just return a success response
-    return { success: true, message: "Issue stock event processed successfully" };
+    const sourceParams = {
+        stockId: req.body.sourceStockId,
+        shelfId: req.body.sourceShelfId,
+        productId: req.body.productId
+    }
+
+    const sourceInventoryes = await findInventories(req, sourceParams, false, false, false);
+
+    if (sourceInventoryes.length > 1) {
+        throw new Error("Multiple source inventories found");
+    }
+
+    if (sourceInventoryes.length === 0) {
+        throw new Error("Source inventory not found");
+    }
+
+    if (req.body.quantity <= 0) {
+        throw new Error("Quantity must be positive");
+    }
+
+    if (sourceInventoryes[0].quantity - req.body.quantity < 0) {
+        throw new Error("Not enough stock to issue");
+    }
+
+    sourceInventoryes[0].quantity -= req.body.quantity;
+
+    if (sourceInventoryes[0].quantity === 0) {
+        await sourceInventoryes[0].deleteOne();
+    } else {
+        await sourceInventoryes[0].save();
+    }
 };
 
 /**
