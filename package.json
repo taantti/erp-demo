@@ -1,11 +1,11 @@
 {
   "name": "erp-demo",
   "version": "1.0.0",
-  "main": "src/app.js",
+  "main": "src/server.js",
   "type": "module",
   "scripts": {
     "test": "echo 'TODO: test scripts'",
-    "start": "node src/app.js",
+    "start": "node src/server.js",
     "init": "node src/scripts/init/init.js",
     "build": "echo 'TODO: Typescript build'"
   },
@@ -14,6 +14,7 @@
   "license": "MIT",
   "description": "A demo ERP-project.",
   "dependencies": {
+    "@vendia/serverless-express": "^4.12.6",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "dotenv": "^17.0.0",

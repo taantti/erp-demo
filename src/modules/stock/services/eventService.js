@@ -137,8 +137,8 @@ const processIssueStockEvent = async (req) => {
         productId: req.body.productId
     }
 
-    const sourceInventoryes = await findInventories(req, sourceParams, false, false, false);
-
+    const sourceInventoryes = await findInventories(req, sourceParams, false, false, false); 
+ 
     if (sourceInventoryes.length > 1) {
         throw new Error("Multiple source inventories found");
     }
