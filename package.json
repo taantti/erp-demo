@@ -4,7 +4,7 @@
   "main": "src/server.js",
   "type": "module",
   "scripts": {
-    "test": "echo 'TODO: test scripts'",
+    "test": "echo 'TODO: test scripts' && exit 0",
     "start": "node src/server.js",
     "init": "node src/scripts/init/init.js",
     "build": "echo 'TODO: Typescript build'"
