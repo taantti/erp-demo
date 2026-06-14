@@ -19,8 +19,9 @@ import { log } from '../../utils/logger.js';
 const connectMongoose = async () => {
     log("INFO", "connectMongoose(): ", true);
     try {
-        await mongoose.connect(`mongodb://${config.DATABASE_HOST}:${config.DATABASE_PORT}/${config.DATABASE_NAME}`);
-        log(`Connected to mongodb://${config.DATABASE_HOST}:${config.DATABASE_PORT}/${config.DATABASE_NAME} database`, true);
+        const dbUri = config.DATABASE_URI || `mongodb://${config.DATABASE_HOST}:${config.DATABASE_PORT}/${config.DATABASE_NAME}`;
+        await mongoose.connect(dbUri);
+        log("INFO", "Connected to database", true);
         return true;
     } catch (error) {
         log(`Connection to mongodb://${config.DATABASE_HOST}:${config.DATABASE_PORT}/${config.DATABASE_NAME} database failed`, true);
