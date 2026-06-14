@@ -9,13 +9,14 @@ log("INFO", "DATABASE_NAME = " + config.DATABASE_NAME);
 log("INFO", "PORT = " + config.PORT);
  
 /* Connect to MongoDB and start the server */
-const dbUri = config.DATABASE_USERNAME && config.DATABASE_PASSWORD
+const dbUri = config.DATABASE_URI || (config.DATABASE_USERNAME && config.DATABASE_PASSWORD
     ? `mongodb://${config.DATABASE_USERNAME}:${config.DATABASE_PASSWORD}@${config.DATABASE_HOST}:${config.DATABASE_PORT}/${config.DATABASE_NAME}`
-    : `mongodb://${config.DATABASE_HOST}:${config.DATABASE_PORT}/${config.DATABASE_NAME}`;
+    : `mongodb://${config.DATABASE_HOST}:${config.DATABASE_PORT}/${config.DATABASE_NAME}`);
  
 mongoose.connect(dbUri).then(() => {
-    log("INFO", `Connected to mongodb://${config.DATABASE_HOST}:${config.DATABASE_PORT}/${config.DATABASE_NAME} database`);
- 
+    //log("INFO", "Connecting to: " + dbUri);
+    log("INFO", "Connected to database");
+    
     app.listen(config.PORT, () => {
         log("INFO", `Server running on port ${config.PORT}`);
     });

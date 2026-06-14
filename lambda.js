@@ -13,9 +13,11 @@ let connection;
  */
 export const handler = async (event, context) => {
     if (!connection) {
-        const dbUri = config.DATABASE_USERNAME && config.DATABASE_PASSWORD
-            ? `mongodb://${config.DATABASE_USERNAME}:${config.DATABASE_PASSWORD}@${config.DATABASE_HOST}:${config.DATABASE_PORT}/${config.DATABASE_NAME}`
-            : `mongodb://${config.DATABASE_HOST}:${config.DATABASE_PORT}/${config.DATABASE_NAME}`;
+        const dbUri = config.DATABASE_URI || (
+            config.DATABASE_USERNAME && config.DATABASE_PASSWORD
+                ? `mongodb://${config.DATABASE_USERNAME}:${config.DATABASE_PASSWORD}@${config.DATABASE_HOST}:${config.DATABASE_PORT}/${config.DATABASE_NAME}`
+                : `mongodb://${config.DATABASE_HOST}:${config.DATABASE_PORT}/${config.DATABASE_NAME}`
+        );
             
         connection = await mongoose.connect(dbUri);
     }

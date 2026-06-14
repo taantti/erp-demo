@@ -10,6 +10,7 @@ const config = {
     DATABASE_NAME: process.env.DATABASE_NAME || '',
     DATABASE_USERNAME: process.env.DATABASE_USERNAME || '',
     DATABASE_PASSWORD: process.env.DATABASE_PASSWORD || '',
+    DATABASE_URI: process.env.DATABASE_URI || '',
     PORT: process.env.PORT || '',
     JWT_SECRET_KEY: process.env.JWT_SECRET_KEY || '',
     JWT_PASSPHRASE: process.env.JWT_PASSPHRASE || '',
