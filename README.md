@@ -243,7 +243,23 @@ This script will populate the database with required tenants and user accounts. 
 
 ## Tests
 
-Unit and integration tests will be added in future updates.
+Integration tests using [Vitest](https://vitest.dev/) and [Supertest](https://www.npmjs.com/package/supertest).
+
+```sh
+npm test
+```
+
+Requires a local MongoDB instance or `DATABASE_URI_TEST` in `.env`.
+
+```
+tests/
+├── setup/
+│   └── db.js                          # Test database connection and teardown
+└── integration/
+    └── modules/
+        └── login/
+            └── login.test.js          # Login endpoint tests
+```
 
 ## License
 MIT
