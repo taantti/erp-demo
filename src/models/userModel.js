@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import bcrypt from "bcrypt";
 import { roles } from "./roleModel.js";
 import { log } from "../utils/logger.js";
+import { hashPassword } from "../utils/password.js";
 import { checkUserTenantPermissions, getTenantIdForQuery, getTenantQueryCondition, setTenantForData, toPlainObjectIfLean, setAutoField, AutoField } from './modelService.js';
 import { sanitizeObjectFields } from '../utils/sanitization.js';
 import { getRelativePath, convertToBoolean } from '../utils/auxiliary.js';
@@ -42,8 +43,7 @@ export const newUser = async (req, userData, allTenants = false, sanitize = true
         if (!isValidRawPassword(userData.password)) {
             throw Object.assign(new Error('Password must contain at least one uppercase letter, one number, and one special character, and be at least 8 characters long.'), { statusCode: 400 });
         }
-        const salt = await bcrypt.genSalt(Number(config.BCRYPT_SALT_ROUNDS));
-        const hashedPassword = await bcrypt.hash(userData.password, salt);
+        const hashedPassword = await hashPassword(userData.password);
         userData = setTenantForData(req, userData, allTenants);
         userData = setAutoField(req, userData, AutoField.CREATED_BY);
         let newUser = await new User({ ...userData, password: hashedPassword }).save();
