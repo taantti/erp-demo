@@ -26,6 +26,10 @@ jobs:
         run: npm test
         env:
           DATABASE_URI_TEST: ${{ secrets.DATABASE_URI_TEST }}
+          BCRYPT_SALT_ROUNDS: ${{ secrets.BCRYPT_SALT_ROUNDS }}
+          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+          JWT_PASSPHRASE: ${{ secrets.JWT_PASSPHRASE }}
+          JWT_TOKEN_EXPIRATION: ${{ secrets.JWT_TOKEN_EXPIRATION }}
 
   deploy:
     name: Deploy
