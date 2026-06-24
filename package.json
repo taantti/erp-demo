@@ -4,7 +4,7 @@
   "main": "src/server.js",
   "type": "module",
   "scripts": {
-    "test": "vitest run",
+    "test": "vitest run --fileParallelism=false",
     "start": "node src/server.js",
     "init": "node src/scripts/init/init.js",
     "build": "echo 'TODO: Typescript build'"

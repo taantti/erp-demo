@@ -154,7 +154,7 @@ export const setAutoField = (req, data, field) => {
  * @returns {*} - The plain JavaScript object or the original document. (JSDoc type * means "any type")
  */
 export const toPlainObjectIfLean = (document, lean) => {
-    if(!document || lean) return document;
+    if(!document || !lean) return document;
     return document.toObject();
 }
 
