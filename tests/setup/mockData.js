@@ -37,12 +37,19 @@ export const createMockRole = async () => {
         role: "OVERSEER",
         rolePermission: {
             user: {
-                createUser: { access: true, immutable: false, adminTenantOnly: false },
-                readUsers: { access: true, immutable: false, adminTenantOnly: false },
-                readUser: { access: true, immutable: false, adminTenantOnly: false },
-                updateUser: { access: true, immutable: false, adminTenantOnly: false },
-                deleteUser: { access: true, immutable: false, adminTenantOnly: false },
-                updateUserPassword: { access: true, immutable: false, adminTenantOnly: false }
+                createUser: {           access: true, immutable: false, adminTenantOnly: false },
+                readUsers: {            access: true, immutable: false, adminTenantOnly: false },
+                readUser: {             access: true, immutable: false, adminTenantOnly: false },
+                updateUser: {           access: true, immutable: false, adminTenantOnly: false },
+                deleteUser: {           access: true, immutable: false, adminTenantOnly: false },
+                updateUserPassword: {   access: true, immutable: false, adminTenantOnly: false }
+            },
+            productCategory: {
+                createProductCategory: {    access: true, immutable: false, adminTenantOnly: false },
+                readProductCategories: {    access: true, immutable: false, adminTenantOnly: false },
+                readProductCategory: {      access: true, immutable: false, adminTenantOnly: false },
+                updateProductCategory: {    access: true, immutable: false, adminTenantOnly: false },
+                deleteProductCategory: {    access: true, immutable: false, adminTenantOnly: false }
             }
         }
     }

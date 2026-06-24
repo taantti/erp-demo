@@ -1,9 +1,9 @@
 import app from "../../../../src/app.js";
-import { log } from './../../../../src/utils/logger.js';
 import { describe, it, expect, beforeAll, afterAll } from "vitest";
 import { setup, teardown } from "../../../setup/db.js";
 import request from 'supertest';
 import { createMockTenant, createMockRole, createMockUser, username, password } from "../../../setup/mockData.js";
+import { login } from "../../../setup/login.js";
 
 let jwtToken = null;
 let userData = null;
@@ -21,16 +21,6 @@ const createMockData = async () => {
     } catch (error) {
         console.error('MOCK DATA FAILED:', error);
         throw error;
-    }
-}
-
-const login = async () => {
-    try {
-        const response = await request(app).post("/login").send({ username: username, password: password });
-        return response;
-    } catch (error) {
-        log("ERROR", "Error logging in:", error, true);
-        return null;
     }
 }
 
