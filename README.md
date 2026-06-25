@@ -255,7 +255,7 @@ Requires a local MongoDB instance or `DATABASE_URI_TEST` in `.env`.
 tests/
 ├── setup/
 │   ├── db.js                          # Test database connection and teardown
-│   ├── mockData.js                    # Shared mock data (tenant, role, user)
+│   ├── mockData.js                    # Shared mock data (tenant, role, user, category)
 │   └── login.js                       # Shared login utility
 └── integration/
     └── modules/
@@ -264,7 +264,8 @@ tests/
         ├── user/
         │   └── user.test.js           # User CRUD endpoint tests
         └── product/
-            └── category.test.js       # Product category CRUD endpoint tests
+            ├── category.test.js       # Product category CRUD endpoint tests
+            └── product.test.js        # Product CRUD endpoint tests
 ```
 
 ## License
