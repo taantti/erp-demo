@@ -1,11 +1,12 @@
 import { findProducts, findProductById, createProduct as modelCreateProduct, updateProductById, deleteProductById } from '../../../models/index.js';
-import { log } from '../../../utils/logger.js';
-import { getRelativePath } from '../../../utils/auxiliary.js';
 
-const relativePath = getRelativePath(import.meta.url);
-
+/**
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ * @returns {Promise<any>}
+ */
 export const createProduct = async (req, res, next) => {
-    log("INFO", `${relativePath}: createProduct(): `, true, req);
     try {
         const product = await modelCreateProduct(req, req.body, false, true, true);
         return product;
@@ -14,8 +15,13 @@ export const createProduct = async (req, res, next) => {
     }
 };
 
+/**
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ * @returns {Promise<any>}
+ */
 export const readProduct = async (req, res, next) => {
-    log("INFO", `${relativePath}: readProduct(${req.params.id}): `, true, req);
     try {
         const product = await findProductById(req, req.params.id, false, true, true);
         return product;
@@ -24,8 +30,13 @@ export const readProduct = async (req, res, next) => {
     }
 };
 
+/**
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ * @returns {Promise<any>}
+ */
 export const readProducts = async (req, res, next) => {
-    log("INFO", `${relativePath}: readProducts(): `, true, req);
     try {
         const products = await findProducts(req, req.query, false, true, true);
         return products;
@@ -34,8 +45,13 @@ export const readProducts = async (req, res, next) => {
     }
 };
 
+/**
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ * @returns {Promise<any>}
+ */
 export const updateProduct = async (req, res, next) => {
-    log("INFO", `${relativePath}: updateProduct(${req.params.id}): `, true, req);
     try {
         const product = await updateProductById(req, req.params.id, req.body, false, true, true);
         return product;
@@ -44,8 +60,13 @@ export const updateProduct = async (req, res, next) => {
     }
 };
 
+/**
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ * @returns {Promise<any>}
+ */
 export const deleteProduct = async (req, res, next) => {
-    log("INFO", `${relativePath}: deleteProduct(${req.params.id}): `, true, req);
     try {
         const product = await deleteProductById(req, req.params.id, false);
         return product;

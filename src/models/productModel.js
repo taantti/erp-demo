@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { log } from "../utils/logger.js";
 import { checkUserTenantPermissions, getTenantIdForQuery, getTenantQueryCondition, setTenantForData, setAutoField, AutoField } from './modelService.js';
 import { sanitizeObjectFields } from '../utils/sanitization.js';
 import { getRelativePath } from '../utils/auxiliary.js';
@@ -64,7 +63,6 @@ const ProductSchema = new mongoose.Schema({
  * @returns {Promise<Object>}
  */
 export const createProduct = async (req, productData, allTenants = false, sanitize = true, lean = true) => {
-    log("INFO", `${relativePath}: createProduct(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
     checkUserTenantPermissions(req, allTenants, `${relativePath}: createProduct()`);
     productData = setTenantForData(req, productData, allTenants);
     productData = setAutoField(req, productData, AutoField.CREATED_BY);
@@ -84,7 +82,6 @@ export const createProduct = async (req, productData, allTenants = false, saniti
  * @returns {Promise<Array>}
  */
 export const findProducts = async (req, params = {}, allTenants = false, sanitize = true, lean = true) => {
-    log("INFO", `${relativePath}: findProducts(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
     checkUserTenantPermissions(req, allTenants, `${relativePath}: findProducts()`);
     params.tenant = getTenantIdForQuery(req, params.tenant, allTenants);
     let products = await Product.find(params).lean(lean).exec();
@@ -102,7 +99,6 @@ export const findProducts = async (req, params = {}, allTenants = false, sanitiz
  * @returns {Promise<Object|null>}
  */
 export const findProductById = async (req, productId, allTenants = false, sanitize = true, lean = true) => {
-    log("INFO", `${relativePath}: findProductById(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
     checkUserTenantPermissions(req, allTenants, `${relativePath}: findProductById()`);
     const tenantCondition = getTenantQueryCondition(req, req.user.tenant?.id, allTenants);
     let product = await Product.findOne({ _id: productId, ...tenantCondition }).lean(lean).exec();
@@ -121,7 +117,6 @@ export const findProductById = async (req, productId, allTenants = false, saniti
  * @returns {Promise<Object|null>}
  */
 export const updateProductById = async (req, productId, productData, allTenants = false, sanitize = true, lean = true) => {
-    log("INFO", `${relativePath}: updateProductById(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
     checkUserTenantPermissions(req, allTenants, `${relativePath}: updateProductById()`);
     productData = setAutoField(req, productData, AutoField.UPDATED_BY);
     const tenantCondition = getTenantQueryCondition(req, req.user.tenant?.id, allTenants);
@@ -138,7 +133,6 @@ export const updateProductById = async (req, productId, productData, allTenants 
  * @returns {Promise<Object|null>}
  */
 export const deleteProductById = async (req, productId, allTenants = false) => {
-    log("INFO", `${relativePath}: deleteProductById(): allTenants = ${allTenants}`, true, req);
     checkUserTenantPermissions(req, allTenants, `${relativePath}: deleteProductById()`);
     const tenantCondition = getTenantQueryCondition(req, req.user.tenant?.id, allTenants);
     return await Product.findOneAndDelete({ _id: productId, ...tenantCondition });

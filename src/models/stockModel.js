@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { log } from "../utils/logger.js";
 import { checkUserTenantPermissions, getTenantIdForQuery, getTenantQueryCondition, setTenantForData, setAutoField, AutoField } from './modelService.js';
 import { sanitizeObjectFields } from '../utils/sanitization.js';
 import { getRelativePath } from '../utils/auxiliary.js';
@@ -47,7 +46,6 @@ StockSchema.pre('save', async function (next) {
  * @returns {Promise<Object>} - The created stock object.
  */
 export const createStock = async (req, stockData, allTenants = false, sanitize = true, lean = true) => {
-    log("INFO", `${relativePath}: createStock(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
     checkUserTenantPermissions(req, allTenants, `${relativePath}: createStock()`);
     stockData = setTenantForData(req, stockData, allTenants);
     stockData = setAutoField(req, stockData, AutoField.CREATED_BY);
@@ -67,7 +65,6 @@ export const createStock = async (req, stockData, allTenants = false, sanitize =
  * @returns {Promise<Array>} - Returns an array of stock objects (possibly empty array).
  */
 export const findStocks = async (req, params = {}, allTenants = false, sanitize = true, lean = true) => {
-    log("INFO", `${relativePath}: findStocks(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
     checkUserTenantPermissions(req, allTenants, `${relativePath}: findStocks()`);
     params.tenant = getTenantIdForQuery(req, params.tenant, allTenants);
     let stocks = await Stock.find(params).lean(lean).exec();
@@ -85,7 +82,6 @@ export const findStocks = async (req, params = {}, allTenants = false, sanitize 
  * @returns {Promise<Object|null>} - The stock object if found, otherwise null.
  */
 export const findStockById = async (req, stockId, allTenants = false, sanitize = true, lean = true) => {
-    log("INFO", `${relativePath}: findStockById(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
     checkUserTenantPermissions(req, allTenants, `${relativePath}: findStockById()`);
     const tenantCondition = getTenantQueryCondition(req, req.user.tenant?.id, allTenants);
     let stock = await Stock.findOne({ _id: stockId, ...tenantCondition }).lean(lean).exec();
@@ -104,7 +100,6 @@ export const findStockById = async (req, stockId, allTenants = false, sanitize =
  * @returns {Promise<Object|null>} - The updated stock object if found and updated, otherwise null.
  */
 export const updateStockById = async (req, stockId, stockData, allTenants = false, sanitize = true, lean = true) => {
-    log("INFO", `${relativePath}: updateStockById(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
     checkUserTenantPermissions(req, allTenants, `${relativePath}: updateStockById()`);
     stockData = setAutoField(req, stockData, AutoField.UPDATED_BY);
     const tenantCondition = getTenantQueryCondition(req, req.user.tenant?.id, allTenants);
@@ -121,7 +116,6 @@ export const updateStockById = async (req, stockId, stockData, allTenants = fals
  * @returns {Promise<Object|null>} - The deleted stock object if found, otherwise null.
  */
 export const deleteStockById = async (req, stockId, allTenants = false) => {
-    log("INFO", `${relativePath}: deleteStockById(): allTenants = ${allTenants}`, true, req);
     checkUserTenantPermissions(req, allTenants, `${relativePath}: deleteStockById()`);
     const tenantCondition = getTenantQueryCondition(req, req.user.tenant?.id, allTenants);
     return await Stock.findOneAndDelete({ _id: stockId, ...tenantCondition });

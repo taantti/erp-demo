@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { log } from "../utils/logger.js";
 import { checkUserTenantPermissions, getTenantIdForQuery, getTenantQueryCondition, setTenantForData, setAutoField, AutoField } from './modelService.js';
 import { sanitizeObjectFields } from '../utils/sanitization.js';
 import { getRelativePath } from '../utils/auxiliary.js';
@@ -48,7 +47,6 @@ const StockEventSchema = new mongoose.Schema({
  * @returns {Promise<Object>} - The created stock event object.
  */
 export const createStockEvent = async (req, eventData, allTenants = false, sanitize = true, lean = true) => {
-    log("INFO", `${relativePath}: createStockEvent(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
     checkUserTenantPermissions(req, allTenants, `${relativePath}: createStockEvent()`);
     eventData = setTenantForData(req, eventData, allTenants);
     eventData = setAutoField(req, eventData, AutoField.PERFORMED_BY);
@@ -68,7 +66,6 @@ export const createStockEvent = async (req, eventData, allTenants = false, sanit
  * @returns {Promise<Array>} - Returns an array of stock event objects (possibly empty array).
  */
 export const findStockEvents = async (req, params = {}, allTenants = false, sanitize = true, lean = true) => {
-    log("INFO", `${relativePath}: findStockEvents(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
     checkUserTenantPermissions(req, allTenants, `${relativePath}: findStockEvents()`);
     params.tenant = getTenantIdForQuery(req, params.tenant, allTenants);
     let events = await StockEvent.find(params).lean(lean).exec();
@@ -86,7 +83,6 @@ export const findStockEvents = async (req, params = {}, allTenants = false, sani
  * @returns {Promise<Object|null>} - The stock event object if found, otherwise null.
  */
 export const findStockEventById = async (req, eventId, allTenants = false, sanitize = true, lean = true) => {
-    log("INFO", `${relativePath}: findStockEventById(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
     checkUserTenantPermissions(req, allTenants, `${relativePath}: findStockEventById()`);
     const tenantCondition = getTenantQueryCondition(req, req.user.tenant?.id, allTenants);
     let event = await StockEvent.findOne({ _id: eventId, ...tenantCondition }).lean(lean).exec();
@@ -105,7 +101,6 @@ export const findStockEventById = async (req, eventId, allTenants = false, sanit
  * @returns {Promise<Object|null>} - The updated stock event object if found and updated, otherwise null.
  */
 export const updateStockEventById = async (req, eventId, eventData, allTenants = false, sanitize = true, lean = true) => {
-    log("INFO", `${relativePath}: updateStockEventById(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
     checkUserTenantPermissions(req, allTenants, `${relativePath}: updateStockEventById()`);
     eventData = setAutoField(req, eventData, AutoField.UPDATED_BY);
     const tenantCondition = getTenantQueryCondition(req, req.user.tenant?.id, allTenants);
@@ -122,7 +117,6 @@ export const updateStockEventById = async (req, eventId, eventData, allTenants =
  * @returns {Promise<Object|null>} - The deleted stock event object if found, otherwise null.
  */
 export const deleteStockEventById = async (req, eventId, allTenants = false) => {
-    log("INFO", `${relativePath}: deleteStockEventById(): allTenants = ${allTenants}`, true, req);
     checkUserTenantPermissions(req, allTenants, `${relativePath}: deleteStockEventById()`);
     const tenantCondition = getTenantQueryCondition(req, req.user.tenant?.id, allTenants);
     return await StockEvent.findOneAndDelete({ _id: eventId, ...tenantCondition });

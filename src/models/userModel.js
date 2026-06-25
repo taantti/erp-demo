@@ -1,8 +1,6 @@
-import config from './../config.js';
 import mongoose from 'mongoose';
 import bcrypt from "bcrypt";
 import { roles } from "./roleModel.js";
-import { log } from "../utils/logger.js";
 import { hashPassword } from "../utils/password.js";
 import { checkUserTenantPermissions, getTenantIdForQuery, getTenantQueryCondition, setTenantForData, toPlainObjectIfLean, setAutoField, AutoField } from './modelService.js';
 import { sanitizeObjectFields } from '../utils/sanitization.js';
@@ -36,8 +34,6 @@ const UserSchema = new mongoose.Schema({
  * @returns {Promise<Object>} - The created user object.
  */
 export const newUser = async (req, userData, allTenants = false, sanitize = true, lean = true) => {
-    log("INFO", `${relativePath}: newUser(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
-
     try {
         checkUserTenantPermissions(req, allTenants, `${relativePath}: newUser()`);
         if (!isValidRawPassword(userData.password)) {
@@ -66,14 +62,9 @@ export const newUser = async (req, userData, allTenants = false, sanitize = true
  * @returns {Promise<Object|null>} - The user object if found, otherwise null.
  */
 export const findUserById = async (req, userId, allTenants = false, sanitize = true, lean = true) => {
-    log("INFO", `${relativePath}: findUserById(): allTenants = ${allTenants}: lean = ${lean}`, true, req);
-
     try {
         checkUserTenantPermissions(req, allTenants, `${relativePath}: findUserById()`);
-
         const tenantCondition = getTenantQueryCondition(req, req.user.tenant.id, allTenants);
-        log("INFO", `${relativePath}: findUserById(): tenantCondition = ${JSON.stringify(tenantCondition)}:`, true, req);
-
         let user = await User.findOne({ _id: userId, ...tenantCondition }).lean(lean).exec();
         if (sanitize) user = sanitizeObjectFields(user, protectedModelFields);
         return user;
@@ -93,9 +84,6 @@ export const findUserById = async (req, userId, allTenants = false, sanitize = t
  * @throws {Error} - Throws if permission denied or query fails.
  */
 export const findUsers = async (req, params, allTenants = false, sanitize = true, lean = true) => {
-    log("INFO", `${relativePath}: findUsers(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
-    log("INFO", `${relativePath}: findUsers(): initial params = ${JSON.stringify(params)}`, true, req);
-
     try {
         checkUserTenantPermissions(req, allTenants, `${relativePath}: findUsers()`);
         params.tenant = getTenantIdForQuery(req, params.tenant, allTenants); // Initialize the tenant condition parameter for queries.
@@ -120,8 +108,6 @@ export const findUsers = async (req, params, allTenants = false, sanitize = true
  * @returns {Promise<Object|null>} - The updated user object if found and updated, otherwise null.
  */
 export const findOneUserAndUpdate = async (req, userId, userData, allTenants = false, sanitize = true, lean = true) => {
-    log("INFO", `${relativePath}: findOneUserAndUpdate(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
-
     try {
         let user = await findUserById(req, userId, allTenants, false, false);
         if (!user) throw new Error(`User with id ${userId} not found.`);
@@ -146,8 +132,6 @@ export const findOneUserAndUpdate = async (req, userId, userData, allTenants = f
  * @returns {Promise<Object|null>} - The deleted user object if found, otherwise null.
  */
 export const deleteUserById = async (req, userId, allTenants = false) => {
-    log("INFO", `${relativePath}: deleteUserById(): allTenants = ${allTenants}`, true, req);
-
     try {
         checkUserTenantPermissions(req, allTenants, `${relativePath}: deleteUserById()`);
         const tenantCondition = getTenantQueryCondition(req, req.user.tenant.id, allTenants);

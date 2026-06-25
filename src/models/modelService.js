@@ -13,8 +13,6 @@ const relativePath = getRelativePath(import.meta.url);
  * @throws {Error} - Throws "Permission denied" error if permissions are insufficient
  */
 export const checkUserTenantPermissions = (req, allTenants, context = "") => {
-    log("INFO", `${relativePath}: checkUserTenantPermissions(): allTenants = ${allTenants}`, true, req);
-
     if (allTenants && !isAdminTenant(req)) {
         log("CRITICAL", `${context}: Admin tenant access required to access all tenants documents. This should not happen!`, true, req);
         throw new Error("Permission denied");
@@ -63,7 +61,6 @@ export const isOverseerRole = (req) => {
  * @returns {boolean} - True if the user has a tenant, false otherwise.
  */
 export const checkTenant = (req) => {
-    log("INFO", `${relativePath}: checkTenant`, true, req);
     if (!req?.user?.tenant?.id) {
         log("ERROR", `${relativePath}: checkTenant: User ${req?.user?.username} has no tenant.`, false, req);
         return false;
@@ -81,7 +78,6 @@ export const checkTenant = (req) => {
  * @returns {ObjectId} - The tenant ID to use in the query. 
  */
 export const getTenantIdForQuery = (req, tenant, allTenants) => {
-    log("INFO", `${relativePath}: getTenantIdForQuery(): allTenants = ${allTenants}`, true, req);
     if (!allTenants || !tenant) tenant = req.user.tenant.id;
     return new mongoose.Types.ObjectId(tenant);
 }
@@ -94,7 +90,6 @@ export const getTenantIdForQuery = (req, tenant, allTenants) => {
  * @returns {Object} - The tenant query condition.
  */
 export const getTenantQueryCondition = (req, tenantId, allTenants) => {
-    log("INFO", `${relativePath}: getTenantQueryCondition(): allTenants = ${allTenants}`, true, req);
     if (allTenants) return {};
     return { tenant: new mongoose.Types.ObjectId(tenantId) };
 }

@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { log } from "../utils/logger.js";
 import { checkUserTenantPermissions, getTenantIdForQuery, getTenantQueryCondition, setTenantForData, setAutoField, AutoField } from './modelService.js';
 import { sanitizeObjectFields } from '../utils/sanitization.js';
 import { getRelativePath } from '../utils/auxiliary.js';
@@ -37,7 +36,6 @@ ShelfSchema.pre('save', async function (next) {
  * @returns {Promise<Object>} - The created shelf object.
  */
 export const createShelf = async (req, shelfData, allTenants = false, sanitize = true, lean = true) => {
-    log("INFO", `${relativePath}: createShelf(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
     checkUserTenantPermissions(req, allTenants, `${relativePath}: createShelf()`);
     shelfData = setTenantForData(req, shelfData, allTenants);
     shelfData = setAutoField(req, shelfData, AutoField.CREATED_BY);
@@ -57,7 +55,6 @@ export const createShelf = async (req, shelfData, allTenants = false, sanitize =
  * @returns {Promise<Array>} - Returns an array of shelf objects (possibly empty array).
  */
 export const findShelves = async (req, params = {}, allTenants = false, sanitize = true, lean = true) => {
-    log("INFO", `${relativePath}: findShelves(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
     checkUserTenantPermissions(req, allTenants, `${relativePath}: findShelves()`);
     params.tenant = getTenantIdForQuery(req, params.tenant, allTenants);
     let shelves = await Shelf.find(params).lean(lean).exec();
@@ -75,7 +72,6 @@ export const findShelves = async (req, params = {}, allTenants = false, sanitize
  * @returns {Promise<Object|null>} - The shelf object if found, otherwise null.
  */
 export const findShelfById = async (req, shelfId, allTenants = false, sanitize = true, lean = true) => {
-    log("INFO", `${relativePath}: findShelfById(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
     checkUserTenantPermissions(req, allTenants, `${relativePath}: findShelfById()`);
     const tenantCondition = getTenantQueryCondition(req, req.user.tenant?.id, allTenants);
     let shelf = await Shelf.findOne({ _id: shelfId, ...tenantCondition }).lean(lean).exec();
@@ -94,7 +90,6 @@ export const findShelfById = async (req, shelfId, allTenants = false, sanitize =
  * @returns {Promise<Object|null>} - The updated shelf object if found and updated, otherwise null.
  */
 export const updateShelfById = async (req, shelfId, shelfData, allTenants = false, sanitize = true, lean = true) => {
-    log("INFO", `${relativePath}: updateShelfById(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
     checkUserTenantPermissions(req, allTenants, `${relativePath}: updateShelfById()`);
     shelfData = setAutoField(req, shelfData, AutoField.UPDATED_BY);
     const tenantCondition = getTenantQueryCondition(req, req.user.tenant?.id, allTenants);
@@ -111,7 +106,6 @@ export const updateShelfById = async (req, shelfId, shelfData, allTenants = fals
  * @returns {Promise<Object|null>} - The deleted shelf object if found, otherwise null.
  */
 export const deleteShelfById = async (req, shelfId, allTenants = false) => {
-    log("INFO", `${relativePath}: deleteShelfById(): allTenants = ${allTenants}`, true, req);
     checkUserTenantPermissions(req, allTenants, `${relativePath}: deleteShelfById()`);
     const tenantCondition = getTenantQueryCondition(req, req.user.tenant?.id, allTenants);
     return await Shelf.findOneAndDelete({ _id: shelfId, ...tenantCondition });

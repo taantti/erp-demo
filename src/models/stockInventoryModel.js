@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { log } from "../utils/logger.js";
 import { checkUserTenantPermissions, getTenantIdForQuery, getTenantQueryCondition, setTenantForData, setAutoField, AutoField } from './modelService.js';
 import { sanitizeObjectFields } from '../utils/sanitization.js';
 import { getRelativePath } from '../utils/auxiliary.js';
@@ -35,7 +34,6 @@ InventorySchema.pre('save', async function (next) {
  * @returns {Promise<Object>} - The created inventory object.
  */
 export const createInventory = async (req, inventoryData, allTenants = false, sanitize = true, lean = true) => {
-    log("INFO", `${relativePath}: createInventory(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
     checkUserTenantPermissions(req, allTenants, `${relativePath}: createInventory()`);
     inventoryData = setTenantForData(req, inventoryData, allTenants);
     inventoryData = setAutoField(req, inventoryData, AutoField.CREATED_BY);
@@ -55,7 +53,6 @@ export const createInventory = async (req, inventoryData, allTenants = false, sa
  * @returns {Promise<Array>} - Returns an array of inventory objects (possibly empty array).
  */
 export const findInventories = async (req, params = {}, allTenants = false, sanitize = true, lean = true) => {
-    log("INFO", `${relativePath}: findInventories(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
     checkUserTenantPermissions(req, allTenants, `${relativePath}: findInventories()`);
     params.tenant = getTenantIdForQuery(req, params.tenant, allTenants);
     let inventories = await Inventory.find(params).lean(lean).exec();
@@ -73,7 +70,6 @@ export const findInventories = async (req, params = {}, allTenants = false, sani
  * @returns {Promise<Object|null>} - The inventory object if found, otherwise null.
  */
 export const findInventoryById = async (req, inventoryId, allTenants = false, sanitize = true, lean = true) => {
-    log("INFO", `${relativePath}: findInventoryById(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
     checkUserTenantPermissions(req, allTenants, `${relativePath}: findInventoryById()`);
     const tenantCondition = getTenantQueryCondition(req, req.user.tenant?.id, allTenants);
     let inventory = await Inventory.findOne({ _id: inventoryId, ...tenantCondition }).lean(lean).exec();
@@ -92,7 +88,6 @@ export const findInventoryById = async (req, inventoryId, allTenants = false, sa
  * @returns {Promise<Object|null>} - The updated inventory object if found and updated, otherwise null.
  */
 export const updateInventoryById = async (req, inventoryId, inventoryData, allTenants = false, sanitize = true, lean = true) => {
-    log("INFO", `${relativePath}: updateInventoryById(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
     checkUserTenantPermissions(req, allTenants, `${relativePath}: updateInventoryById()`);
     inventoryData = setAutoField(req, inventoryData, AutoField.UPDATED_BY);
     const tenantCondition = getTenantQueryCondition(req, req.user.tenant?.id, allTenants);
@@ -109,7 +104,6 @@ export const updateInventoryById = async (req, inventoryId, inventoryData, allTe
  * @returns {Promise<Object|null>} - The deleted inventory object if found, otherwise null.
  */
 export const deleteInventoryById = async (req, inventoryId, allTenants = false) => {
-    log("INFO", `${relativePath}: deleteInventoryById(): allTenants = ${allTenants}`, true, req);
     checkUserTenantPermissions(req, allTenants, `${relativePath}: deleteInventoryById()`);
     const tenantCondition = getTenantQueryCondition(req, req.user.tenant?.id, allTenants);
     return await Inventory.findOneAndDelete({ _id: inventoryId, ...tenantCondition });

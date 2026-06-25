@@ -2,10 +2,6 @@ import mongoose from 'mongoose';
 import { StockEventTypes } from '../../../models/stockEventModel.js';
 import { findStockEvents, findStockEventById, createStockEvent as modelCreateStockEvent, updateStockEventById, deleteStockEventById } from '../../../models/index.js';
 import { findInventories, createInventory } from '../../../models/index.js';
-import { log } from '../../../utils/logger.js';
-import { getRelativePath } from '../../../utils/auxiliary.js';
-
-const relativePath = getRelativePath(import.meta.url);
 
 /**
  * Create a new stock event.
@@ -15,7 +11,6 @@ const relativePath = getRelativePath(import.meta.url);
  * @returns 
  */
 export const createStockEvent = async (req, res, next) => {
-    log("INFO", `${relativePath}: createStockEvent(): `, true, req);
     try {
         await processStockEvent(req);
         const event = await modelCreateStockEvent(req, req.body, false, true, true);
@@ -33,7 +28,6 @@ export const createStockEvent = async (req, res, next) => {
  * @returns 
  */
 export const readStockEvent = async (req, res, next) => {
-    log("INFO", `${relativePath}: readStockEvent(${req.params.id}): `, true, req);
     try {
         const event = await findStockEventById(req, req.params.id, false, true, true);
         return event;
@@ -50,7 +44,6 @@ export const readStockEvent = async (req, res, next) => {
  * @returns 
  */
 export const readStockEvents = async (req, res, next) => {
-    log("INFO", `${relativePath}: readStockEvents(): `, true, req);
     try {
         const events = await findStockEvents(req, req.query, false, true, true);
         return events;
@@ -67,7 +60,6 @@ export const readStockEvents = async (req, res, next) => {
  * @returns 
  */
 export const updateStockEvent = async (req, res, next) => {
-    log("INFO", `${relativePath}: updateStockEvent(${req.params.id}): `, true, req);
     try {
         await processStockEventUpdate(req);
         const event = await updateStockEventById(req, req.params.id, req.body, false, true, true);
@@ -85,7 +77,6 @@ export const updateStockEvent = async (req, res, next) => {
  * @returns 
  */
 export const deleteStockEvent = async (req, res, next) => {
-    log("INFO", `${relativePath}: deleteStockEvent(${req.params.id}): `, true, req);
     try {
         const event = await deleteStockEventById(req, req.params.id, false);
         return event;

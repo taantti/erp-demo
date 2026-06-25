@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { log } from "../utils/logger.js";
 import { checkUserTenantPermissions, getTenantIdForQuery, getTenantQueryCondition, setTenantForData, toPlainObjectIfLean, setAutoField, AutoField } from './modelService.js';
 import { sanitizeObjectFields } from '../utils/sanitization.js';
 import { getRelativePath } from '../utils/auxiliary.js';
@@ -44,7 +43,6 @@ const ProductCategorySchema = new mongoose.Schema({
  * @returns {Promise<Object>}
  */
 export const createCategory = async (req, categoryData, allTenants = false, sanitize = true, lean = true) => {
-    log("INFO", `${relativePath}: createCategory(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
     checkUserTenantPermissions(req, allTenants, `${relativePath}: createCategory()`);
     categoryData = setTenantForData(req, categoryData, allTenants);
     categoryData = setAutoField(req, categoryData, AutoField.CREATED_BY);
@@ -64,7 +62,6 @@ export const createCategory = async (req, categoryData, allTenants = false, sani
  * @returns {Promise<Array>}
  */
 export const findCategories = async (req, params = {}, allTenants = false, sanitize = true, lean = true) => {
-    log("INFO", `${relativePath}: findCategories(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
     checkUserTenantPermissions(req, allTenants, `${relativePath}: findCategories()`);
     params.tenant = getTenantIdForQuery(req, params.tenant, allTenants);
     let categories = await ProductCategory.find(params).lean(lean).exec();
@@ -82,7 +79,6 @@ export const findCategories = async (req, params = {}, allTenants = false, sanit
  * @returns {Promise<Object|null>}
  */
 export const findCategoryById = async (req, categoryId, allTenants = false, sanitize = true, lean = true) => {
-    log("INFO", `${relativePath}: findCategoryById(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
     checkUserTenantPermissions(req, allTenants, `${relativePath}: findCategoryById()`);
     const tenantCondition = getTenantQueryCondition(req, req.user.tenant?.id, allTenants);
     let category = await ProductCategory.findOne({ _id: categoryId, ...tenantCondition }).lean(lean).exec();
@@ -101,7 +97,6 @@ export const findCategoryById = async (req, categoryId, allTenants = false, sani
  * @returns {Promise<Object|null>}
  */
 export const updateCategoryById = async (req, categoryId, categoryData, allTenants = false, sanitize = true, lean = true) => {
-    log("INFO", `${relativePath}: updateCategoryById(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
     checkUserTenantPermissions(req, allTenants, `${relativePath}: updateCategoryById()`);
     categoryData = setAutoField(req, categoryData, AutoField.UPDATED_BY);
     const tenantCondition = getTenantQueryCondition(req, req.user.tenant?.id, allTenants);
@@ -118,12 +113,16 @@ export const updateCategoryById = async (req, categoryId, categoryData, allTenan
  * @returns {Promise<Object|null>}
  */
 export const deleteCategoryById = async (req, categoryId, allTenants = false) => {
-    log("INFO", `${relativePath}: deleteCategoryById(): allTenants = ${allTenants}`, true, req);
     checkUserTenantPermissions(req, allTenants, `${relativePath}: deleteCategoryById()`);
     const tenantCondition = getTenantQueryCondition(req, req.user.tenant?.id, allTenants);
     return await ProductCategory.findOneAndDelete({ _id: categoryId, ...tenantCondition });
 };
 
+/**
+ * Pre-save hook to update updatedAt field.
+ * @param {Function} next
+ * @returns {Promise<void>}
+ */
 ProductCategorySchema.pre('save', async function (next) {
     this.updatedAt = new Date();
     return next();

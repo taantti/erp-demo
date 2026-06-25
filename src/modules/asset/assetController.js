@@ -1,7 +1,6 @@
 import { roles } from '../../models/roleModel.js';
 import { ProductUnits } from '../../models/productModel.js';
 import { StockEventTypes } from '../../models/stockEventModel.js';
-import { log } from '../../utils/logger.js';
 import { getRelativePath } from '../../utils/auxiliary.js';
 
 const relativePath = getRelativePath(import.meta.url);
@@ -24,7 +23,6 @@ const getAvailableRoles = (userRole) => {
  * @param {Function} next - The next middleware function.
  */
 export const readRoles = async (req, res, next) => {
-    log("INFO", `${relativePath}: readRoles(): `, true, req);
     try {
         res.status(200).json(getAvailableRoles(req.user.role));
     } catch (error) {
@@ -40,7 +38,6 @@ export const readRoles = async (req, res, next) => {
  * @returns {Promise<Object>} - The available product units.
  */
 export const readProductUnits = async (req, res, next) => {
-    log("INFO", `${relativePath}: readProductUnits(): `, true, req);
     try {
         res.status(200).json(Object.values(ProductUnits));
     } catch (error) {
@@ -56,7 +53,6 @@ export const readProductUnits = async (req, res, next) => {
  * @returns {Promise<Object>} - The available stock event types.
  */
 export const readStockEventTypes = async (req, res, next) => {
-    log("INFO", `${relativePath}: StockEventTypes(): `, true, req);
     try {
         res.status(200).json(Object.values(StockEventTypes));
     } catch (error) {

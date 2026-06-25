@@ -27,10 +27,8 @@ app.use(express.json());
 /* Sanitization middleware */
 app.use(sanitizeAndValidateRequest);
 
-/* Swagger documentation */
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
 /* Public routes */
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/login', routes.login);
 
 /* Authentication middleware */

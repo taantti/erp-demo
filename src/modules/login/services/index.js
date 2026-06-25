@@ -1,4 +1,4 @@
-import {login}  from './loginService.js';
+import { login } from './loginService.js';
 export default {
     login
 }

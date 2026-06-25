@@ -1,11 +1,13 @@
 import userService from './services/index.js';
-import { log } from '../../utils/logger.js';
-import { getRelativePath } from '../../utils/auxiliary.js';
 
-const relativePath = getRelativePath(import.meta.url);
-
+/**
+ * Reads all users
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - The next middleware function
+ * @returns {Array} The users
+ */
 export const readUsers = async (req, res, next) => {
-    log("INFO", `${relativePath}: readUsers(): `, true, req);
     try {
         const users = await userService.readUsers(req, res, next);
         res.status(200).json(users);
@@ -14,8 +16,14 @@ export const readUsers = async (req, res, next) => {
     }
 };
 
+/**
+ * Reads a user
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - The next middleware function
+ * @returns {Object} The user
+ */
 export const readUser = async (req, res, next) => {
-    log("INFO", `${relativePath}: readUser(): `, true, req);
     try {
         const user = await userService.readUser(req, res, next);
         if (!user) return res.status(404).json({ error: 'User not found' });
@@ -25,8 +33,14 @@ export const readUser = async (req, res, next) => {
     }
 };
 
+/**
+ * Creates a user
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - The next middleware function
+ * @returns {Object} The created user
+ */
 export const createUser = async (req, res, next) => {
-    log("INFO", `${relativePath}: createUser(): `, true, req);
     try {
         const newUser = await userService.createUser(req, res, next);
         if (!newUser) return res.status(400).json({ error: 'User not created' });
@@ -36,8 +50,14 @@ export const createUser = async (req, res, next) => {
     }
 };
 
+/**
+ * Updates a user
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - The next middleware function
+ * @returns {Object} The updated user
+ */
 export const updateUser = async (req, res, next) => {
-    log("INFO", `${relativePath}: updateUser(): `, true, req);
     try {
         const updatedUser = await userService.updateUser(req, res, next);
         if (!updatedUser) return res.status(404).json({ error: 'User not found' });
@@ -47,9 +67,14 @@ export const updateUser = async (req, res, next) => {
     }
 };
 
-
+/**
+ * Updates a user's password
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - The next middleware function
+ * @returns {Object} The updated user
+ */
 export const updateUserPassword = async (req, res, next) => {
-    log("INFO", `${relativePath}: updateUserPassword(): `, true, req);
     try {
         const result = await userService.updateUserPassword(req, res, next);
         if (!result) return res.status(404).json({ error: 'User not found' });
@@ -59,8 +84,14 @@ export const updateUserPassword = async (req, res, next) => {
     }
 };
 
+/**
+ * Deletes a user
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - The next middleware function
+ * @returns {Object} The deleted user
+ */
 export const deleteUser = async (req, res, next) => {
-    log("INFO", `${relativePath}: deleteUser(): `, true, req);
     try {
         const deletedUser = await userService.deleteUser(req, res, next);
         if (!deletedUser) return res.status(404).json({ error: 'User not found' });

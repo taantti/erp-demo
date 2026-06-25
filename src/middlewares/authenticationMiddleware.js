@@ -1,10 +1,6 @@
 import jwt from 'jsonwebtoken';
 import config from '../config.js';
 import { User, Tenant } from '../models/index.js';
-import { log } from '../utils/logger.js';
-import { getRelativePath } from '../utils/auxiliary.js';
-
-const relativePath = getRelativePath(import.meta.url);
 
 /**
  * Authentication middleware for verifying JWT tokens.
@@ -13,11 +9,7 @@ const relativePath = getRelativePath(import.meta.url);
  * @param {Function} next - The next middleware function.
  */
 const auth = async (req, res, next) => {
-    log("INFO", `${relativePath}:`, true, req);
     const authHeader = req.headers['authorization'];
-
-    log("INFO", `${relativePath}: authHeader: ${authHeader}`, true, req);
-
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return next(Object.assign(new Error('Missing or malformed Authorization header.'), { statusCode: 401 }));

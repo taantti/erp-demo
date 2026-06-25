@@ -1,11 +1,12 @@
 import roleService from './services/index.js';
-import { log } from '../../utils/logger.js';
-import { getRelativePath } from '../../utils/auxiliary.js';
 
-const relativePath = getRelativePath(import.meta.url);
-
+/**
+ * Read roles
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ */
 export const readRoles = async (req, res, next) => {
-    log("INFO", `${relativePath}: readRoles(): `, true, req);
     try {
         const roles = await roleService.readRoles(req, res, next);
         res.status(200).json(roles);
@@ -14,8 +15,13 @@ export const readRoles = async (req, res, next) => {
     }
 };
 
+/**
+ * Read role
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ */
 export const readRole = async (req, res, next) => {
-    log("INFO", `${relativePath}: readRole(): `, true, req);
     try {
         const role = await roleService.readRole(req, res, next);
         if (!role) return res.status(404).json({ error: 'Role not found' });
@@ -25,8 +31,13 @@ export const readRole = async (req, res, next) => {
     }
 };
 
+/**
+ * Create role
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ */
 export const createRole = async (req, res, next) => {
-    log("INFO", `${relativePath}: createRole(): `, true, req);
     try {
         const newRole = await roleService.createRole(req, res, next);
         if (!newRole) return res.status(404).json({ error: 'Role not created' });
@@ -36,8 +47,13 @@ export const createRole = async (req, res, next) => {
     }
 };
 
+/**
+ * Update role
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ */
 export const updateRole = async (req, res, next) => {
-    log("INFO", `${relativePath}: updateRole(): `, true, req);
     try {
         const updatedRole = await roleService.updateRole(req, res, next);
         if (!updatedRole) return res.status(404).json({ error: 'Role not found' });
@@ -47,8 +63,13 @@ export const updateRole = async (req, res, next) => {
     }
 };
 
+/**
+ * Delete role
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ */
 export const deleteRole = async (req, res, next) => {
-    log("INFO", `${relativePath}: deleteRole(): `, true, req);
     try {
         const deletedRole = await roleService.deleteRole(req, res, next);
         if (!deletedRole) return res.status(404).json({ error: 'Role not found' });

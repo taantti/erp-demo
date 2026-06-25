@@ -1,11 +1,12 @@
 import { productService, categoryService } from './services/index.js';
-import { log } from '../../utils/logger.js';
-import { getRelativePath } from '../../utils/auxiliary.js';
 
-const relativePath = getRelativePath(import.meta.url);
-
+/**
+ * Read all products
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ */
 export const readProducts = async (req, res, next) => {
-    log("INFO", `${relativePath}: readProducts(): `, true, req);
     try {
         const products = await productService.readProducts(req, res, next);
         res.status(200).json(products);
@@ -14,8 +15,13 @@ export const readProducts = async (req, res, next) => {
     }
 };
 
+/**
+ * Read a single product
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ */
 export const readProduct = async (req, res, next) => {
-    log("INFO", `${relativePath}: readProduct(): `, true, req);
     try {
         const product = await productService.readProduct(req, res, next);
         if (!product) return res.status(404).json({ error: 'Product not found' });
@@ -25,8 +31,13 @@ export const readProduct = async (req, res, next) => {
     }
 };
 
+/**
+ * Create a new product
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ */
 export const createProduct = async (req, res, next) => {
-    log("INFO", `${relativePath}: createProduct(): `, true, req);
     try {
         const newProduct = await productService.createProduct(req, res, next);
         if (!newProduct) return res.status(400).json({ error: 'Product not created' });
@@ -36,8 +47,13 @@ export const createProduct = async (req, res, next) => {
     }
 };
 
+/**
+ * Update a product
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ */
 export const updateProduct = async (req, res, next) => {
-    log("INFO", `${relativePath}: updateProduct(): `, true, req);
     try {
         const updatedProduct = await productService.updateProduct(req, res, next);
         if (!updatedProduct) return res.status(404).json({ error: 'Product not found' });
@@ -47,8 +63,13 @@ export const updateProduct = async (req, res, next) => {
     }
 };
 
+/**
+ * Delete a product
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ */
 export const deleteProduct = async (req, res, next) => {
-    log("INFO", `${relativePath}: deleteProduct(): `, true, req);
     try {
         const deletedProduct = await productService.deleteProduct(req, res, next);
         if (!deletedProduct) return res.status(404).json({ error: 'Product not found' });
@@ -58,8 +79,13 @@ export const deleteProduct = async (req, res, next) => {
     }
 };
 
+/**
+ * Read all categories
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ */
 export const readCategories = async (req, res, next) => {
-    log("INFO", `${relativePath}: readCategories(): `, true, req);
     try {
         const categories = await categoryService.readCategories(req, res, next);
         res.status(200).json(categories);
@@ -68,8 +94,13 @@ export const readCategories = async (req, res, next) => {
     }
 };
 
+/**
+ * Read a single category
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ */
 export const readCategory = async (req, res, next) => {
-    log("INFO", `${relativePath}: readCategory(): `, true, req);
     try {
         const category = await categoryService.readCategory(req, res, next);
         if (!category) return res.status(404).json({ error: 'Category not found' });
@@ -79,8 +110,13 @@ export const readCategory = async (req, res, next) => {
     }
 };
 
+/**
+ * Create a new category
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ */
 export const createCategory = async (req, res, next) => {
-    log("INFO", `${relativePath}: createCategory(): `, true, req);
     try {
         const newCategory = await categoryService.createCategory(req, res, next);
         if (!newCategory) return res.status(400).json({ error: 'Category not created' });
@@ -90,8 +126,13 @@ export const createCategory = async (req, res, next) => {
     }
 };
 
+/**
+ * Update a category
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ */
 export const updateCategory = async (req, res, next) => {
-    log("INFO", `${relativePath}: updateCategory(): `, true, req);
     try {
         const updatedCategory = await categoryService.updateCategory(req, res, next);
         if (!updatedCategory) return res.status(404).json({ error: 'Category not found' });
@@ -101,8 +142,13 @@ export const updateCategory = async (req, res, next) => {
     }
 };
 
+/**
+ * Delete a category
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ */
 export const deleteCategory = async (req, res, next) => {
-    log("INFO", `${relativePath}: deleteCategory(): `, true, req);
     try {
         const deletedCategory = await categoryService.deleteCategory(req, res, next);
         if (!deletedCategory) return res.status(404).json({ error: 'Category not found' });

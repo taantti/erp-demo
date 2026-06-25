@@ -1,11 +1,12 @@
 import { newTenant as modelNewTenant, findTenantById, findTenants as modelFindTenants, findOneTenantAndUpdate, deleteTenantById } from '../../../models/index.js';
-import { log } from '../../../utils/logger.js';
-import { getRelativePath } from '../../../utils/auxiliary.js';
 
-const relativePath = getRelativePath(import.meta.url);
-
+/**
+ * Create a new tenant
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ */
 export const createTenant = async (req, res, next) => {
-    log("INFO", `${relativePath}: createTenant(): `, true, req);
     try {
         const tenantData = { ...req.body, active: true };
         const tenant = await modelNewTenant(req, tenantData, true, true, true);
@@ -15,8 +16,13 @@ export const createTenant = async (req, res, next) => {
     }
 };
 
+/**
+ * Read a tenant
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ */
 export const readTenant = async (req, res, next) => {
-    log("INFO", `${relativePath}: readTenant(${req.params.id}): `, true, req);
     try {
         const tenant = await findTenantById(req, req.params.id, false, true, true);
         return tenant;
@@ -25,8 +31,13 @@ export const readTenant = async (req, res, next) => {
     }
 };
 
+/**
+ * Read tenants
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ */
 export const readTenants = async (req, res, next) => {
-    log("INFO", `${relativePath}: readTenants(): `, true, req);
     try {
         const ids = req.params.ids.split(',');
         const tenants = await modelFindTenants(req, { _id: { $in: ids } }, false, true, true);
@@ -36,8 +47,13 @@ export const readTenants = async (req, res, next) => {
     }
 };
 
+/**
+ * Update a tenant
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ */
 export const updateTenant = async (req, res, next) => {
-    log("INFO", `${relativePath}: updateTenant(${req.params.id}): `, true, req);
     try {
         const tenant = await findOneTenantAndUpdate(req, req.params.id, req.body, false, true, true);
         return tenant;
@@ -46,8 +62,13 @@ export const updateTenant = async (req, res, next) => {
     }
 };
 
+/**
+ * Delete a tenant
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ */
 export const deleteTenant = async (req, res, next) => {
-    log("INFO", `${relativePath}: deleteTenant(${req.params.id}): `, true, req);
     try {
         const tenant = await deleteTenantById(req, req.params.id, true);
         return tenant;

@@ -3,7 +3,6 @@ import jwt from 'jsonwebtoken';
 import config from './../../../config.js';
 import { User } from '../../../models/index.js';
 import { Role } from '../../../models/index.js';
-import { log } from '../../../utils/logger.js';
 
 /**
  * Login service. Validates user credentials and generates JWT token
@@ -13,7 +12,6 @@ import { log } from '../../../utils/logger.js';
  * @returns {string} - JWT token
  */
 export const login = async (req, res, next) => {
-    log("INFO", "loginService.js: login(): ", true, req);
     const { username, password } = req.body;
 
     try {

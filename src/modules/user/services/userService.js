@@ -7,9 +7,14 @@ import { sanitizeObjectFields } from '../../../utils/sanitization.js';
 
 const relativePath = getRelativePath(import.meta.url);
 
+/**
+ * Creates a new user
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - The next middleware function
+ * @returns {Object} The created user
+ */
 export const createUser = async (req, res, next) => {
-    log("INFO", `${relativePath}: createUser(): `, true, req);
-
     try {
         const user = await newUser(req, req.body, false, true, true);
         return user;
@@ -18,8 +23,14 @@ export const createUser = async (req, res, next) => {
     }
 };
 
+/**
+ * Reads a user by ID
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - The next middleware function
+ * @returns {Object} The user
+ */
 export const readUser = async (req, res, next) => {
-    log("INFO", `${relativePath}: readUser(${req.params.id}): `, true, req);
     try {
         const user = await findUserById(req, req.params.id, false, true, true);
         return user;
@@ -28,9 +39,14 @@ export const readUser = async (req, res, next) => {
     }
 };
 
+/**
+ * Reads all users
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - The next middleware function
+ * @returns {Array} The users
+ */
 export const readUsers = async (req, res, next) => {
-    log("INFO", `${relativePath}: readUsers(): `, true, req);
-
     try {
         const users = await findUsers(req, req.query, false, true, true);
         return users;
@@ -39,23 +55,32 @@ export const readUsers = async (req, res, next) => {
     }
 };
 
+/**
+ * Updates a user
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - The next middleware function
+ * @returns {Object} The updated user
+ */
 export const updateUser = async (req, res, next) => {
-    log("INFO", `${relativePath}: updateUser(${req.params.id}): `, true, req);
     try {
-
         req.body = sanitizeObjectFields(req.body, ['username', 'password', 'tenant']); // These fields cannot be updated here.
         const user = await findOneUserAndUpdate(req, req.params.id, req.body, false, true, true);
-
         return user;
-
     } catch (error) {
         return next(error);
     }
 };
 
-// PUT /user/:id/update-password
+
+/**
+ * Updates a user's password
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - The next middleware function
+ * @returns {Boolean} True if the password was updated successfully
+ */
 export const updateUserPassword = async (req, res, next) => {
-    log("INFO", `${relativePath}: updateUserPassword(${req.params.id}): `, true, req);
     try {
         if (req.user.username !== req.body.username) {
             log("CRITICAL", `${relativePath}: ${req.user.username} is not allowed to change password for ${req.body.username}`, true, req);
@@ -84,8 +109,14 @@ export const updateUserPassword = async (req, res, next) => {
     }
 }
 
+/**
+ * Deletes a user
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - The next middleware function
+ * @returns {Object} The deleted user
+ */
 export const deleteUser = async (req, res, next) => {
-    log("INFO", `${relativePath}: deleteUser(${req.params.id}): `, true, req);
     try {
         const user = await deleteUserById(req, req.params.id, false);
         return user;

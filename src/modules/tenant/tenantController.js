@@ -1,11 +1,12 @@
 import tenantService from './services/index.js';
-import { log } from '../../utils/logger.js';
-import { getRelativePath } from '../../utils/auxiliary.js';
 
-const relativePath = getRelativePath(import.meta.url);
-
+/**
+ * Read tenants
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ */
 export const readTenants = async (req, res, next) => {
-    log("INFO", `${relativePath}: readTenants(): `, true, req);
     try {
         const tenants = await tenantService.readTenants(req, res, next);
         res.status(200).json(tenants);
@@ -14,8 +15,13 @@ export const readTenants = async (req, res, next) => {
     }
 };
 
+/**
+ * Read tenant
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ */
 export const readTenant = async (req, res, next) => {
-    log("INFO", `${relativePath}: readTenant(): `, true, req);
     try {
         const tenant = await tenantService.readTenant(req, res, next);
         if (!tenant) return res.status(404).json({ error: 'Tenant not found' });
@@ -25,8 +31,13 @@ export const readTenant = async (req, res, next) => {
     }
 };
 
+/**
+ * Create tenant
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ */
 export const createTenant = async (req, res, next) => {
-    log("INFO", `${relativePath}: createTenant(): `, true, req);
     try {
         const newTenant = await tenantService.createTenant(req, res, next);
         if (!newTenant) return res.status(404).json({ error: 'Tenant not created' });
@@ -36,8 +47,13 @@ export const createTenant = async (req, res, next) => {
     }
 };
 
+/**
+ * Update tenant
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ */
 export const updateTenant = async (req, res, next) => {
-    log("INFO", `${relativePath}: updateTenant(): `, true, req);
     try {
         const updatedTenant = await tenantService.updateTenant(req, res, next);
         if (!updatedTenant) return res.status(404).json({ error: 'Tenant not found' });
@@ -47,8 +63,13 @@ export const updateTenant = async (req, res, next) => {
     }
 };
 
+/**
+ * Delete tenant
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ */
 export const deleteTenant = async (req, res, next) => {
-    log("INFO", `${relativePath}: deleteTenant(): `, true, req);
     try {
         const deletedTenant = await tenantService.deleteTenant(req, res, next);
         if (!deletedTenant) return res.status(404).json({ error: 'Tenant not found' });

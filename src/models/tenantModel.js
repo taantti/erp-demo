@@ -25,8 +25,6 @@ const TenantSchema = new mongoose.Schema({
  * @returns {Promise<Object>} - The created tenant object.
  */
 export const newTenant = async (req, tenantData, allTenants = false, sanitize = true, lean = true) => {
-    log("INFO", `${relativePath}: newTenant(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
-
     try {
         checkUserTenantPermissions(req, allTenants, `${relativePath}: newTenant()`);
         tenantData = setAutoField(req, tenantData, AutoField.CREATED_BY);
@@ -50,8 +48,6 @@ export const newTenant = async (req, tenantData, allTenants = false, sanitize = 
  * @returns {Promise<Object|null>} - The tenant object if found, otherwise null.
  */
 export const findTenantById = async (req, tenantId, allTenants = false, sanitize = true, lean = true) => {
-    log("INFO", `${relativePath}: findTenantById(): allTenants = ${allTenants}: lean = ${lean}`, true, req);
-
     try {
         checkUserTenantPermissions(req, allTenants, `${relativePath}: findTenantById()`);
         if (!allTenants && req.user.tenant.id.toString() !== tenantId.toString()) {
@@ -77,8 +73,6 @@ export const findTenantById = async (req, tenantId, allTenants = false, sanitize
  * @returns {Promise<Array>} - Returns an array of tenant objects (possibly empty array).
  */
 export const findTenants = async (req, params = {}, allTenants = false, sanitize = true, lean = true) => {
-    log("INFO", `${relativePath}: findTenants(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
-
     try {
         checkUserTenantPermissions(req, allTenants, `${relativePath}: findTenants()`);
         if (!allTenants) {
@@ -104,8 +98,6 @@ export const findTenants = async (req, params = {}, allTenants = false, sanitize
  * @returns {Promise<Object|null>} - The updated tenant object if found and updated, otherwise null.
  */
 export const findOneTenantAndUpdate = async (req, tenantId, tenantData, allTenants = false, sanitize = true, lean = true) => {
-    log("INFO", `${relativePath}: findOneTenantAndUpdate(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
-
     try {
         checkUserTenantPermissions(req, allTenants, `${relativePath}: findOneTenantAndUpdate()`);
         if (!allTenants && req.user.tenant.id.toString() !== tenantId.toString()) {
@@ -134,8 +126,6 @@ export const findOneTenantAndUpdate = async (req, tenantId, tenantData, allTenan
  * @returns {Promise<Object|null>} - The deleted tenant object if found, otherwise null.
  */
 export const deleteTenantById = async (req, tenantId, allTenants = false) => {
-    log("INFO", `${relativePath}: deleteTenantById(): allTenants = ${allTenants}`, true, req);
-
     try {
         checkUserTenantPermissions(req, allTenants, `${relativePath}: deleteTenantById()`);
         return await Tenant.findByIdAndDelete(tenantId);

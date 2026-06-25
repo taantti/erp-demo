@@ -1,9 +1,5 @@
 import config from '../config.js';
 import { sanitizeValue, isValidMaxValue, isValidMaxLength } from "../utils/sanitization.js";
-import { log } from "../utils/logger.js";
-import { getRelativePath } from '../utils/auxiliary.js';
-
-const relativePath = getRelativePath(import.meta.url);
 
 /**
  * Middleware to sanitize and validate incoming requests
@@ -198,7 +194,6 @@ const sanitizeQueryParam = (value) => {
  * @returns {Object} - { result: [...], errorMsgs: [...] }
  */
 const validateAndSanitizeObject = (originalObject) => {
-    log("INFO", `${relativePath}: validateAndSanitizeObject()`, true);
     let stack = [];
     let result = [];
     let errorMsgs = [];

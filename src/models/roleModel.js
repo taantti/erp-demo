@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { log } from "../utils/logger.js";
 import { checkUserTenantPermissions, toPlainObjectIfLean, setAutoField, AutoField } from './modelService.js';
 import { sanitizeObjectFields } from '../utils/sanitization.js';
 import { getRelativePath } from '../utils/auxiliary.js';
@@ -40,8 +39,6 @@ const RoleSchema = new mongoose.Schema({
  * @returns {Promise<Object>} - The created role object.
  */
 export const newRole = async (req, roleData, allTenants = false, sanitize = true, lean = true) => {
-    log("INFO", `${relativePath}: newRole(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
-
     try {
         checkUserTenantPermissions(req, allTenants, `${relativePath}: newRole()`);
         roleData = setAutoField(req, roleData, AutoField.CREATED_BY);
@@ -64,8 +61,6 @@ export const newRole = async (req, roleData, allTenants = false, sanitize = true
  * @returns {Promise<Object|null>} - The role object if found, otherwise null.
  */
 export const findRoleById = async (req, roleId, allTenants = false, sanitize = true, lean = true) => {
-    log("INFO", `${relativePath}: findRoleById(): allTenants = ${allTenants}: lean = ${lean}`, true, req);
-
     try {
         checkUserTenantPermissions(req, allTenants, `${relativePath}: findRoleById()`);
         let role = await Role.findById(roleId).lean(lean).exec();
@@ -86,8 +81,6 @@ export const findRoleById = async (req, roleId, allTenants = false, sanitize = t
  * @returns {Promise<Array>} - Returns an array of role objects (possibly empty array).
  */
 export const findRoles = async (req, params = {}, allTenants = false, sanitize = true, lean = true) => {
-    log("INFO", `${relativePath}: findRoles(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
-
     try {
         checkUserTenantPermissions(req, allTenants, `${relativePath}: findRoles()`);
         let roles = await Role.find(params).lean(lean).exec();
@@ -109,8 +102,6 @@ export const findRoles = async (req, params = {}, allTenants = false, sanitize =
  * @returns {Promise<Object|null>} - The updated role object if found and updated, otherwise null.
  */
 export const findOneRoleAndUpdate = async (req, roleId, roleData, allTenants = false, sanitize = true, lean = true) => {
-    log("INFO", `${relativePath}: findOneRoleAndUpdate(): allTenants = ${allTenants}: sanitize = ${sanitize}: lean = ${lean}`, true, req);
-
     try {
         checkUserTenantPermissions(req, allTenants, `${relativePath}: findOneRoleAndUpdate()`);
         let role = await findRoleById(req, roleId, allTenants, false, false);
@@ -135,8 +126,6 @@ export const findOneRoleAndUpdate = async (req, roleId, roleData, allTenants = f
  * @returns {Promise<Object|null>} - The deleted role object if found, otherwise null.
  */
 export const deleteRoleById = async (req, roleId, allTenants = false) => {
-    log("INFO", `${relativePath}: deleteRoleById(): allTenants = ${allTenants}`, true, req);
-
     try {
         checkUserTenantPermissions(req, allTenants, `${relativePath}: deleteRoleById()`);
         return await Role.findByIdAndDelete(roleId);
