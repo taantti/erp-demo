@@ -29,7 +29,7 @@ export const createMockTenant = async () => {
 }
 
 /**
- * Create a mock role for testing
+ * Create a mock role and permissions for testing
  * @returns {Promise<void>}
  */
 export const createMockRole = async () => {
@@ -59,6 +59,18 @@ export const createMockRole = async () => {
                 updateProduct: { access: true, adminTenantOnly: false, immutable: false },
                 deleteProduct: { access: true, adminTenantOnly: false, immutable: false }
             },
+            stock: {
+                createStock: { access: true, adminTenantOnly: false, immutable: false },
+                readStock: { access: true, adminTenantOnly: false, immutable: false },
+                readStocks: { access: true, adminTenantOnly: false, immutable: false },
+                updateStock: { access: true, adminTenantOnly: false, immutable: false },
+                deleteStock: { access: true, adminTenantOnly: false, immutable: false },
+                createShelf: { access: true, adminTenantOnly: false, immutable: false },
+                readShelf: { access: true, adminTenantOnly: false, immutable: false },
+                readShelves: { access: true, adminTenantOnly: false, immutable: false },
+                updateShelf: { access: true, adminTenantOnly: false, immutable: false },
+                deleteShelf: { access: true, adminTenantOnly: false, immutable: false }
+            }
         }
     }
 
