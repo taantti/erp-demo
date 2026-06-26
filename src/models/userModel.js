@@ -34,22 +34,18 @@ const UserSchema = new mongoose.Schema({
  * @returns {Promise<Object>} - The created user object.
  */
 export const newUser = async (req, userData, allTenants = false, sanitize = true, lean = true) => {
-    try {
-        checkUserTenantPermissions(req, allTenants, `${relativePath}: newUser()`);
-        if (!isValidRawPassword(userData.password)) {
-            throw Object.assign(new Error('Password must contain at least one uppercase letter, one number, and one special character, and be at least 8 characters long.'), { statusCode: 400 });
-        }
-        const hashedPassword = await hashPassword(userData.password);
-        userData = setTenantForData(req, userData, allTenants);
-        userData = setAutoField(req, userData, AutoField.CREATED_BY);
-        let newUser = await new User({ ...userData, password: hashedPassword }).save();
-
-        if (lean) newUser = newUser.toObject();
-        if (sanitize) newUser = sanitizeObjectFields(newUser, protectedModelFields);
-        return newUser;
-    } catch (error) {
-        throw error;
+    checkUserTenantPermissions(req, allTenants, `${relativePath}: newUser()`);
+    if (!isValidRawPassword(userData.password)) {
+        throw Object.assign(new Error('Password must contain at least one uppercase letter, one number, and one special character, and be at least 8 characters long.'), { statusCode: 400 });
     }
+    const hashedPassword = await hashPassword(userData.password);
+    userData = setTenantForData(req, userData, allTenants);
+    userData = setAutoField(req, userData, AutoField.CREATED_BY);
+    let newUser = await new User({ ...userData, password: hashedPassword }).save();
+
+    if (lean) newUser = newUser.toObject();
+    if (sanitize) newUser = sanitizeObjectFields(newUser, protectedModelFields);
+    return newUser;
 }
 
 /**
@@ -62,15 +58,11 @@ export const newUser = async (req, userData, allTenants = false, sanitize = true
  * @returns {Promise<Object|null>} - The user object if found, otherwise null.
  */
 export const findUserById = async (req, userId, allTenants = false, sanitize = true, lean = true) => {
-    try {
-        checkUserTenantPermissions(req, allTenants, `${relativePath}: findUserById()`);
-        const tenantCondition = getTenantQueryCondition(req, req.user.tenant.id, allTenants);
-        let user = await User.findOne({ _id: userId, ...tenantCondition }).lean(lean).exec();
-        if (sanitize) user = sanitizeObjectFields(user, protectedModelFields);
-        return user;
-    } catch (error) {
-        throw error;
-    }
+    checkUserTenantPermissions(req, allTenants, `${relativePath}: findUserById()`);
+    const tenantCondition = getTenantQueryCondition(req, req.user.tenant.id, allTenants);
+    let user = await User.findOne({ _id: userId, ...tenantCondition }).lean(lean).exec();
+    if (sanitize) user = sanitizeObjectFields(user, protectedModelFields);
+    return user;
 }
 
 /**
@@ -84,17 +76,13 @@ export const findUserById = async (req, userId, allTenants = false, sanitize = t
  * @throws {Error} - Throws if permission denied or query fails.
  */
 export const findUsers = async (req, params, allTenants = false, sanitize = true, lean = true) => {
-    try {
-        checkUserTenantPermissions(req, allTenants, `${relativePath}: findUsers()`);
-        params.tenant = getTenantIdForQuery(req, params.tenant, allTenants); // Initialize the tenant condition parameter for queries.
-        if (params.active) params.active = convertToBoolean(params.active); // TODO: move to example sanitize orr other early function. All boolean fields should be converted before being used in queries.
+    checkUserTenantPermissions(req, allTenants, `${relativePath}: findUsers()`);
+    params.tenant = getTenantIdForQuery(req, params.tenant, allTenants); // Initialize the tenant condition parameter for queries.
+    if (params.active) params.active = convertToBoolean(params.active); // TODO: move to example sanitize orr other early function. All boolean fields should be converted before being used in queries.
 
-        let users = await User.find(params).lean(lean).exec();
-        if (sanitize) users = users.map(user => sanitizeObjectFields(user, protectedModelFields));
-        return users;
-    } catch (error) {
-        throw error;
-    }
+    let users = await User.find(params).lean(lean).exec();
+    if (sanitize) users = users.map(user => sanitizeObjectFields(user, protectedModelFields));
+    return users;
 }
 
 /**
@@ -108,20 +96,16 @@ export const findUsers = async (req, params, allTenants = false, sanitize = true
  * @returns {Promise<Object|null>} - The updated user object if found and updated, otherwise null.
  */
 export const findOneUserAndUpdate = async (req, userId, userData, allTenants = false, sanitize = true, lean = true) => {
-    try {
-        let user = await findUserById(req, userId, allTenants, false, false);
-        if (!user) throw new Error(`User with id ${userId} not found.`);
+    checkUserTenantPermissions(req, allTenants, `${relativePath}: findOneUserAndUpdate()`);
+    let user = await findUserById(req, userId, allTenants, false, false);
+    if (!user) throw new Error(`User with id ${userId} not found.`);
 
-        userData = setAutoField(req, userData, AutoField.UPDATED_BY);
-        Object.assign(user, userData); // Merge new data into the user object.
-        await user.save();
-        user = toPlainObjectIfLean(user, lean);
-        if (sanitize) user = sanitizeObjectFields(user, protectedModelFields);
-        return user;
-    } catch (error) {
-        throw error;
-    }
-
+    userData = setAutoField(req, userData, AutoField.UPDATED_BY);
+    Object.assign(user, userData); // Merge new data into the user object.
+    await user.save();
+    user = toPlainObjectIfLean(user, lean);
+    if (sanitize) user = sanitizeObjectFields(user, protectedModelFields);
+    return user;
 }
 
 /**
@@ -132,13 +116,9 @@ export const findOneUserAndUpdate = async (req, userId, userData, allTenants = f
  * @returns {Promise<Object|null>} - The deleted user object if found, otherwise null.
  */
 export const deleteUserById = async (req, userId, allTenants = false) => {
-    try {
-        checkUserTenantPermissions(req, allTenants, `${relativePath}: deleteUserById()`);
-        const tenantCondition = getTenantQueryCondition(req, req.user.tenant.id, allTenants);
-        return await User.findOneAndDelete({ _id: userId, ...tenantCondition });
-    } catch (error) {
-        throw error;
-    }
+    checkUserTenantPermissions(req, allTenants, `${relativePath}: deleteUserById()`);
+    const tenantCondition = getTenantQueryCondition(req, req.user.tenant.id, allTenants);
+    return await User.findOneAndDelete({ _id: userId, ...tenantCondition });
 }
 
 /**

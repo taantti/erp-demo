@@ -25,16 +25,12 @@ const TenantSchema = new mongoose.Schema({
  * @returns {Promise<Object>} - The created tenant object.
  */
 export const newTenant = async (req, tenantData, allTenants = false, sanitize = true, lean = true) => {
-    try {
-        checkUserTenantPermissions(req, allTenants, `${relativePath}: newTenant()`);
-        tenantData = setAutoField(req, tenantData, AutoField.CREATED_BY);
-        let tenant = await new Tenant({ ...tenantData }).save();
-        if (lean) tenant = tenant.toObject();
-        if (sanitize) tenant = sanitizeObjectFields(tenant, protectedModelFields);
-        return tenant;
-    } catch (error) {
-        throw error;
-    }
+    checkUserTenantPermissions(req, allTenants, `${relativePath}: newTenant()`);
+    tenantData = setAutoField(req, tenantData, AutoField.CREATED_BY);
+    let tenant = await new Tenant({ ...tenantData }).save();
+    if (lean) tenant = tenant.toObject();
+    if (sanitize) tenant = sanitizeObjectFields(tenant, protectedModelFields);
+    return tenant;
 };
 
 /**
@@ -48,18 +44,14 @@ export const newTenant = async (req, tenantData, allTenants = false, sanitize = 
  * @returns {Promise<Object|null>} - The tenant object if found, otherwise null.
  */
 export const findTenantById = async (req, tenantId, allTenants = false, sanitize = true, lean = true) => {
-    try {
-        checkUserTenantPermissions(req, allTenants, `${relativePath}: findTenantById()`);
-        if (!allTenants && req.user.tenant.id.toString() !== tenantId.toString()) {
-            log("WARN", `${relativePath}: findTenantById(): User attempted to access tenant ${tenantId} but belongs to ${req.user.tenant.id}`, true, req);
-            return null;
-        }
-        let tenant = await Tenant.findById(tenantId).lean(lean).exec();
-        if (sanitize) tenant = sanitizeObjectFields(tenant, protectedModelFields);
-        return tenant;
-    } catch (error) {
-        throw error;
+    checkUserTenantPermissions(req, allTenants, `${relativePath}: findTenantById()`);
+    if (!allTenants && req.user.tenant.id.toString() !== tenantId.toString()) {
+        log("WARN", `${relativePath}: findTenantById(): User attempted to access tenant ${tenantId} but belongs to ${req.user.tenant.id}`, true, req);
+        return null;
     }
+    let tenant = await Tenant.findById(tenantId).lean(lean).exec();
+    if (sanitize) tenant = sanitizeObjectFields(tenant, protectedModelFields);
+    return tenant;
 };
 
 /**
@@ -73,17 +65,13 @@ export const findTenantById = async (req, tenantId, allTenants = false, sanitize
  * @returns {Promise<Array>} - Returns an array of tenant objects (possibly empty array).
  */
 export const findTenants = async (req, params = {}, allTenants = false, sanitize = true, lean = true) => {
-    try {
-        checkUserTenantPermissions(req, allTenants, `${relativePath}: findTenants()`);
-        if (!allTenants) {
-            params._id = req.user.tenant.id;
-        }
-        let tenants = await Tenant.find(params).lean(lean).exec();
-        if (sanitize) tenants = tenants.map(tenant => sanitizeObjectFields(tenant, protectedModelFields));
-        return tenants;
-    } catch (error) {
-        throw error;
+    checkUserTenantPermissions(req, allTenants, `${relativePath}: findTenants()`);
+    if (!allTenants) {
+        params._id = req.user.tenant.id;
     }
+    let tenants = await Tenant.find(params).lean(lean).exec();
+    if (sanitize) tenants = tenants.map(tenant => sanitizeObjectFields(tenant, protectedModelFields));
+    return tenants;
 };
 
 /**
@@ -98,24 +86,21 @@ export const findTenants = async (req, params = {}, allTenants = false, sanitize
  * @returns {Promise<Object|null>} - The updated tenant object if found and updated, otherwise null.
  */
 export const findOneTenantAndUpdate = async (req, tenantId, tenantData, allTenants = false, sanitize = true, lean = true) => {
-    try {
-        checkUserTenantPermissions(req, allTenants, `${relativePath}: findOneTenantAndUpdate()`);
-        if (!allTenants && req.user.tenant.id.toString() !== tenantId.toString()) {
-            log("WARN", `${relativePath}: findOneTenantAndUpdate(): User attempted to update tenant ${tenantId} but belongs to ${req.user.tenant.id}`, true, req);
-            return null;
-        }
-        let tenant = await findTenantById(req, tenantId, allTenants, false, false);
-        if (!tenant) throw Object.assign(new Error(`Tenant with id ${tenantId} not found.`), { statusCode: 404 });
 
-        tenantData = setAutoField(req, tenantData, AutoField.UPDATED_BY);
-        Object.assign(tenant, tenantData);
-        await tenant.save();
-        tenant = toPlainObjectIfLean(tenant, lean);
-        if (sanitize) tenant = sanitizeObjectFields(tenant, protectedModelFields);
-        return tenant;
-    } catch (error) {
-        throw error;
+    checkUserTenantPermissions(req, allTenants, `${relativePath}: findOneTenantAndUpdate()`);
+    if (!allTenants && req.user.tenant.id.toString() !== tenantId.toString()) {
+        log("WARN", `${relativePath}: findOneTenantAndUpdate(): User attempted to update tenant ${tenantId} but belongs to ${req.user.tenant.id}`, true, req);
+        return null;
     }
+    let tenant = await findTenantById(req, tenantId, allTenants, false, false);
+    if (!tenant) throw Object.assign(new Error(`Tenant with id ${tenantId} not found.`), { statusCode: 404 });
+
+    tenantData = setAutoField(req, tenantData, AutoField.UPDATED_BY);
+    Object.assign(tenant, tenantData);
+    await tenant.save();
+    tenant = toPlainObjectIfLean(tenant, lean);
+    if (sanitize) tenant = sanitizeObjectFields(tenant, protectedModelFields);
+    return tenant;
 };
 
 /**
@@ -126,12 +111,8 @@ export const findOneTenantAndUpdate = async (req, tenantId, tenantData, allTenan
  * @returns {Promise<Object|null>} - The deleted tenant object if found, otherwise null.
  */
 export const deleteTenantById = async (req, tenantId, allTenants = false) => {
-    try {
-        checkUserTenantPermissions(req, allTenants, `${relativePath}: deleteTenantById()`);
-        return await Tenant.findByIdAndDelete(tenantId);
-    } catch (error) {
-        throw error;
-    }
+    checkUserTenantPermissions(req, allTenants, `${relativePath}: deleteTenantById()`);
+    return await Tenant.findByIdAndDelete(tenantId);
 };
 
 export const Tenant = mongoose.model('Tenant', TenantSchema);

@@ -8,7 +8,7 @@ const protectedModelFields = ['__v'];
 
 export const roles = ['READER', 'WRITER', 'ADMIN', 'OVERSEER'];
 
-const PermissionSchema = new mongoose.Schema({   
+const PermissionSchema = new mongoose.Schema({
     access: { type: Boolean, required: true },
     adminTenantOnly: { type: Boolean, required: true },
     immutable: { type: Boolean, required: true },
@@ -39,16 +39,12 @@ const RoleSchema = new mongoose.Schema({
  * @returns {Promise<Object>} - The created role object.
  */
 export const newRole = async (req, roleData, allTenants = false, sanitize = true, lean = true) => {
-    try {
-        checkUserTenantPermissions(req, allTenants, `${relativePath}: newRole()`);
-        roleData = setAutoField(req, roleData, AutoField.CREATED_BY);
-        let role = await new Role({ ...roleData }).save();
-        if (lean) role = role.toObject();
-        if (sanitize) role = sanitizeObjectFields(role, protectedModelFields);
-        return role;
-    } catch (error) {
-        throw error;
-    }
+    checkUserTenantPermissions(req, allTenants, `${relativePath}: newRole()`);
+    roleData = setAutoField(req, roleData, AutoField.CREATED_BY);
+    let role = await new Role({ ...roleData }).save();
+    if (lean) role = role.toObject();
+    if (sanitize) role = sanitizeObjectFields(role, protectedModelFields);
+    return role;
 };
 
 /**
@@ -61,14 +57,10 @@ export const newRole = async (req, roleData, allTenants = false, sanitize = true
  * @returns {Promise<Object|null>} - The role object if found, otherwise null.
  */
 export const findRoleById = async (req, roleId, allTenants = false, sanitize = true, lean = true) => {
-    try {
-        checkUserTenantPermissions(req, allTenants, `${relativePath}: findRoleById()`);
-        let role = await Role.findById(roleId).lean(lean).exec();
-        if (sanitize) role = sanitizeObjectFields(role, protectedModelFields);
-        return role;
-    } catch (error) {
-        throw error;
-    }
+    checkUserTenantPermissions(req, allTenants, `${relativePath}: findRoleById()`);
+    let role = await Role.findById(roleId).lean(lean).exec();
+    if (sanitize) role = sanitizeObjectFields(role, protectedModelFields);
+    return role;
 };
 
 /**
@@ -102,20 +94,16 @@ export const findRoles = async (req, params = {}, allTenants = false, sanitize =
  * @returns {Promise<Object|null>} - The updated role object if found and updated, otherwise null.
  */
 export const findOneRoleAndUpdate = async (req, roleId, roleData, allTenants = false, sanitize = true, lean = true) => {
-    try {
-        checkUserTenantPermissions(req, allTenants, `${relativePath}: findOneRoleAndUpdate()`);
-        let role = await findRoleById(req, roleId, allTenants, false, false);
-        if (!role) throw Object.assign(new Error(`Role with id ${roleId} not found.`), { statusCode: 404 });
+    checkUserTenantPermissions(req, allTenants, `${relativePath}: findOneRoleAndUpdate()`);
+    let role = await findRoleById(req, roleId, allTenants, false, false);
+    if (!role) throw Object.assign(new Error(`Role with id ${roleId} not found.`), { statusCode: 404 });
 
-        roleData = setAutoField(req, roleData, AutoField.UPDATED_BY);
-        Object.assign(role, roleData);
-        await role.save();
-        role = toPlainObjectIfLean(role, lean);
-        if (sanitize) role = sanitizeObjectFields(role, protectedModelFields);
-        return role;
-    } catch (error) {
-        throw error;
-    }
+    roleData = setAutoField(req, roleData, AutoField.UPDATED_BY);
+    Object.assign(role, roleData);
+    await role.save();
+    role = toPlainObjectIfLean(role, lean);
+    if (sanitize) role = sanitizeObjectFields(role, protectedModelFields);
+    return role;
 };
 
 /**
@@ -126,12 +114,8 @@ export const findOneRoleAndUpdate = async (req, roleId, roleData, allTenants = f
  * @returns {Promise<Object|null>} - The deleted role object if found, otherwise null.
  */
 export const deleteRoleById = async (req, roleId, allTenants = false) => {
-    try {
-        checkUserTenantPermissions(req, allTenants, `${relativePath}: deleteRoleById()`);
-        return await Role.findByIdAndDelete(roleId);
-    } catch (error) {
-        throw error;
-    }
+    checkUserTenantPermissions(req, allTenants, `${relativePath}: deleteRoleById()`);
+    return await Role.findByIdAndDelete(roleId);
 };
 
 export const Role = mongoose.model('Role', RoleSchema);
