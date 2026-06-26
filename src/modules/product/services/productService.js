@@ -2,75 +2,40 @@ import { findProducts, findProductById, createProduct as modelCreateProduct, upd
 
 /**
  * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
  * @returns {Promise<any>}
  */
-export const createProduct = async (req, res, next) => {
-    try {
-        const product = await modelCreateProduct(req, req.body, false, true, true);
-        return product;
-    } catch (error) {
-        return next(error);
-    }
+export const createProduct = async (req) => {
+    return await modelCreateProduct(req, req.body, false, true, true);
 };
 
 /**
  * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
  * @returns {Promise<any>}
  */
-export const readProduct = async (req, res, next) => {
-    try {
-        const product = await findProductById(req, req.params.id, false, true, true);
-        return product;
-    } catch (error) {
-        return next(error);
-    }
+export const readProduct = async (req) => {
+    return await findProductById(req, req.params.id, false, true, true);
 };
 
 /**
  * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
  * @returns {Promise<any>}
  */
-export const readProducts = async (req, res, next) => {
-    try {
-        const products = await findProducts(req, req.query, false, true, true);
-        return products;
-    } catch (error) {
-        return next(error);
-    }
+export const readProducts = async (req) => {
+    return await findProducts(req, req.query, false, true, true);
 };
 
 /**
  * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
  * @returns {Promise<any>}
  */
-export const updateProduct = async (req, res, next) => {
-    try {
-        const product = await updateProductById(req, req.params.id, req.body, false, true, true);
-        return product;
-    } catch (error) {
-        return next(error);
-    }
+export const updateProduct = async (req) => {
+    return await updateProductById(req, req.params.id, req.body, false, true, true);
 };
 
 /**
  * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
  * @returns {Promise<any>}
  */
-export const deleteProduct = async (req, res, next) => {
-    try {
-        const product = await deleteProductById(req, req.params.id, false);
-        return product;
-    } catch (error) {
-        return next(error);
-    }
+export const deleteProduct = async (req) => {
+    return await deleteProductById(req, req.params.id, false);
 };

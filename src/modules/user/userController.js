@@ -9,7 +9,7 @@ import userService from './services/index.js';
  */
 export const readUsers = async (req, res, next) => {
     try {
-        const users = await userService.readUsers(req, res, next);
+        const users = await userService.readUsers(req);
         res.status(200).json(users);
     } catch (error) {
         return next(error);
@@ -25,7 +25,7 @@ export const readUsers = async (req, res, next) => {
  */
 export const readUser = async (req, res, next) => {
     try {
-        const user = await userService.readUser(req, res, next);
+        const user = await userService.readUser(req);
         if (!user) return res.status(404).json({ error: 'User not found' });
         res.status(200).json(user);
     } catch (error) {
@@ -42,7 +42,7 @@ export const readUser = async (req, res, next) => {
  */
 export const createUser = async (req, res, next) => {
     try {
-        const newUser = await userService.createUser(req, res, next);
+        const newUser = await userService.createUser(req);
         if (!newUser) return res.status(400).json({ error: 'User not created' });
         res.status(201).json(newUser);
     } catch (error) {
@@ -59,7 +59,7 @@ export const createUser = async (req, res, next) => {
  */
 export const updateUser = async (req, res, next) => {
     try {
-        const updatedUser = await userService.updateUser(req, res, next);
+        const updatedUser = await userService.updateUser(req);
         if (!updatedUser) return res.status(404).json({ error: 'User not found' });
         res.status(200).json(updatedUser);
     } catch (error) {
@@ -76,7 +76,7 @@ export const updateUser = async (req, res, next) => {
  */
 export const updateUserPassword = async (req, res, next) => {
     try {
-        const result = await userService.updateUserPassword(req, res, next);
+        const result = await userService.updateUserPassword(req);
         if (!result) return res.status(404).json({ error: 'User not found' });
         res.status(200).json({ msg: 'Password updated' });
     } catch (error) {
@@ -93,7 +93,7 @@ export const updateUserPassword = async (req, res, next) => {
  */
 export const deleteUser = async (req, res, next) => {
     try {
-        const deletedUser = await userService.deleteUser(req, res, next);
+        const deletedUser = await userService.deleteUser(req);
         if (!deletedUser) return res.status(404).json({ error: 'User not found' });
         res.status(200).json({ msg: 'User deleted' });
     } catch (error) {

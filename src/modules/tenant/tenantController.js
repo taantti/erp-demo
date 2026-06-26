@@ -8,7 +8,7 @@ import tenantService from './services/index.js';
  */
 export const readTenants = async (req, res, next) => {
     try {
-        const tenants = await tenantService.readTenants(req, res, next);
+        const tenants = await tenantService.readTenants(req);
         res.status(200).json(tenants);
     } catch (error) {
         return next(error);
@@ -23,7 +23,7 @@ export const readTenants = async (req, res, next) => {
  */
 export const readTenant = async (req, res, next) => {
     try {
-        const tenant = await tenantService.readTenant(req, res, next);
+        const tenant = await tenantService.readTenant(req);
         if (!tenant) return res.status(404).json({ error: 'Tenant not found' });
         res.status(200).json(tenant);
     } catch (error) {
@@ -39,7 +39,7 @@ export const readTenant = async (req, res, next) => {
  */
 export const createTenant = async (req, res, next) => {
     try {
-        const newTenant = await tenantService.createTenant(req, res, next);
+        const newTenant = await tenantService.createTenant(req);
         if (!newTenant) return res.status(404).json({ error: 'Tenant not created' });
         res.status(201).json(newTenant);
     } catch (error) {
@@ -55,7 +55,7 @@ export const createTenant = async (req, res, next) => {
  */
 export const updateTenant = async (req, res, next) => {
     try {
-        const updatedTenant = await tenantService.updateTenant(req, res, next);
+        const updatedTenant = await tenantService.updateTenant(req);
         if (!updatedTenant) return res.status(404).json({ error: 'Tenant not found' });
         res.status(200).json(updatedTenant);
     } catch (error) {
@@ -71,7 +71,7 @@ export const updateTenant = async (req, res, next) => {
  */
 export const deleteTenant = async (req, res, next) => {
     try {
-        const deletedTenant = await tenantService.deleteTenant(req, res, next);
+        const deletedTenant = await tenantService.deleteTenant(req);
         if (!deletedTenant) return res.status(404).json({ error: 'Tenant not found' });
         res.status(200).json({ msg: 'Tenant deleted' });
     } catch (error) {

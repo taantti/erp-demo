@@ -8,7 +8,7 @@ import { productService, categoryService } from './services/index.js';
  */
 export const readProducts = async (req, res, next) => {
     try {
-        const products = await productService.readProducts(req, res, next);
+        const products = await productService.readProducts(req);
         res.status(200).json(products);
     } catch (error) {
         return next(error);
@@ -23,7 +23,7 @@ export const readProducts = async (req, res, next) => {
  */
 export const readProduct = async (req, res, next) => {
     try {
-        const product = await productService.readProduct(req, res, next);
+        const product = await productService.readProduct(req);
         if (!product) return res.status(404).json({ error: 'Product not found' });
         res.status(200).json(product);
     } catch (error) {
@@ -39,7 +39,7 @@ export const readProduct = async (req, res, next) => {
  */
 export const createProduct = async (req, res, next) => {
     try {
-        const newProduct = await productService.createProduct(req, res, next);
+        const newProduct = await productService.createProduct(req);
         if (!newProduct) return res.status(400).json({ error: 'Product not created' });
         res.status(201).json(newProduct);
     } catch (error) {
@@ -55,7 +55,7 @@ export const createProduct = async (req, res, next) => {
  */
 export const updateProduct = async (req, res, next) => {
     try {
-        const updatedProduct = await productService.updateProduct(req, res, next);
+        const updatedProduct = await productService.updateProduct(req);
         if (!updatedProduct) return res.status(404).json({ error: 'Product not found' });
         res.status(200).json(updatedProduct);
     } catch (error) {
@@ -71,7 +71,7 @@ export const updateProduct = async (req, res, next) => {
  */
 export const deleteProduct = async (req, res, next) => {
     try {
-        const deletedProduct = await productService.deleteProduct(req, res, next);
+        const deletedProduct = await productService.deleteProduct(req);
         if (!deletedProduct) return res.status(404).json({ error: 'Product not found' });
         res.status(200).json({ msg: 'Product deleted' });
     } catch (error) {
@@ -87,7 +87,7 @@ export const deleteProduct = async (req, res, next) => {
  */
 export const readCategories = async (req, res, next) => {
     try {
-        const categories = await categoryService.readCategories(req, res, next);
+        const categories = await categoryService.readCategories(req);
         res.status(200).json(categories);
     } catch (error) {
         return next(error);
@@ -102,7 +102,7 @@ export const readCategories = async (req, res, next) => {
  */
 export const readCategory = async (req, res, next) => {
     try {
-        const category = await categoryService.readCategory(req, res, next);
+        const category = await categoryService.readCategory(req);
         if (!category) return res.status(404).json({ error: 'Category not found' });
         res.status(200).json(category);
     } catch (error) {
@@ -118,7 +118,7 @@ export const readCategory = async (req, res, next) => {
  */
 export const createCategory = async (req, res, next) => {
     try {
-        const newCategory = await categoryService.createCategory(req, res, next);
+        const newCategory = await categoryService.createCategory(req);
         if (!newCategory) return res.status(400).json({ error: 'Category not created' });
         res.status(201).json(newCategory);
     } catch (error) {
@@ -134,7 +134,7 @@ export const createCategory = async (req, res, next) => {
  */
 export const updateCategory = async (req, res, next) => {
     try {
-        const updatedCategory = await categoryService.updateCategory(req, res, next);
+        const updatedCategory = await categoryService.updateCategory(req);
         if (!updatedCategory) return res.status(404).json({ error: 'Category not found' });
         res.status(200).json(updatedCategory);
     } catch (error) {
@@ -150,7 +150,7 @@ export const updateCategory = async (req, res, next) => {
  */
 export const deleteCategory = async (req, res, next) => {
     try {
-        const deletedCategory = await categoryService.deleteCategory(req, res, next);
+        const deletedCategory = await categoryService.deleteCategory(req);
         if (!deletedCategory) return res.status(404).json({ error: 'Category not found' });
         res.status(200).json({ msg: 'Category deleted' });
     } catch (error) {

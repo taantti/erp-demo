@@ -3,76 +3,41 @@ import { newTenant as modelNewTenant, findTenantById, findTenants as modelFindTe
 /**
  * Create a new tenant
  * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
  */
-export const createTenant = async (req, res, next) => {
-    try {
-        const tenantData = { ...req.body, active: true };
-        const tenant = await modelNewTenant(req, tenantData, true, true, true);
-        return tenant;
-    } catch (error) {
-        return next(error);
-    }
+export const createTenant = async (req) => {
+    const tenantData = { ...req.body, active: true };
+    return await modelNewTenant(req, tenantData, true, true, true);
 };
 
 /**
  * Read a tenant
  * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
  */
-export const readTenant = async (req, res, next) => {
-    try {
-        const tenant = await findTenantById(req, req.params.id, false, true, true);
-        return tenant;
-    } catch (error) {
-        return next(error);
-    }
+export const readTenant = async (req) => {
+    return await findTenantById(req, req.params.id, false, true, true);
 };
 
 /**
  * Read tenants
  * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
  */
-export const readTenants = async (req, res, next) => {
-    try {
-        const ids = req.params.ids.split(',');
-        const tenants = await modelFindTenants(req, { _id: { $in: ids } }, false, true, true);
-        return tenants;
-    } catch (error) {
-        return next(error);
-    }
+export const readTenants = async (req) => {
+    const ids = req.params.ids.split(',');
+    return await modelFindTenants(req, { _id: { $in: ids } }, false, true, true);
 };
 
 /**
  * Update a tenant
  * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
  */
-export const updateTenant = async (req, res, next) => {
-    try {
-        const tenant = await findOneTenantAndUpdate(req, req.params.id, req.body, false, true, true);
-        return tenant;
-    } catch (error) {
-        return next(error);
-    }
+export const updateTenant = async (req) => {
+    return await findOneTenantAndUpdate(req, req.params.id, req.body, false, true, true);
 };
 
 /**
  * Delete a tenant
  * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
  */
-export const deleteTenant = async (req, res, next) => {
-    try {
-        const tenant = await deleteTenantById(req, req.params.id, true);
-        return tenant;
-    } catch (error) {
-        return next(error);
-    }
+export const deleteTenant = async (req) => {
+    return await deleteTenantById(req, req.params.id, true);
 };

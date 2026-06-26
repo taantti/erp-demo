@@ -8,7 +8,7 @@ import { stockService, stockEventService, inventoryService, shelfService } from 
  */
 export const readStocks = async (req, res, next) => {
     try {
-        const stocks = await stockService.readStocks(req, res, next);
+        const stocks = await stockService.readStocks(req);
         res.status(200).json(stocks);
     } catch (error) {
         return next(error);
@@ -23,7 +23,7 @@ export const readStocks = async (req, res, next) => {
  */
 export const readStock = async (req, res, next) => {
     try {
-        const stock = await stockService.readStock(req, res, next);
+        const stock = await stockService.readStock(req);
         if (!stock) return res.status(404).json({ error: 'Stock not found' });
         res.status(200).json(stock);
     } catch (error) {
@@ -39,7 +39,7 @@ export const readStock = async (req, res, next) => {
  */
 export const createStock = async (req, res, next) => {
     try {
-        const newStock = await stockService.createStock(req, res, next);
+        const newStock = await stockService.createStock(req);
         if (!newStock) return res.status(400).json({ error: 'Stock not created' });
         res.status(201).json(newStock);
     } catch (error) {
@@ -55,7 +55,7 @@ export const createStock = async (req, res, next) => {
  */
 export const updateStock = async (req, res, next) => {
     try {
-        const updatedStock = await stockService.updateStock(req, res, next);
+        const updatedStock = await stockService.updateStock(req);
         if (!updatedStock) return res.status(404).json({ error: 'Stock not found' });
         res.status(200).json(updatedStock);
     } catch (error) {
@@ -71,7 +71,7 @@ export const updateStock = async (req, res, next) => {
  */
 export const deleteStock = async (req, res, next) => {
     try {
-        const deletedStock = await stockService.deleteStock(req, res, next);
+        const deletedStock = await stockService.deleteStock(req);
         if (!deletedStock) return res.status(404).json({ error: 'Stock not found' });
         res.status(200).json({ msg: 'Stock deleted' });
     } catch (error) {
@@ -88,7 +88,7 @@ export const deleteStock = async (req, res, next) => {
  */
 export const readStockEvents = async (req, res, next) => {
     try {
-        const events = await stockEventService.readStockEvents(req, res, next);
+        const events = await stockEventService.readStockEvents(req);
         res.status(200).json(events);
     } catch (error) {
         return next(error);
@@ -103,7 +103,7 @@ export const readStockEvents = async (req, res, next) => {
  */
 export const readStockEvent = async (req, res, next) => {
     try {
-        const event = await stockEventService.readStockEvent(req, res, next);
+        const event = await stockEventService.readStockEvent(req);
         if (!event) return res.status(404).json({ error: 'Stock event not found' });
         res.status(200).json(event);
     } catch (error) {
@@ -119,7 +119,7 @@ export const readStockEvent = async (req, res, next) => {
  */
 export const createStockEvent = async (req, res, next) => {
     try {
-        const newEvent = await stockEventService.createStockEvent(req, res, next);
+        const newEvent = await stockEventService.createStockEvent(req);
         if (!newEvent) return res.status(400).json({ error: 'Stock event not created' });
         res.status(201).json(newEvent);
     } catch (error) {
@@ -135,7 +135,7 @@ export const createStockEvent = async (req, res, next) => {
  */
 export const updateStockEvent = async (req, res, next) => {
     try {
-        const updatedEvent = await stockEventService.updateStockEvent(req, res, next);
+        const updatedEvent = await stockEventService.updateStockEvent(req);
         if (!updatedEvent) return res.status(404).json({ error: 'Stock event not found' });
         res.status(200).json(updatedEvent);
     } catch (error) {
@@ -151,7 +151,7 @@ export const updateStockEvent = async (req, res, next) => {
  */
 export const deleteStockEvent = async (req, res, next) => {
     try {
-        const deletedEvent = await stockEventService.deleteStockEvent(req, res, next);
+        const deletedEvent = await stockEventService.deleteStockEvent(req);
         if (!deletedEvent) return res.status(404).json({ error: 'Stock event not found' });
         res.status(200).json({ msg: 'Stock event deleted' });
     } catch (error) {
@@ -168,7 +168,7 @@ export const deleteStockEvent = async (req, res, next) => {
  */
 export const readInventories = async (req, res, next) => {
     try {
-        const inventories = await inventoryService.readInventories(req, res, next);
+        const inventories = await inventoryService.readInventories(req);
         res.status(200).json(inventories);
     } catch (error) {
         return next(error);
@@ -183,7 +183,7 @@ export const readInventories = async (req, res, next) => {
  */
 export const readInventory = async (req, res, next) => {
     try {
-        const inventory = await inventoryService.readInventory(req, res, next);
+        const inventory = await inventoryService.readInventory(req);
         if (!inventory) return res.status(404).json({ error: 'Inventory not found' });
         res.status(200).json(inventory);
     } catch (error) {
@@ -199,7 +199,7 @@ export const readInventory = async (req, res, next) => {
  */
 export const createInventory = async (req, res, next) => {
     try {
-        const newInventory = await inventoryService.createInventory(req, res, next);
+        const newInventory = await inventoryService.createInventory(req);
         if (!newInventory) return res.status(400).json({ error: 'Inventory not created' });
         res.status(201).json(newInventory);
     } catch (error) {
@@ -215,7 +215,7 @@ export const createInventory = async (req, res, next) => {
  */
 export const updateInventory = async (req, res, next) => {
     try {
-        const updatedInventory = await inventoryService.updateInventory(req, res, next);
+        const updatedInventory = await inventoryService.updateInventory(req);
         if (!updatedInventory) return res.status(404).json({ error: 'Inventory not found' });
         res.status(200).json(updatedInventory);
     } catch (error) {
@@ -231,7 +231,7 @@ export const updateInventory = async (req, res, next) => {
  */
 export const deleteInventory = async (req, res, next) => {
     try {
-        const deletedInventory = await inventoryService.deleteInventory(req, res, next);
+        const deletedInventory = await inventoryService.deleteInventory(req);
         if (!deletedInventory) return res.status(404).json({ error: 'Inventory not found' });
         res.status(200).json({ msg: 'Inventory deleted' });
     } catch (error) {
@@ -247,7 +247,7 @@ export const deleteInventory = async (req, res, next) => {
  */
 export const readShelves = async (req, res, next) => {
     try {
-        const shelves = await shelfService.readShelves(req, res, next);
+        const shelves = await shelfService.readShelves(req);
         res.status(200).json(shelves);
     } catch (error) {
         return next(error);
@@ -262,7 +262,7 @@ export const readShelves = async (req, res, next) => {
  */
 export const readShelf = async (req, res, next) => {
     try {
-        const shelf = await shelfService.readShelf(req, res, next);
+        const shelf = await shelfService.readShelf(req);
         if (!shelf) return res.status(404).json({ error: 'Shelf not found' });
         res.status(200).json(shelf);
     } catch (error) {
@@ -278,7 +278,7 @@ export const readShelf = async (req, res, next) => {
  */
 export const createShelf = async (req, res, next) => {
     try {
-        const newShelf = await shelfService.createShelf(req, res, next);
+        const newShelf = await shelfService.createShelf(req);
         if (!newShelf) return res.status(400).json({ error: 'Shelf not created' });
         res.status(201).json(newShelf);
     } catch (error) {
@@ -294,7 +294,7 @@ export const createShelf = async (req, res, next) => {
  */
 export const updateShelf = async (req, res, next) => {
     try {
-        const updatedShelf = await shelfService.updateShelf(req, res, next);
+        const updatedShelf = await shelfService.updateShelf(req);
         if (!updatedShelf) return res.status(404).json({ error: 'Shelf not found' });
         res.status(200).json(updatedShelf);
     } catch (error) {
@@ -310,7 +310,7 @@ export const updateShelf = async (req, res, next) => {
  */
 export const deleteShelf = async (req, res, next) => {
     try {
-        const deletedShelf = await shelfService.deleteShelf(req, res, next);
+        const deletedShelf = await shelfService.deleteShelf(req);
         if (!deletedShelf) return res.status(404).json({ error: 'Shelf not found' });
         res.status(200).json({ msg: 'Shelf deleted' });
     } catch (error) {

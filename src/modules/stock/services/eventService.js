@@ -6,89 +6,49 @@ import { findInventories, createInventory } from '../../../models/index.js';
 /**
  * Create a new stock event.
  * @param {Object} req - The request object.
- * @param {Object} res - The response object.
- * @param {Function} next - The next middleware function.
- * @returns 
  */
-export const createStockEvent = async (req, res, next) => {
-    try {
-        await processStockEvent(req);
-        const event = await modelCreateStockEvent(req, req.body, false, true, true);
-        return event;
-    } catch (error) {
-        return next(error);
-    }
+export const createStockEvent = async (req) => {
+    await processStockEvent(req);
+    return await modelCreateStockEvent(req, req.body, false, true, true);
 };
 
 /**
  * Read a stock event by ID.
  * @param {Object} req - The request object.
- * @param {Object} res - The response object.
- * @param {Function} next - The next middleware function.
- * @returns 
  */
-export const readStockEvent = async (req, res, next) => {
-    try {
-        const event = await findStockEventById(req, req.params.id, false, true, true);
-        return event;
-    } catch (error) {
-        return next(error);
-    }
+export const readStockEvent = async (req) => {
+    return await findStockEventById(req, req.params.id, false, true, true);
 };
 
 /**
  * Read all stock events.
  * @param {Object} req - The request object.
- * @param {Object} res - The response object.
- * @param {Function} next - The next middleware function.
- * @returns 
  */
-export const readStockEvents = async (req, res, next) => {
-    try {
-        const events = await findStockEvents(req, req.query, false, true, true);
-        return events;
-    } catch (error) {
-        return next(error);
-    }
+export const readStockEvents = async (req) => {
+    return await findStockEvents(req, req.query, false, true, true);
 };
 
 /**
  * Update a stock event by ID.
  * @param {Object} req - The request object.
- * @param {Object} res - The response object.
- * @param {Function} next - The next middleware function.
- * @returns 
  */
-export const updateStockEvent = async (req, res, next) => {
-    try {
-        await processStockEventUpdate(req);
-        const event = await updateStockEventById(req, req.params.id, req.body, false, true, true);
-        return event;
-    } catch (error) {
-        return next(error);
-    }
+export const updateStockEvent = async (req) => {
+    await processStockEventUpdate(req);
+    return await updateStockEventById(req, req.params.id, req.body, false, true, true);
 };
 
 /**
  * Delete a stock event by ID.
  * @param {Object} req - The request object.
- * @param {Object} res - The response object.
- * @param {Function} next - The next middleware function.
- * @returns 
  */
-export const deleteStockEvent = async (req, res, next) => {
-    try {
-        const event = await deleteStockEventById(req, req.params.id, false);
-        return event;
-    } catch (error) {
-        return next(error);
-    }
+export const deleteStockEvent = async (req) => {
+    return await deleteStockEventById(req, req.params.id, false);
 };
 
 /**
  * Process a stock event based on its type.
  * @param {Object} req - The request object.
- * @returns 
+ * @returns
  */
 const processStockEvent = async (req) => {
     switch (req.body.eventType) {
@@ -108,7 +68,7 @@ const processStockEvent = async (req) => {
 /**
  * Process a receipt stock event.
  * @param {Object} req - The request object.
- * @returns 
+ * @returns
  */
 const processReceiptStockEvent = async (req) => {
     // TODO: Implement receipt stock event processing logic
@@ -128,8 +88,8 @@ const processIssueStockEvent = async (req) => {
         productId: req.body.productId
     }
 
-    const sourceInventoryes = await findInventories(req, sourceParams, false, false, false); 
- 
+    const sourceInventoryes = await findInventories(req, sourceParams, false, false, false);
+
     if (sourceInventoryes.length > 1) {
         throw new Error("Multiple source inventories found");
     }
@@ -227,8 +187,8 @@ const processTransferStockEvent = async (req) => {
 
 /**
  * Process an adjustment stock event.
- * @param {Object} req - The request object. 
- * @throws {Error} If the adjustment fails. 
+ * @param {Object} req - The request object.
+ * @throws {Error} If the adjustment fails.
  */
 const processAdjustmentStockEvent = async (req) => {
     const destinationParams = {
@@ -264,7 +224,7 @@ const processAdjustmentStockEvent = async (req) => {
 /**
  * Process a stock event update.
  * @param {Object} req - The request object.
- * @returns  
+ * @returns
  */
 const processStockEventUpdate = async (req) => {
     switch (req.body.eventType) {
@@ -284,7 +244,7 @@ const processStockEventUpdate = async (req) => {
 /**
  * Process a receipt stock event update.
  * @param {Object} req - The request object.
- * @returns 
+ * @returns
  */
 const processReceiptStockEventUpdate = async (req) => {
     // TODO: Implement receipt stock event update processing logic
@@ -295,7 +255,7 @@ const processReceiptStockEventUpdate = async (req) => {
 /**
  * Process an issue stock event update.
  * @param {Object} req - The request object.
- * @returns 
+ * @returns
  */
 const processIssueStockEventUpdate = async (req) => {
     // TODO: Implement issue stock event update processing logic
@@ -306,7 +266,7 @@ const processIssueStockEventUpdate = async (req) => {
 /**
  * Process a transfer stock event update.
  * @param {Object} req - The request object.
- * @returns 
+ * @returns
  */
 const processTransferStockEventUpdate = async (req) => {
     // TODO: Implement transfer stock event update processing logic
@@ -317,15 +277,10 @@ const processTransferStockEventUpdate = async (req) => {
 /**
  * Process an adjustment stock event update.
  * @param {Object} req - The request object.
- * @returns 
+ * @returns
  */
 const processAdjustmentStockEventUpdate = async (req) => {
     // TODO: Implement adjustment stock event update processing logic
     // For now, just return a success response
     return { success: true, message: "Adjustment stock event update processed successfully" };
 };
-
-
-
-
-

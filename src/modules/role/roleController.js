@@ -8,7 +8,7 @@ import roleService from './services/index.js';
  */
 export const readRoles = async (req, res, next) => {
     try {
-        const roles = await roleService.readRoles(req, res, next);
+        const roles = await roleService.readRoles(req);
         res.status(200).json(roles);
     } catch (error) {
         return next(error);
@@ -23,7 +23,7 @@ export const readRoles = async (req, res, next) => {
  */
 export const readRole = async (req, res, next) => {
     try {
-        const role = await roleService.readRole(req, res, next);
+        const role = await roleService.readRole(req);
         if (!role) return res.status(404).json({ error: 'Role not found' });
         res.status(200).json(role);
     } catch (error) {
@@ -39,7 +39,7 @@ export const readRole = async (req, res, next) => {
  */
 export const createRole = async (req, res, next) => {
     try {
-        const newRole = await roleService.createRole(req, res, next);
+        const newRole = await roleService.createRole(req);
         if (!newRole) return res.status(404).json({ error: 'Role not created' });
         res.status(201).json(newRole);
     } catch (error) {
@@ -55,7 +55,7 @@ export const createRole = async (req, res, next) => {
  */
 export const updateRole = async (req, res, next) => {
     try {
-        const updatedRole = await roleService.updateRole(req, res, next);
+        const updatedRole = await roleService.updateRole(req);
         if (!updatedRole) return res.status(404).json({ error: 'Role not found' });
         res.status(200).json(updatedRole);
     } catch (error) {
@@ -71,7 +71,7 @@ export const updateRole = async (req, res, next) => {
  */
 export const deleteRole = async (req, res, next) => {
     try {
-        const deletedRole = await roleService.deleteRole(req, res, next);
+        const deletedRole = await roleService.deleteRole(req);
         if (!deletedRole) return res.status(404).json({ error: 'Role not found' });
         res.status(200).json({ msg: 'Role deleted' });
     } catch (error) {
