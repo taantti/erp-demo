@@ -1,6 +1,7 @@
 import { Role } from "../../src/models/index.js";
 import { User } from "../../src/models/index.js";
 import { Tenant } from "../../src/models/index.js";
+import { Stock } from "../../src/models/index.js";
 import { ProductCategory } from "../../src/models/index.js";
 import { hashPassword } from "../../src/utils/password.js";
 
@@ -123,6 +124,25 @@ export const createMockProductCategory = async () => {
     try {
         const categoryModel = new ProductCategory(mockCategoryData);
         return await categoryModel.save();
+    } catch (error) {
+        throw error;
+    }
+}
+
+/**
+ * Create a mock stock for testing
+ * @returns {Promise<Stock>}
+ */
+export const createMockStock = async () => {
+    const mockStockData = {
+        name: "Test Stock",
+        active: true,
+        tenant: mockTenantId
+    }
+
+    try {
+        const stockModel = new Stock(mockStockData);
+        return await stockModel.save();
     } catch (error) {
         throw error;
     }
