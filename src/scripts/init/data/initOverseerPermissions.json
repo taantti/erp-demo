@@ -184,6 +184,31 @@
             "access": true,
             "adminTenantOnly": true,
             "immutable": true
+        },
+        "readInventories": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "createInventory": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "readInventory": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "updateInventory": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "deleteInventory": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
         }
     }
 }

@@ -2,8 +2,11 @@ import { Role } from "../../src/models/index.js";
 import { User } from "../../src/models/index.js";
 import { Tenant } from "../../src/models/index.js";
 import { Stock } from "../../src/models/index.js";
+import { Shelf } from "../../src/models/index.js";
+import { Product } from "../../src/models/index.js";
 import { ProductCategory } from "../../src/models/index.js";
 import { hashPassword } from "../../src/utils/password.js";
+import { ProductUnits } from '../../src/models/productModel.js';
 
 export const username = "test-user";
 export const password = "Test-Password123!";
@@ -11,13 +14,15 @@ export let mockTenantId = null;
 
 /**
  * Create a mock tenant for testing
+ * @param {Object} tenantData - (Optional) Tenant data to override defaults
  * @returns {Promise<void>}
  */
-export const createMockTenant = async () => {
+export const createMockTenant = async (tenantData = {}) => {
     const mockTenantData = {
         name: "test-tenant",
         admin: false,
-        active: true
+        active: true,
+        ...tenantData
     }
 
     try {
@@ -31,9 +36,10 @@ export const createMockTenant = async () => {
 
 /**
  * Create a mock role and permissions for testing
+ * @param {Object} roleData - (Optional) Role data to override defaults.
  * @returns {Promise<void>}
  */
-export const createMockRole = async () => {
+export const createMockRole = async (roleData = {}) => {
     const mockRoleData = {
         name: "test-role",
         role: "OVERSEER",
@@ -70,9 +76,15 @@ export const createMockRole = async () => {
                 readShelf: { access: true, adminTenantOnly: false, immutable: false },
                 readShelves: { access: true, adminTenantOnly: false, immutable: false },
                 updateShelf: { access: true, adminTenantOnly: false, immutable: false },
-                deleteShelf: { access: true, adminTenantOnly: false, immutable: false }
+                deleteShelf: { access: true, adminTenantOnly: false, immutable: false },
+                readInventories: { access: true, adminTenantOnly: false, immutable: false },
+                createInventory: { access: true, adminTenantOnly: false, immutable: false },
+                readInventory: { access: true, adminTenantOnly: false, immutable: false },
+                updateInventory: { access: true, adminTenantOnly: false, immutable: false },
+                deleteInventory: { access: true, adminTenantOnly: false, immutable: false }
             }
-        }
+        },
+        ...roleData
     }
 
     try {
@@ -85,9 +97,10 @@ export const createMockRole = async () => {
 
 /**
  * Create a mock user for testing
+ * @param {Object} userData - (Optional) User data to override defaults.
  * @returns {Promise<void>}
  */
-export const createMockUser = async () => {
+export const createMockUser = async (userData = {}) => {
 
     const hashedPassword = await hashPassword(password);
 
@@ -99,7 +112,8 @@ export const createMockUser = async () => {
         email: "test@example.com",
         role: "OVERSEER",
         active: true,
-        tenant: mockTenantId
+        tenant: mockTenantId,
+        ...userData
     }
     try {
         const userModel = new User(mockUserData);
@@ -111,14 +125,16 @@ export const createMockUser = async () => {
 
 /**
  * Create a mock product category for testing
+ * @param {Object} productCategoryData - (Optional) Product category data to override defaults.
  * @returns {Promise<ProductCategory>}
  */
-export const createMockProductCategory = async () => {
+export const createMockProductCategory = async (productCategoryData = {}) => {
     const mockCategoryData = {
         name: "Test Category",
         slug: "test-category",
         active: true,
-        tenant: mockTenantId
+        tenant: mockTenantId,
+        ...productCategoryData
     };
 
     try {
@@ -130,19 +146,70 @@ export const createMockProductCategory = async () => {
 }
 
 /**
+ * Create a mock product for testing
+ * @param {array} categoryIds - The IDs of the categories.
+ * @param {Object} productCategoryData - (Optional) Product data to override defaults.
+ * @returns {Promise<Product>}
+ */
+export const createMockProduct = async (categoryIds, productCategoryData = {}) => {
+    const mockProductData = {
+        name: "Test Product",
+        sku: "TEST-PRODUCT",
+        unit: ProductUnits.PIECE,
+        categoryIds: categoryIds,
+        active: true,
+        tenant: mockTenantId,
+        ...productCategoryData
+    }
+
+    try {
+        const productModel = new Product(mockProductData);
+        return await productModel.save();
+    } catch (error) {
+        throw error;
+    }
+}
+
+/**
  * Create a mock stock for testing
+ * @param {Object} stockData - (Optional) Stock data to override defaults
  * @returns {Promise<Stock>}
  */
-export const createMockStock = async () => {
+export const createMockStock = async (stockData = {}) => {
     const mockStockData = {
         name: "Test Stock",
         active: true,
-        tenant: mockTenantId
+        tenant: mockTenantId,
+        ...stockData
     }
 
     try {
         const stockModel = new Stock(mockStockData);
         return await stockModel.save();
+    } catch (error) {
+        throw error;
+    }
+}
+
+/**
+ * Create a mock shelf for testing
+ * @param {string} stockId - The ID of the stock.
+ * @param {Object} shelfData - (Optional) Shelf data to override defaults.
+ * @returns {Promise<Shelf>}
+ */
+export const createMockShelf = async (stockId, shelfData = {}) => {
+    const mockShelfData = {
+        stockId: stockId,
+        name: "Test Shelf",
+        code: "TEST-SHELF",
+        active: true,
+        tenant: mockTenantId,
+        ...shelfData
+    }
+
+    try {
+        const shelfModel = new Shelf(mockShelfData);
+        return await shelfModel.save();
     } catch (error) {
         throw error;
     }
