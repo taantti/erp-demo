@@ -1,0 +1,13 @@
+# Keep the build context small and avoid leaking secrets/dev files into the image.
+node_modules
+npm-debug.log*
+.env
+.env-example
+.git
+.gitignore
+.github
+.serverless
+tests
+coverage
+*.md
+.claude
