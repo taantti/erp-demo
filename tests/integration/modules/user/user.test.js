@@ -2,7 +2,7 @@ import app from "../../../../src/app.js";
 import { describe, it, expect, beforeAll, afterAll } from "vitest";
 import { setup, teardown } from "../../../setup/db.js";
 import request from 'supertest';
-import { createMockTenant, createMockRole, createMockUser, username, password } from "../../../setup/mockData.js";
+import { createMockTenant, createMockRole, createMockUser } from "../../../setup/mockData.js";
 import { login } from "../../../setup/login.js";
 
 let jwtToken = null;

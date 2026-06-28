@@ -8,15 +8,20 @@ import { ProductCategory } from "../../src/models/index.js";
 import { hashPassword } from "../../src/utils/password.js";
 import { ProductUnits } from '../../src/models/productModel.js';
 
-export const username = "test-user";
-export const password = "Test-Password123!";
+export const username_1 = "mock-user-1";
+export const password_1 = "Mock-Password123!-1";
+
+export const username_2 = "mock-user-2";
+export const password_2 = "Mock-Password123!-2";
+
+
 export let mockTenantId = null;
 
 export const initTenantData = {
     name: "test-tenant",
     admin: false,
     active: true
-}
+};
 
 export const initRoleData = {
     name: "test-role",
@@ -62,48 +67,94 @@ export const initRoleData = {
             deleteInventory: { access: true, adminTenantOnly: false, immutable: false }
         }
     }
-}
-
-export const initUserData = {
-    username: username,
-    password: null,
-    first_name: "Test",
-    last_name: "User",
-    email: "test@example.com",
-    role: "OVERSEER",
-    active: true,
-    tenant: null
-}
-
-export const initProductCategoryData = {
-    name: "Test Category",
-    slug: "test-category",
-    active: true,
-    tenant: null
 };
 
-export const initProductData = {
-    name: "Test Product",
-    sku: "TEST-PRODUCT",
-    unit: ProductUnits.PIECE,
-    categoryIds: [],
-    active: true,
-    tenant: null
-}
+export const initUserData = [
+    {
+        username: username_1,
+        password: null,
+        first_name: "Test-1",
+        last_name: "User-1",
+        email: "test1@example.com",
+        role: "OVERSEER",
+        active: true,
+        tenant: null
+    },
+    {
+        username: username_2,
+        password: null,
+        first_name: "Test2",
+        last_name: "User2",
+        email: "test2@example.com",
+        role: "OVERSEER",
+        active: true,
+        tenant: null
+    }
+];
 
-export const initStockData = {
-    name: "Test Stock",
-    active: true,
-    tenant: null
-};
+export const initProductCategoryData = [
+    {
+        name: "Test Category 1",
+        slug: "test-category-1",
+        active: true,
+        tenant: null
+    },
+    {
+        name: "Test Category 2",
+        slug: "test-category-2",
+        active: true,
+        tenant: null
+    }
+];
 
-export const initShelfData = {
-    stockId: null,
-    name: "Test Shelf",
-    code: "TEST-SHELF",
-    active: true,
-    tenant: null
-};
+export const initProductData = [
+    {
+        name: "Test Product 1",
+        sku: "TEST-PRODUCT-1",
+        unit: ProductUnits.PIECE,
+        categoryIds: [],
+        active: true,
+        tenant: null
+    },
+    {
+        name: "Test Product 2",
+        sku: "TEST-PRODUCT-2",
+        unit: ProductUnits.METER,
+        categoryIds: [],
+        active: true,
+        tenant: null
+    }
+];
+
+export const initStockData = [
+    {
+        name: "Test Stock 1",
+        active: true,
+        tenant: null
+    },
+    {
+        name: "Test Stock 2",
+        active: true,
+        tenant: null
+    }
+];
+
+export const initShelfData = [
+    {
+        stockId: null,
+        name: "Test Shelf 1",
+        code: "TEST-SHELF-1",
+        active: true,
+        tenant: null
+    },
+    {
+        stockId: null,
+        name: "Test Shelf 2",
+        code: "TEST-SHELF-2",
+        active: true,
+        tenant: null
+    }
+];
 
 /**
  * Create a mock tenant for testing
@@ -111,7 +162,7 @@ export const initShelfData = {
  * @returns {Promise<void>}
  */
 export const createMockTenant = async (tenantData = {}) => {
-    const mockTenantData = {...initTenantData, ...tenantData};
+    const mockTenantData = { ...initTenantData, ...tenantData };
 
     try {
         const tenantModel = new Tenant(mockTenantData);
@@ -128,7 +179,7 @@ export const createMockTenant = async (tenantData = {}) => {
  * @returns {Promise<void>}
  */
 export const createMockRole = async (roleData = {}) => {
-    const mockRoleData = {...initRoleData, ...roleData};
+    const mockRoleData = { ...initRoleData, ...roleData };
 
     try {
         const roleModel = new Role(mockRoleData);
@@ -144,8 +195,8 @@ export const createMockRole = async (roleData = {}) => {
  * @returns {Promise<void>}
  */
 export const createMockUser = async (userData = {}) => {
-    const hashedPassword = await hashPassword(password);
-    const mockUserData = { ...initUserData, password: hashedPassword, tenant: mockTenantId, ...userData };
+    const hashedPassword = await hashPassword(password_1);
+    const mockUserData = { ...initUserData[0], password: hashedPassword, tenant: mockTenantId, ...userData };
 
     try {
         const userModel = new User(mockUserData);
@@ -161,7 +212,7 @@ export const createMockUser = async (userData = {}) => {
  * @returns {Promise<ProductCategory>}
  */
 export const createMockProductCategory = async (productCategoryData = {}) => {
-    const mockCategoryData = { ...initProductCategoryData, tenant: mockTenantId, ...productCategoryData };
+    const mockCategoryData = { ...initProductCategoryData[0], tenant: mockTenantId, ...productCategoryData };
 
     try {
         const categoryModel = new ProductCategory(mockCategoryData);
@@ -178,7 +229,7 @@ export const createMockProductCategory = async (productCategoryData = {}) => {
  * @returns {Promise<Product>}
  */
 export const createMockProduct = async (categoryIds = [], productData = {}) => {
-    const mockProductData = { ...initProductData, categoryIds: categoryIds, tenant: mockTenantId, ...productData };
+    const mockProductData = { ...initProductData[0], categoryIds: categoryIds, tenant: mockTenantId, ...productData };
 
     try {
         const productModel = new Product(mockProductData);
@@ -194,7 +245,7 @@ export const createMockProduct = async (categoryIds = [], productData = {}) => {
  * @returns {Promise<Stock>}
  */
 export const createMockStock = async (stockData = {}) => {
-    const mockStockData = { ...initStockData, tenant: mockTenantId, ...stockData };
+    const mockStockData = { ...initStockData[0], tenant: mockTenantId, ...stockData };
 
     try {
         const stockModel = new Stock(mockStockData);
@@ -211,7 +262,7 @@ export const createMockStock = async (stockData = {}) => {
  * @returns {Promise<Shelf>}
  */
 export const createMockShelf = async (stockId, shelfData = {}) => {
-    const mockShelfData = { ...initShelfData, stockId: stockId, tenant: mockTenantId, ...shelfData };
+    const mockShelfData = { ...initShelfData[0], stockId: stockId, tenant: mockTenantId, ...shelfData };
 
     try {
         const shelfModel = new Shelf(mockShelfData);
