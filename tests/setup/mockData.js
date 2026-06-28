@@ -12,18 +12,106 @@ export const username = "test-user";
 export const password = "Test-Password123!";
 export let mockTenantId = null;
 
+export const initTenantData = {
+    name: "test-tenant",
+    admin: false,
+    active: true
+}
+
+export const initRoleData = {
+    name: "test-role",
+    role: "OVERSEER",
+    rolePermission: {
+        user: {
+            createUser: { access: true, immutable: false, adminTenantOnly: false },
+            readUsers: { access: true, immutable: false, adminTenantOnly: false },
+            readUser: { access: true, immutable: false, adminTenantOnly: false },
+            updateUser: { access: true, immutable: false, adminTenantOnly: false },
+            deleteUser: { access: true, immutable: false, adminTenantOnly: false },
+            updateUserPassword: { access: true, immutable: false, adminTenantOnly: false }
+        },
+        productCategory: {
+            createProductCategory: { access: true, immutable: false, adminTenantOnly: false },
+            readProductCategories: { access: true, immutable: false, adminTenantOnly: false },
+            readProductCategory: { access: true, immutable: false, adminTenantOnly: false },
+            updateProductCategory: { access: true, immutable: false, adminTenantOnly: false },
+            deleteProductCategory: { access: true, immutable: false, adminTenantOnly: false }
+        },
+        product: {
+            createProduct: { access: true, adminTenantOnly: false, immutable: false },
+            readProduct: { access: true, adminTenantOnly: false, immutable: false },
+            readProducts: { access: true, adminTenantOnly: false, immutable: false },
+            updateProduct: { access: true, adminTenantOnly: false, immutable: false },
+            deleteProduct: { access: true, adminTenantOnly: false, immutable: false }
+        },
+        stock: {
+            createStock: { access: true, adminTenantOnly: false, immutable: false },
+            readStock: { access: true, adminTenantOnly: false, immutable: false },
+            readStocks: { access: true, adminTenantOnly: false, immutable: false },
+            updateStock: { access: true, adminTenantOnly: false, immutable: false },
+            deleteStock: { access: true, adminTenantOnly: false, immutable: false },
+            createShelf: { access: true, adminTenantOnly: false, immutable: false },
+            readShelf: { access: true, adminTenantOnly: false, immutable: false },
+            readShelves: { access: true, adminTenantOnly: false, immutable: false },
+            updateShelf: { access: true, adminTenantOnly: false, immutable: false },
+            deleteShelf: { access: true, adminTenantOnly: false, immutable: false },
+            readInventories: { access: true, adminTenantOnly: false, immutable: false },
+            createInventory: { access: true, adminTenantOnly: false, immutable: false },
+            readInventory: { access: true, adminTenantOnly: false, immutable: false },
+            updateInventory: { access: true, adminTenantOnly: false, immutable: false },
+            deleteInventory: { access: true, adminTenantOnly: false, immutable: false }
+        }
+    }
+}
+
+export const initUserData = {
+    username: username,
+    password: null,
+    first_name: "Test",
+    last_name: "User",
+    email: "test@example.com",
+    role: "OVERSEER",
+    active: true,
+    tenant: null
+}
+
+export const initProductCategoryData = {
+    name: "Test Category",
+    slug: "test-category",
+    active: true,
+    tenant: null
+};
+
+export const initProductData = {
+    name: "Test Product",
+    sku: "TEST-PRODUCT",
+    unit: ProductUnits.PIECE,
+    categoryIds: [],
+    active: true,
+    tenant: null
+}
+
+export const initStockData = {
+    name: "Test Stock",
+    active: true,
+    tenant: null
+};
+
+export const initShelfData = {
+    stockId: null,
+    name: "Test Shelf",
+    code: "TEST-SHELF",
+    active: true,
+    tenant: null
+};
+
 /**
  * Create a mock tenant for testing
  * @param {Object} tenantData - (Optional) Tenant data to override defaults
  * @returns {Promise<void>}
  */
 export const createMockTenant = async (tenantData = {}) => {
-    const mockTenantData = {
-        name: "test-tenant",
-        admin: false,
-        active: true,
-        ...tenantData
-    }
+    const mockTenantData = {...initTenantData, ...tenantData};
 
     try {
         const tenantModel = new Tenant(mockTenantData);
@@ -40,52 +128,7 @@ export const createMockTenant = async (tenantData = {}) => {
  * @returns {Promise<void>}
  */
 export const createMockRole = async (roleData = {}) => {
-    const mockRoleData = {
-        name: "test-role",
-        role: "OVERSEER",
-        rolePermission: {
-            user: {
-                createUser: { access: true, immutable: false, adminTenantOnly: false },
-                readUsers: { access: true, immutable: false, adminTenantOnly: false },
-                readUser: { access: true, immutable: false, adminTenantOnly: false },
-                updateUser: { access: true, immutable: false, adminTenantOnly: false },
-                deleteUser: { access: true, immutable: false, adminTenantOnly: false },
-                updateUserPassword: { access: true, immutable: false, adminTenantOnly: false }
-            },
-            productCategory: {
-                createProductCategory: { access: true, immutable: false, adminTenantOnly: false },
-                readProductCategories: { access: true, immutable: false, adminTenantOnly: false },
-                readProductCategory: { access: true, immutable: false, adminTenantOnly: false },
-                updateProductCategory: { access: true, immutable: false, adminTenantOnly: false },
-                deleteProductCategory: { access: true, immutable: false, adminTenantOnly: false }
-            },
-            product: {
-                createProduct: { access: true, adminTenantOnly: false, immutable: false },
-                readProduct: { access: true, adminTenantOnly: false, immutable: false },
-                readProducts: { access: true, adminTenantOnly: false, immutable: false },
-                updateProduct: { access: true, adminTenantOnly: false, immutable: false },
-                deleteProduct: { access: true, adminTenantOnly: false, immutable: false }
-            },
-            stock: {
-                createStock: { access: true, adminTenantOnly: false, immutable: false },
-                readStock: { access: true, adminTenantOnly: false, immutable: false },
-                readStocks: { access: true, adminTenantOnly: false, immutable: false },
-                updateStock: { access: true, adminTenantOnly: false, immutable: false },
-                deleteStock: { access: true, adminTenantOnly: false, immutable: false },
-                createShelf: { access: true, adminTenantOnly: false, immutable: false },
-                readShelf: { access: true, adminTenantOnly: false, immutable: false },
-                readShelves: { access: true, adminTenantOnly: false, immutable: false },
-                updateShelf: { access: true, adminTenantOnly: false, immutable: false },
-                deleteShelf: { access: true, adminTenantOnly: false, immutable: false },
-                readInventories: { access: true, adminTenantOnly: false, immutable: false },
-                createInventory: { access: true, adminTenantOnly: false, immutable: false },
-                readInventory: { access: true, adminTenantOnly: false, immutable: false },
-                updateInventory: { access: true, adminTenantOnly: false, immutable: false },
-                deleteInventory: { access: true, adminTenantOnly: false, immutable: false }
-            }
-        },
-        ...roleData
-    }
+    const mockRoleData = {...initRoleData, ...roleData};
 
     try {
         const roleModel = new Role(mockRoleData);
@@ -101,20 +144,9 @@ export const createMockRole = async (roleData = {}) => {
  * @returns {Promise<void>}
  */
 export const createMockUser = async (userData = {}) => {
-
     const hashedPassword = await hashPassword(password);
+    const mockUserData = { ...initUserData, password: hashedPassword, tenant: mockTenantId, ...userData };
 
-    const mockUserData = {
-        username: username,
-        password: hashedPassword,
-        first_name: "Test",
-        last_name: "User",
-        email: "test@example.com",
-        role: "OVERSEER",
-        active: true,
-        tenant: mockTenantId,
-        ...userData
-    }
     try {
         const userModel = new User(mockUserData);
         await userModel.save();
@@ -129,13 +161,7 @@ export const createMockUser = async (userData = {}) => {
  * @returns {Promise<ProductCategory>}
  */
 export const createMockProductCategory = async (productCategoryData = {}) => {
-    const mockCategoryData = {
-        name: "Test Category",
-        slug: "test-category",
-        active: true,
-        tenant: mockTenantId,
-        ...productCategoryData
-    };
+    const mockCategoryData = { ...initProductCategoryData, tenant: mockTenantId, ...productCategoryData };
 
     try {
         const categoryModel = new ProductCategory(mockCategoryData);
@@ -148,19 +174,11 @@ export const createMockProductCategory = async (productCategoryData = {}) => {
 /**
  * Create a mock product for testing
  * @param {array} categoryIds - The IDs of the categories.
- * @param {Object} productCategoryData - (Optional) Product data to override defaults.
+ * @param {Object} productData - (Optional) Product data to override defaults.
  * @returns {Promise<Product>}
  */
-export const createMockProduct = async (categoryIds, productCategoryData = {}) => {
-    const mockProductData = {
-        name: "Test Product",
-        sku: "TEST-PRODUCT",
-        unit: ProductUnits.PIECE,
-        categoryIds: categoryIds,
-        active: true,
-        tenant: mockTenantId,
-        ...productCategoryData
-    }
+export const createMockProduct = async (categoryIds = [], productData = {}) => {
+    const mockProductData = { ...initProductData, categoryIds: categoryIds, tenant: mockTenantId, ...productData };
 
     try {
         const productModel = new Product(mockProductData);
@@ -176,12 +194,7 @@ export const createMockProduct = async (categoryIds, productCategoryData = {}) =
  * @returns {Promise<Stock>}
  */
 export const createMockStock = async (stockData = {}) => {
-    const mockStockData = {
-        name: "Test Stock",
-        active: true,
-        tenant: mockTenantId,
-        ...stockData
-    }
+    const mockStockData = { ...initStockData, tenant: mockTenantId, ...stockData };
 
     try {
         const stockModel = new Stock(mockStockData);
@@ -198,14 +211,7 @@ export const createMockStock = async (stockData = {}) => {
  * @returns {Promise<Shelf>}
  */
 export const createMockShelf = async (stockId, shelfData = {}) => {
-    const mockShelfData = {
-        stockId: stockId,
-        name: "Test Shelf",
-        code: "TEST-SHELF",
-        active: true,
-        tenant: mockTenantId,
-        ...shelfData
-    }
+    const mockShelfData = { ...initShelfData, stockId: stockId, tenant: mockTenantId, ...shelfData };
 
     try {
         const shelfModel = new Shelf(mockShelfData);
