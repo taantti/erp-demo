@@ -72,6 +72,13 @@ export const initRoleData = {
             readStockEvent: { access: true, adminTenantOnly: false, immutable: false },
             updateStockEvent: { access: true, adminTenantOnly: false, immutable: false },
             deleteStockEvent: { access: true, adminTenantOnly: false, immutable: false }
+        },
+        customer: {
+            createCustomer: { access: true, adminTenantOnly: false, immutable: false },
+            readCustomer: { access: true, adminTenantOnly: false, immutable: false },
+            readCustomers: { access: true, adminTenantOnly: false, immutable: false },
+            updateCustomer: { access: true, adminTenantOnly: false, immutable: false },
+            deleteCustomer: { access: true, adminTenantOnly: false, immutable: false }
         }
     }
 };

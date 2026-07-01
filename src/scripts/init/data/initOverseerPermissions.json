@@ -210,5 +210,32 @@
             "adminTenantOnly": true,
             "immutable": true
         }
+    },
+        "customer": {
+        "createCustomer": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "readCustomer": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "readCustomers": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "updateCustomer": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "deleteCustomer": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        }
     }
 }

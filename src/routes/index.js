@@ -5,6 +5,7 @@ import tenantRoutes from './tenantRoutes.js';
 import userRoutes from './userRoutes.js';
 import stockRoutes from './stockRoutes.js';
 import assetRoutes from './assetRoutes.js';
+import customerRoutes from './customerRoutes.js';
 
 const routes = {
     login: loginRoutes,
@@ -13,7 +14,8 @@ const routes = {
     tenant: tenantRoutes,
     user: userRoutes,
     stock: stockRoutes,
-    asset: assetRoutes
+    asset: assetRoutes,
+    customer: customerRoutes
 }
 
 export default routes;
