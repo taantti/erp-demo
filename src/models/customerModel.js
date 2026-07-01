@@ -7,13 +7,13 @@ const relativePath = getRelativePath(import.meta.url);
 const protectedModelFields = ['__v'];
 
 /**
- * Address types
+ * Customer address types
  * BILLING: A billing street address
  * SHIPPING: A shipping street address
  * HOME: A home street address
  * WORK: A work street address
  */
-export const AddressTypes = {
+export const CustomerAddressType = {
     BILLING: 'billing',
     SHIPPING: 'shipping',
     HOME: 'home',
@@ -22,7 +22,7 @@ export const AddressTypes = {
 
 
 const PostalAddressSchema = new mongoose.Schema({
-    type: { type: String, enum: Object.values(AddressTypes), required: true },
+    type: { type: String, enum: Object.values(CustomerAddressType), required: true },
     streetAddress: { type: String, maxlength: 200 },
     city: { type: String, maxlength: 100 },
     postalCode: { type: String, maxlength: 20 },

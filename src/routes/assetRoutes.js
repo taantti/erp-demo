@@ -1,5 +1,5 @@
 import express from 'express';
-import { readRoles, readProductUnits, readStockEventTypes } from '../modules/asset/assetController.js';
+import { readRoles, readProductUnits, readStockEventTypes, readCustomerAddressTypes } from '../modules/asset/assetController.js';
 
 const router = express.Router();
 
@@ -105,5 +105,39 @@ router.get('/product/units', readProductUnits);
  *               $ref: '#/components/schemas/Error'
  */
 router.get('/stock/event-types', readStockEventTypes);
+
+/**
+ * @swagger
+ * /asset/customer/address-types:
+ *   get:
+ *     summary: Get available customer address types
+ *     description: Returns a list of all available customer address types.
+ *     tags: [Assets]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Array of address type strings
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: string
+ *             example: ["billing", "shipping", "home", "work"]
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+router.get('/customer/address-types', readCustomerAddressTypes);
 
 export default router;

@@ -1,6 +1,7 @@
 import { roles } from '../../models/roleModel.js';
 import { ProductUnits } from '../../models/productModel.js';
 import { StockEventTypes } from '../../models/stockEventModel.js';
+import { CustomerAddressType } from '../../models/customerModel.js';
 import { getRelativePath } from '../../utils/auxiliary.js';
 
 const relativePath = getRelativePath(import.meta.url);
@@ -55,6 +56,21 @@ export const readProductUnits = async (req, res, next) => {
 export const readStockEventTypes = async (req, res, next) => {
     try {
         res.status(200).json(Object.values(StockEventTypes));
+    } catch (error) {
+        return next(error);
+    }
+};
+
+/**
+ * Returns available customer address types.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ * @returns {Promise<Object>} - The available customer address types.
+ */
+export const readCustomerAddressTypes = async (req, res, next) => {
+    try {
+        res.status(200).json(Object.values(CustomerAddressType));
     } catch (error) {
         return next(error);
     }
