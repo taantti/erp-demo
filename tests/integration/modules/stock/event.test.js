@@ -20,7 +20,7 @@ let sourceStockId = null;
 let sourceShelfId = null;
 let destinationStockId = null;
 let destinationShelfId = null;
-let productCategoryId = null;
+let mockProductCategoryId = null;
 let productId = null;
 let sourceInventoryId = null;
 let destinationInventoryId = null;
@@ -34,14 +34,18 @@ const createMockData = async () => {
         await createMockTenant();
         await createMockRole();
         await createMockUser();
+
         sourceStockId = (await createMockStock(initStockData[0]))._id;
-        sourceShelfId = (await createMockShelf(null, { ...initShelfData[0], stockId: sourceStockId }))._id;
+        sourceShelfId = (await createMockShelf({ ...initShelfData[0], stockId: sourceStockId }))._id;
+
         destinationStockId = (await createMockStock(initStockData[1]))._id;
-        destinationShelfId = (await createMockShelf(null, { ...initShelfData[1], stockId: destinationStockId }))._id;
-        productCategoryId = (await createMockProductCategory())._id;
-        productId = (await createMockProduct([productCategoryId]))._id;
-        sourceInventoryId = (await createMockInventory(null, null, null, { ...initInventoryData[0], stockId: sourceStockId, shelfId: sourceShelfId, productId: productId }))._id;
-        destinationInventoryId = (await createMockInventory(null, null, null, { ...initInventoryData[1], stockId: destinationStockId, shelfId: destinationShelfId, productId: productId }))._id;
+        destinationShelfId = (await createMockShelf({ ...initShelfData[1], stockId: destinationStockId }))._id;
+
+        mockProductCategoryId = (await createMockProductCategory())._id;
+        productId = (await createMockProduct({ categoryIds: [mockProductCategoryId] }))._id;
+
+        sourceInventoryId = (await createMockInventory({ ...initInventoryData[0], stockId: sourceStockId, shelfId: sourceShelfId, productId: productId }))._id;
+        destinationInventoryId = (await createMockInventory({ ...initInventoryData[1], stockId: destinationStockId, shelfId: destinationShelfId, productId: productId }))._id;
     } catch (error) {
         console.error('MOCK DATA FAILED:', error);
         throw error;

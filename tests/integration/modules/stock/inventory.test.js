@@ -23,9 +23,9 @@ const createMockData = async () => {
         await createMockRole();
         await createMockUser();
         mockStockId = (await createMockStock())._id;
-        mockShelfId = (await createMockShelf(mockStockId))._id;
+        mockShelfId = (await createMockShelf({ stockId: mockStockId }))._id;
         mockProductCategoryId = (await createMockProductCategory())._id;
-        mockProductId = (await createMockProduct([mockProductCategoryId]))._id;
+        mockProductId = (await createMockProduct({ categoryIds: [mockProductCategoryId] }))._id;
     } catch (error) {
         console.error('MOCK DATA FAILED:', error);
         throw error;

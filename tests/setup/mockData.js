@@ -182,11 +182,11 @@ export const initInventoryData = [
 
 /**
  * Create a mock tenant for testing
- * @param {Object} tenantData - (Optional) Tenant data to override defaults
+ * @param {Object} [options={}] - Fields to override the defaults (e.g. name, active)
  * @returns {Promise<void>}
  */
-export const createMockTenant = async (tenantData = {}) => {
-    const mockTenantData = { ...initTenantData, ...tenantData };
+export const createMockTenant = async (options = {}) => {
+    const mockTenantData = { ...initTenantData, ...options };
 
     try {
         const tenantModel = new Tenant(mockTenantData);
@@ -199,11 +199,11 @@ export const createMockTenant = async (tenantData = {}) => {
 
 /**
  * Create a mock role and permissions for testing
- * @param {Object} roleData - (Optional) Role data to override defaults.
+ * @param {Object} [options={}] - Fields to override the defaults (e.g. name, role, rolePermission {})
  * @returns {Promise<void>}
  */
-export const createMockRole = async (roleData = {}) => {
-    const mockRoleData = { ...initRoleData, ...roleData };
+export const createMockRole = async (options = {}) => {
+    const mockRoleData = { ...initRoleData, ...options };
 
     try {
         const roleModel = new Role(mockRoleData);
@@ -215,12 +215,12 @@ export const createMockRole = async (roleData = {}) => {
 
 /**
  * Create a mock user for testing
- * @param {Object} userData - (Optional) User data to override defaults.
+ * @param {Object} [options={}] - Fields to override the defaults (e.g. username, password)
  * @returns {Promise<void>}
  */
-export const createMockUser = async (userData = {}) => {
+export const createMockUser = async (options = {}) => {
     const hashedPassword = await hashPassword(password_1);
-    const mockUserData = { ...initUserData[0], password: hashedPassword, tenant: mockTenantId, ...userData };
+    const mockUserData = { ...initUserData[0], password: hashedPassword, tenant: mockTenantId, ...options };
 
     try {
         const userModel = new User(mockUserData);
@@ -232,11 +232,11 @@ export const createMockUser = async (userData = {}) => {
 
 /**
  * Create a mock product category for testing
- * @param {Object} productCategoryData - (Optional) Product category data to override defaults.
+ * @param {Object} [options={}] - Fields to override the defaults (e.g. name, slug)
  * @returns {Promise<ProductCategory>}
  */
-export const createMockProductCategory = async (productCategoryData = {}) => {
-    const mockCategoryData = { ...initProductCategoryData[0], tenant: mockTenantId, ...productCategoryData };
+export const createMockProductCategory = async (options = {}) => {
+    const mockCategoryData = { ...initProductCategoryData[0], tenant: mockTenantId, ...options };
 
     try {
         const categoryModel = new ProductCategory(mockCategoryData);
@@ -248,12 +248,11 @@ export const createMockProductCategory = async (productCategoryData = {}) => {
 
 /**
  * Create a mock product for testing
- * @param {array} categoryIds - The IDs of the categories.
- * @param {Object} productData - (Optional) Product data to override defaults.
+ * @param {Object} [options={}] - Fields to override the defaults (e.g. name, sku, categoryIds)
  * @returns {Promise<Product>}
  */
-export const createMockProduct = async (categoryIds = [], productData = {}) => {
-    const mockProductData = { ...initProductData[0], categoryIds: categoryIds, tenant: mockTenantId, ...productData };
+export const createMockProduct = async (options = {}) => {
+    const mockProductData = { ...initProductData[0], tenant: mockTenantId, ...options };
 
     try {
         const productModel = new Product(mockProductData);
@@ -265,11 +264,11 @@ export const createMockProduct = async (categoryIds = [], productData = {}) => {
 
 /**
  * Create a mock stock for testing
- * @param {Object} stockData - (Optional) Stock data to override defaults
+ * @param {Object} [options={}] - Fields to override the defaults (e.g. name, active)
  * @returns {Promise<Stock>}
  */
-export const createMockStock = async (stockData = {}) => {
-    const mockStockData = { ...initStockData[0], tenant: mockTenantId, ...stockData };
+export const createMockStock = async (options = {}) => {
+    const mockStockData = { ...initStockData[0], tenant: mockTenantId, ...options };
 
     try {
         const stockModel = new Stock(mockStockData);
@@ -281,12 +280,11 @@ export const createMockStock = async (stockData = {}) => {
 
 /**
  * Create a mock shelf for testing
- * @param {string} stockId - The ID of the stock.
- * @param {Object} shelfData - (Optional) Shelf data to override defaults.
+ * @param {Object} [options={}] - Fields to override the defaults (e.g. stockId, name).
  * @returns {Promise<Shelf>}
  */
-export const createMockShelf = async (stockId, shelfData = {}) => {
-    const mockShelfData = { ...initShelfData[0], stockId: stockId, tenant: mockTenantId, ...shelfData };
+export const createMockShelf = async (options = {}) => {
+    const mockShelfData = { ...initShelfData[0], tenant: mockTenantId, ...options };
 
     try {
         const shelfModel = new Shelf(mockShelfData);
@@ -298,14 +296,11 @@ export const createMockShelf = async (stockId, shelfData = {}) => {
 
 /**
  * Create a mock inventory for testing
- * @param {string} mockStockId - The ID of the stock.
- * @param {string} mockShelfId - The ID of the shelf.
- * @param {string} mockProductId - The ID of the product.
- * @param {Object} shelfData - (Optional) Inventory data to override defaults.
- * @returns {Promise<Shelf>}
+ * @param {Object} [options={}] - Fields to override the defaults (e.g. stockId, shelfId, productId).
+ * @returns {Promise<Inventory>}
  */
-export const createMockInventory = async (mockStockId, mockShelfId, mockProductId, inventoryData = {}) => {
-    const mockInventoryData = { ...initInventoryData, stockId: mockStockId, shelfId: mockShelfId, productId: mockProductId, tenant: mockTenantId, ...inventoryData };
+export const createMockInventory = async (options = {}) => {
+    const mockInventoryData = { ...initInventoryData[0], tenant: mockTenantId, ...options };
 
     try {
         const inventoryModel = new Inventory(mockInventoryData);
