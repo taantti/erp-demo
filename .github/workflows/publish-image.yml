@@ -9,20 +9,6 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
-    services:
-      # Ephemeral MongoDB for this job only — created at job start, destroyed at
-      # job end. Isolated from the Atlas DB that deploy.yml uses, so the two
-      # workflows no longer share a test database when they run concurrently.
-      mongodb:
-        image: mongo:7
-        ports:
-          - 27017:27017
-        # Wait until MongoDB answers pings before the steps start.
-        options: >-
-          --health-cmd "mongosh --quiet --eval 'db.adminCommand({ ping: 1 })'"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 10
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -39,8 +25,6 @@ jobs:
       - name: Run tests
         run: npm test
         env:
-          # Point at the service container above, NOT the shared Atlas secret.
-          DATABASE_URI_TEST: mongodb://localhost:27017/erp-demo-test
           BCRYPT_SALT_ROUNDS: ${{ secrets.BCRYPT_SALT_ROUNDS }}
           JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
           JWT_PASSPHRASE: ${{ secrets.JWT_PASSPHRASE }}
