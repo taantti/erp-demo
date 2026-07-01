@@ -249,23 +249,29 @@ Integration tests using [Vitest](https://vitest.dev/) and [Supertest](https://ww
 npm test
 ```
 
-Requires a local MongoDB instance or `DATABASE_URI_TEST` in `.env`.
+Tests run against an in-memory MongoDB replica set (mongodb-memory-server) — no local MongoDB or DATABASE_URI_TEST needed.
 
 ```
 tests/
 ├── setup/
 │   ├── db.js                          # Test database connection and teardown
-│   ├── mockData.js                    # Shared mock data (tenant, role, user, category)
+│   ├── mockData.js                    # Shared mock data (product, stock, user)
 │   └── login.js                       # Shared login utility
 └── integration/
     └── modules/
         ├── login/
         │   └── login.test.js          # Login endpoint tests
-        ├── user/
-        │   └── user.test.js           # User CRUD endpoint tests
-        └── product/
-            ├── category.test.js       # Product category CRUD endpoint tests
-            └── product.test.js        # Product CRUD endpoint tests
+        ├── product/
+        │   ├── category.test.js       # Product category CRUD endpoint tests
+        │   └── product.test.js        # Product CRUD endpoint tests
+        ├── stock/
+        │   ├── event.test.js           # Stock event CRUD endpoint tests
+        │   ├── inventory.test.js       # Stock inventory CRUD endpoint tests
+        │   ├── shelf.test.js           # Stock shelf CRUD endpoint tests
+        │   └── stock.test.js           # Stock CRUD endpoint tests
+        └── user/
+            └── user.test.js           # User CRUD endpoint tests
+
 ```
 
 ## License

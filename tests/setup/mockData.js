@@ -5,6 +5,8 @@ import { Stock } from "../../src/models/index.js";
 import { Shelf } from "../../src/models/index.js";
 import { Product } from "../../src/models/index.js";
 import { ProductCategory } from "../../src/models/index.js";
+import { Inventory } from "../../src/models/index.js";
+import { StockEvent } from "../../src/models/index.js";
 import { hashPassword } from "../../src/utils/password.js";
 import { ProductUnits } from '../../src/models/productModel.js';
 
@@ -64,7 +66,12 @@ export const initRoleData = {
             createInventory: { access: true, adminTenantOnly: false, immutable: false },
             readInventory: { access: true, adminTenantOnly: false, immutable: false },
             updateInventory: { access: true, adminTenantOnly: false, immutable: false },
-            deleteInventory: { access: true, adminTenantOnly: false, immutable: false }
+            deleteInventory: { access: true, adminTenantOnly: false, immutable: false },
+            readStockEvents: { access: true, adminTenantOnly: false, immutable: false },
+            createStockEvent: { access: true, adminTenantOnly: false, immutable: false },
+            readStockEvent: { access: true, adminTenantOnly: false, immutable: false },
+            updateStockEvent: { access: true, adminTenantOnly: false, immutable: false },
+            deleteStockEvent: { access: true, adminTenantOnly: false, immutable: false }
         }
     }
 };
@@ -78,7 +85,7 @@ export const initUserData = [
         email: "test1@example.com",
         role: "OVERSEER",
         active: true,
-        tenant: null
+        //tenant: null
     },
     {
         username: username_2,
@@ -88,7 +95,7 @@ export const initUserData = [
         email: "test2@example.com",
         role: "OVERSEER",
         active: true,
-        tenant: null
+        //tenant: null
     }
 ];
 
@@ -97,13 +104,13 @@ export const initProductCategoryData = [
         name: "Test Category 1",
         slug: "test-category-1",
         active: true,
-        tenant: null
+        //tenant: null
     },
     {
         name: "Test Category 2",
         slug: "test-category-2",
         active: true,
-        tenant: null
+        //tenant: null
     }
 ];
 
@@ -114,7 +121,7 @@ export const initProductData = [
         unit: ProductUnits.PIECE,
         categoryIds: [],
         active: true,
-        tenant: null
+        //tenant: null
     },
     {
         name: "Test Product 2",
@@ -122,7 +129,7 @@ export const initProductData = [
         unit: ProductUnits.METER,
         categoryIds: [],
         active: true,
-        tenant: null
+        //tenant: null
     }
 ];
 
@@ -130,12 +137,12 @@ export const initStockData = [
     {
         name: "Test Stock 1",
         active: true,
-        tenant: null
+        //tenant: null
     },
     {
         name: "Test Stock 2",
         active: true,
-        tenant: null
+        //tenant: null
     }
 ];
 
@@ -145,14 +152,31 @@ export const initShelfData = [
         name: "Test Shelf 1",
         code: "TEST-SHELF-1",
         active: true,
-        tenant: null
+        //tenant: null
     },
     {
         stockId: null,
         name: "Test Shelf 2",
         code: "TEST-SHELF-2",
         active: true,
-        tenant: null
+        //tenant: null
+    }
+];
+
+export const initInventoryData = [
+    {
+        stockId: null,
+        shelfId: null,
+        productId: null,
+        quantity: 100,
+        //tenant: null
+    },
+    {
+        stockId: null,
+        shelfId: null,
+        productId: null,
+        quantity: 200,
+        //tenant: null
     }
 ];
 
@@ -267,6 +291,25 @@ export const createMockShelf = async (stockId, shelfData = {}) => {
     try {
         const shelfModel = new Shelf(mockShelfData);
         return await shelfModel.save();
+    } catch (error) {
+        throw error;
+    }
+}
+
+/**
+ * Create a mock inventory for testing
+ * @param {string} mockStockId - The ID of the stock.
+ * @param {string} mockShelfId - The ID of the shelf.
+ * @param {string} mockProductId - The ID of the product.
+ * @param {Object} shelfData - (Optional) Inventory data to override defaults.
+ * @returns {Promise<Shelf>}
+ */
+export const createMockInventory = async (mockStockId, mockShelfId, mockProductId, inventoryData = {}) => {
+    const mockInventoryData = { ...initInventoryData, stockId: mockStockId, shelfId: mockShelfId, productId: mockProductId, tenant: mockTenantId, ...inventoryData };
+
+    try {
+        const inventoryModel = new Inventory(mockInventoryData);
+        return await inventoryModel.save();
     } catch (error) {
         throw error;
     }
