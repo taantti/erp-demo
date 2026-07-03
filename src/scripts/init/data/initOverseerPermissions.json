@@ -211,7 +211,7 @@
             "immutable": true
         }
     },
-        "customer": {
+    "customer": {
         "createCustomer": {
             "access": true,
             "adminTenantOnly": true,
@@ -233,6 +233,58 @@
             "immutable": true
         },
         "deleteCustomer": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        }
+    },
+    "purchaseOrder": {
+        "createPurchaseOrderItem": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "readPurchaseOrderItem": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "readPurchaseOrderItems": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "updatePurchaseOrderItem": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "deletePurchaseOrderItem": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "createPurchaseOrder": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "readPurchaseOrder": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "readPurchaseOrders": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "updatePurchaseOrder": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "deletePurchaseOrder": {
             "access": true,
             "adminTenantOnly": true,
             "immutable": true

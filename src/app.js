@@ -1,6 +1,6 @@
 import express from 'express';
 import config from './config.js';
-import { sanitizeAndValidateRequest }   from './middlewares/sanitizationMiddleware.js';
+import { sanitizeAndValidateRequest } from './middlewares/sanitizationMiddleware.js';
 import authenticationMiddleware from './middlewares/authenticationMiddleware.js';
 import validationErrorMiddleware from './middlewares/validationErrorMiddleware.js';
 import errorHandler from './middlewares/errorMiddleware.js';
@@ -14,7 +14,7 @@ import cors from 'cors';
 const app = express();
 
 /* Security middleware */
-app.use(helmet()); 
+app.use(helmet());
 
 /* CORS middleware. Allow all origins for development */
 app.use(cors({
@@ -42,6 +42,7 @@ app.use('/product', routes.product);
 app.use('/stock', routes.stock);
 app.use('/asset', routes.asset);
 app.use('/customer', routes.customer);
+app.use('/purchase-order', routes.purchaseOrder);
 
 /* Error handling middlewares */
 app.use(validationErrorMiddleware);

@@ -207,5 +207,57 @@
             "adminTenantOnly": false,
             "immutable": false
         }
+    },
+    "purchaseOrder": {
+        "createPurchaseOrderItem": {
+            "access": false,
+            "adminTenantOnly": false,
+            "immutable": false
+        },
+        "readPurchaseOrderItem": {
+            "access": true,
+            "adminTenantOnly": false,
+            "immutable": false
+        },
+        "readPurchaseOrderItems": {
+            "access": true,
+            "adminTenantOnly": false,
+            "immutable": false
+        },
+        "updatePurchaseOrderItem": {
+            "access": false,
+            "adminTenantOnly": false,
+            "immutable": false
+        },
+        "deletePurchaseOrderItem": {
+            "access": false,
+            "adminTenantOnly": false,
+            "immutable": false
+        },
+        "createPurchaseOrder": {
+            "access": false,
+            "adminTenantOnly": false,
+            "immutable": false
+        },
+        "readPurchaseOrder": {
+            "access": true,
+            "adminTenantOnly": false,
+            "immutable": false
+        },
+        "readPurchaseOrders": {
+            "access": true,
+            "adminTenantOnly": false,
+            "immutable": false
+        },
+        "updatePurchaseOrder": {
+            "access": false,
+            "adminTenantOnly": false,
+            "immutable": false
+        },
+        "deletePurchaseOrder": {
+            "access": false,
+            "adminTenantOnly": false,
+            "immutable": false
+        }
     }
 }

@@ -6,6 +6,7 @@ import userRoutes from './userRoutes.js';
 import stockRoutes from './stockRoutes.js';
 import assetRoutes from './assetRoutes.js';
 import customerRoutes from './customerRoutes.js';
+import purchaseOrderRoutes from './purchaseOrderRoutes.js';
 
 const routes = {
     login: loginRoutes,
@@ -15,7 +16,8 @@ const routes = {
     user: userRoutes,
     stock: stockRoutes,
     asset: assetRoutes,
-    customer: customerRoutes
+    customer: customerRoutes,
+    purchaseOrder: purchaseOrderRoutes
 }
 
 export default routes;

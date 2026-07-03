@@ -24,7 +24,8 @@ const RoleSchema = new mongoose.Schema({
         tenant: { type: Map, of: PermissionSchema },
         user: { type: Map, of: PermissionSchema },
         stock: { type: Map, of: PermissionSchema },
-        customer: { type: Map, of: PermissionSchema }
+        customer: { type: Map, of: PermissionSchema },
+        purchaseOrder: { type: Map, of: PermissionSchema }
     },
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },

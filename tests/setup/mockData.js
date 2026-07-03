@@ -7,6 +7,7 @@ import { Product } from "../../src/models/index.js";
 import { ProductCategory } from "../../src/models/index.js";
 import { Inventory } from "../../src/models/index.js";
 import { StockEvent } from "../../src/models/index.js";
+import { PurchaseOrder } from "../../src/models/index.js";
 import { hashPassword } from "../../src/utils/password.js";
 import { ProductUnits } from '../../src/models/productModel.js';
 
@@ -79,6 +80,18 @@ export const initRoleData = {
             readCustomers: { access: true, adminTenantOnly: false, immutable: false },
             updateCustomer: { access: true, adminTenantOnly: false, immutable: false },
             deleteCustomer: { access: true, adminTenantOnly: false, immutable: false }
+        },
+        "purchaseOrder": {
+            createPurchaseOrderItem: { access: true, adminTenantOnly: false, immutable: false },
+            readPurchaseOrderItem: { access: true, adminTenantOnly: false, immutable: false },
+            readPurchaseOrderItems: { access: true, adminTenantOnly: false, immutable: false },
+            updatePurchaseOrderItem: { access: true, adminTenantOnly: false, immutable: false },
+            deletePurchaseOrderItem: { access: true, adminTenantOnly: false, immutable: false },
+            createPurchaseOrder: { access: true, adminTenantOnly: false, immutable: false },
+            readPurchaseOrder: { access: true, adminTenantOnly: false, immutable: false },
+            readPurchaseOrders: { access: true, adminTenantOnly: false, immutable: false },
+            updatePurchaseOrder: { access: true, adminTenantOnly: false, immutable: false },
+            deletePurchaseOrder: { access: true, adminTenantOnly: false, immutable: false }
         }
     }
 };
@@ -91,8 +104,7 @@ export const initUserData = [
         last_name: "User-1",
         email: "test1@example.com",
         role: "OVERSEER",
-        active: true,
-        //tenant: null
+        active: true
     },
     {
         username: username_2,
@@ -101,8 +113,7 @@ export const initUserData = [
         last_name: "User2",
         email: "test2@example.com",
         role: "OVERSEER",
-        active: true,
-        //tenant: null
+        active: true
     }
 ];
 
@@ -110,14 +121,12 @@ export const initProductCategoryData = [
     {
         name: "Test Category 1",
         slug: "test-category-1",
-        active: true,
-        //tenant: null
+        active: true
     },
     {
         name: "Test Category 2",
         slug: "test-category-2",
-        active: true,
-        //tenant: null
+        active: true
     }
 ];
 
@@ -127,29 +136,25 @@ export const initProductData = [
         sku: "TEST-PRODUCT-1",
         unit: ProductUnits.PIECE,
         categoryIds: [],
-        active: true,
-        //tenant: null
+        active: true
     },
     {
         name: "Test Product 2",
         sku: "TEST-PRODUCT-2",
         unit: ProductUnits.METER,
         categoryIds: [],
-        active: true,
-        //tenant: null
+        active: true
     }
 ];
 
 export const initStockData = [
     {
         name: "Test Stock 1",
-        active: true,
-        //tenant: null
+        active: true
     },
     {
         name: "Test Stock 2",
-        active: true,
-        //tenant: null
+        active: true
     }
 ];
 
@@ -158,15 +163,13 @@ export const initShelfData = [
         stockId: null,
         name: "Test Shelf 1",
         code: "TEST-SHELF-1",
-        active: true,
-        //tenant: null
+        active: true
     },
     {
         stockId: null,
         name: "Test Shelf 2",
         code: "TEST-SHELF-2",
-        active: true,
-        //tenant: null
+        active: true
     }
 ];
 
@@ -175,15 +178,44 @@ export const initInventoryData = [
         stockId: null,
         shelfId: null,
         productId: null,
-        quantity: 100,
-        //tenant: null
+        quantity: 100
     },
     {
         stockId: null,
         shelfId: null,
         productId: null,
+        quantity: 200
+    }
+];
+
+
+export const initPurchaseOrderItemData = [
+    {
+        productName: "Test purchase order item 1",
+        quantity: 100,
+        unitNetPrice: 100,
+        unitGrossPrice: 125.5,
+        vat: 25.5
+    },
+    {
+        productName: "Test purchase order item 2",
         quantity: 200,
-        //tenant: null
+        unitNetPrice: 200,
+        unitGrossPrice: 224,
+        vat: 12
+    }
+];
+
+export const initPurchaseOrderData = [
+    {
+        orderNumber: 1001,
+        supplier: "Test supplier",
+        notes: "Test notes 1"
+    },
+    {
+        orderNumber: 1002,
+        supplier: "Test supplier 2",
+        notes: "Test notes 2"
     }
 ];
 
@@ -316,3 +348,35 @@ export const createMockInventory = async (options = {}) => {
         throw error;
     }
 }
+
+/**
+ * Create a mock purchase order item (embedded supdocument - not persisted on its own).
+ * @param {Object} [options={}] - Fields to override the defaults (e.g. productId, stockId, shelfId, quantity).
+ * @returns {Object} - A plain purchase order item object.
+ */
+export const createMockPurchaseOrderItem = (options = {}) => {
+    return { ...initPurchaseOrderItemData[0], ...options };
+}
+
+/**
+ * Create a mock purchase order for testing. Provided items are run through
+ * createMockPurchaseOrderItem() and embedded; if non is given one default item is used.
+ * @param {Object} [options={}] - Fields to override the defaults (e.g. orderNumber, status).
+ * @returns {Promise<Inventory>}
+ */
+export const createMockPurchaseOrder = async (options = {}) => {
+    const items = (options.items ?? [{}]).map(item => createMockPurchaseOrderItem(item));
+    const mockPurchaseOrderData = { ...initPurchaseOrderData[0], tenant: mockTenantId, ...options };
+
+    try {
+        const purchaseOrderModel = new PurchaseOrder(mockPurchaseOrderData);
+        return await purchaseOrderModel.save();
+    } catch (error) {
+        throw error;
+    }
+}
+
+
+
+
+
