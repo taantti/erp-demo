@@ -21,9 +21,9 @@ npx vitest run tests/integration/modules/product/product.test.js
 npx vitest run -t "should create new product"
 ```
 
-`npm test` runs with `--fileParallelism=false` (serial). This is required: tests share a single MongoDB test database and `teardown()` drops it in `afterAll`, so parallel files would clobber each other. Keep new test files serial-safe.
+`npm test` runs with `--fileParallelism=false` (serial). Tests use an **in-memory MongoDB replica set** via `mongodb-memory-server` (`tests/setup/db.js`) — no external Mongo or `DATABASE_URI_TEST` needed; each test file gets its own fresh server (started in `beforeAll`, stopped in `afterAll`). It's a single-node **replica set** (not standalone) because some flows use multi-document transactions (e.g. stock transfer), which require one.
 
-Tests need a reachable Mongo instance via `DATABASE_URI_TEST` in `.env` (separate from the dev DB — it gets dropped). Copy `.env-example` to `.env` for local config. `npm run build` is a no-op placeholder.
+For the dev server (`npm start`), copy `.env-example` to `.env` (DB URI, JWT secrets, etc.). `npm run build` is a no-op placeholder.
 
 ## Architecture
 
@@ -34,8 +34,8 @@ Request → Route → Controller → Service → Model → MongoDB
 ```
 
 - **Route** (`src/routes/*Routes.js`) — endpoint + Swagger JSDoc + per-route `authorizationMiddleware(module, feature)`. Routes are aggregated in `src/routes/index.js` and mounted in `src/app.js`.
-- **Controller** (`src/modules/<domain>/<domain>Controller.js`) — owns HTTP: reads `req`, calls the service, sets status codes (200/201/400/404), forwards errors with `next(error)`. No business logic.
-- **Service** (`src/modules/<domain>/services/*Service.js`) — calls model functions, returns plain data to the controller. Note the unusual signature: services are called as `service.fn(req, res, next)` and themselves call `next(error)` on failure rather than rethrowing.
+- **Controller** (`src/modules/<domain>/<domain>Controller.js`) — owns HTTP: reads `req`, calls `service.fn(req)`, sets status codes (200/201/400/404). It is the **only** layer with a try/catch that forwards errors via `next(error)`. No business logic.
+- **Service** (`src/modules/<domain>/services/*Service.js`) — HTTP-agnostic: takes `(req)`, calls model functions, and **returns data or throws**. It does NOT receive `res`/`next` and never calls `next(error)` (errors propagate up to the controller).
 - **Model** (`src/models/*Model.js`) — Mongoose schema **plus** exported CRUD functions (e.g. `createProduct`, `findProducts`). This is where tenant isolation, audit fields, and sanitization are enforced — not in the service.
 
 `src/models/index.js` re-exports all model CRUD functions; import from there. Each module's services have an `index.js` barrel too.
@@ -54,10 +54,19 @@ The `allTenants` flag (default `false`) is the override for cross-tenant access 
 
 `setAutoField(req, data, AutoField.X)` in `modelService.js` populates `createdBy` (on create), `updatedBy` (on update), and `performedBy` (on stock events) from `req.user.userId`. Use the `AutoField` enum, don't set these fields by hand.
 
+### Embedded sub-resources (order line items)
+
+`purchaseOrder` and `saleOrder` embed their line items as an array subdocument (`items: [ItemSchema]`), **not** a separate collection. The item CRUD model functions load the **parent** order (not `.lean()`), mutate the `items` array, and save the parent — addressing items by their subdocument `_id`:
+- add: `order.items.push(itemData)` · find: `order.items.id(itemId)` · update: `item.set(itemData)` · delete: `item.deleteOne()`
+
+Item routes are sub-resources: `/{order}/:id/item/:itemId`. Since both order models export generically-named item functions (`createItem`, `findItems`, …), `src/models/index.js` re-exports them under prefixed aliases (`createPOItem`/`createSOItem`, …) to avoid name collisions.
+
 ### Auth & authorization
 
 - **Authentication**: `authenticationMiddleware` verifies the JWT and populates `req.user` (`userId`, `role`, `tenant: {id, admin}`). Applied globally in `app.js` *after* the public `/login` and `/api-docs` routes.
-- **Authorization**: `authorizationMiddleware(module, feature)` (default export `authorize` in `src/middlewares/authorizationMiddleware.js`) looks up the caller's `Role` document and checks `role.rolePermission[module][feature].access`. Permissions are data in the DB, not code. The `feature` keys are the specific operation names (e.g. `createProduct`, `readProducts`, `readProductCategories`) — see `tests/setup/mockData.js` `createMockRole` for the full shape. When adding an endpoint, add its feature key to the relevant role's `rolePermission`.
+- **Authorization**: `authorizationMiddleware(module, feature)` (default export `authorize` in `src/middlewares/authorizationMiddleware.js`) looks up the caller's `Role` document and checks `role.rolePermission[module][feature].access`. Permissions are data in the DB, not code. The `feature` keys are the specific operation names (e.g. `createProduct`, `readProducts`, `readProductCategories`). Feature-key names must match the route's `authorizationMiddleware('module','feature')` exactly.
+
+  **Adding permissions — three places must agree:** (1) `RoleSchema.rolePermission` in `src/models/roleModel.js` — a NEW module key (e.g. `customer`, `purchaseOrder`) **must** be added here as `{ type: Map, of: PermissionSchema }`, or Mongoose strict mode silently strips it on save → `403` at the module check. (A new *feature* inside an existing module needs no schema change — the module is a `Map`.) (2) `initRoleData` in `tests/setup/mockData.js` (the test role). (3) the four `src/scripts/init/data/init*Permissions.json` seed files (production roles).
 
 ### Middleware pipeline (order matters, defined in `app.js`)
 
@@ -79,8 +88,8 @@ helmet → cors → express.json → sanitizeAndValidateRequest → /login + /ap
 ## Tests
 
 Vitest + Supertest integration tests in `tests/integration/modules/<domain>/`. Shared setup in `tests/setup/`:
-- `db.js` — `setup()` connects to `DATABASE_URI_TEST`; `teardown()` drops the DB and disconnects.
-- `mockData.js` — `createMockTenant/Role/User/ProductCategory`; exports `username`/`password` and `mockTenantId`. The mock role is `OVERSEER` with full permissions.
+- `db.js` — `setup()` starts an in-memory MongoDB replica set (`mongodb-memory-server`) and connects Mongoose; `teardown()` disconnects and stops it. Each test file gets a fresh, isolated server.
+- `mockData.js` — `createMockX(options = {})` factories (tenant, role, user, product, productCategory, stock, shelf, inventory, customer, purchaseOrder + items, saleOrder + items). Each merges `{ ...initXData[0], tenant: mockTenantId, ...options }` — pass foreign keys and field overrides in the options object. Exports `username_1`/`password_1` and `mockTenantId`. The mock role (`initRoleData`) is `OVERSEER` with all module permissions.
 - `login.js` — `login()` returns the auth response; grab the JWT via `(await login()).body.login`.
 
 Standard test flow: `beforeAll` → `setup()` → create mock data → log in for a JWT; `afterAll` → `teardown()`. Drive the app with `request(app)` and send `Authorization: Bearer <jwtToken>`.
