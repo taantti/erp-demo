@@ -8,6 +8,7 @@ import { ProductCategory } from "../../src/models/index.js";
 import { Inventory } from "../../src/models/index.js";
 import { StockEvent } from "../../src/models/index.js";
 import { PurchaseOrder } from "../../src/models/index.js";
+import { Customer } from "../../src/models/index.js";
 import { hashPassword } from "../../src/utils/password.js";
 import { ProductUnits } from '../../src/models/productModel.js';
 
@@ -92,6 +93,18 @@ export const initRoleData = {
             readPurchaseOrders: { access: true, adminTenantOnly: false, immutable: false },
             updatePurchaseOrder: { access: true, adminTenantOnly: false, immutable: false },
             deletePurchaseOrder: { access: true, adminTenantOnly: false, immutable: false }
+        },
+        "saleOrder": {
+            createSaleOrderItem: { access: true, adminTenantOnly: false, immutable: false },
+            readSaleOrderItem: { access: true, adminTenantOnly: false, immutable: false },
+            readSaleOrderItems: { access: true, adminTenantOnly: false, immutable: false },
+            updateSaleOrderItem: { access: true, adminTenantOnly: false, immutable: false },
+            deleteSaleOrderItem: { access: true, adminTenantOnly: false, immutable: false },
+            createSaleOrder: { access: true, adminTenantOnly: false, immutable: false },
+            readSaleOrder: { access: true, adminTenantOnly: false, immutable: false },
+            readSaleOrders: { access: true, adminTenantOnly: false, immutable: false },
+            updateSaleOrder: { access: true, adminTenantOnly: false, immutable: false },
+            deleteSaleOrder: { access: true, adminTenantOnly: false, immutable: false }
         }
     }
 };
@@ -216,6 +229,14 @@ export const initPurchaseOrderData = [
         orderNumber: 1002,
         supplier: "Test supplier 2",
         notes: "Test notes 2"
+    }
+];
+
+export const initCustomerData = [
+    {
+        first_name: "Test first name",
+        last_name: " Test last name",
+        active: true
     }
 ];
 
@@ -374,6 +395,10 @@ export const createMockPurchaseOrder = async (options = {}) => {
     } catch (error) {
         throw error;
     }
+}
+
+export const createMockCustomer = (options = {}) => {
+    return { ...initCustomerData[0], ...options };
 }
 
 

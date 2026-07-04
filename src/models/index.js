@@ -11,6 +11,11 @@ export { findShelves, findShelfById, createShelf, updateShelfById, deleteShelfBy
 export { findCustomers, findCustomerById, createCustomer, updateCustomerById, deleteCustomerById, Customer } from './customerModel.js';
 export {
     createPurchaseOrder, findPurchaseOrders, findPurchaseOrderById, updatePurchaseOrderById, deletePurchaseOrderById,
-    createItem, findItems, findItemById, updateItemById, deleteItemById,
+    createItem as createPOItem, findItems as findPOItems, findItemById as findPOItemById, updateItemById as updatePOItemById, deleteItemById as deletePOItemById,
     PurchaseOrder
 } from './purchaseOrderModel.js';
+export {
+    createSaleOrder, findSaleOrders, findSaleOrderById, updateSaleOrderById, deleteSaleOrderById,
+    createItem as createSOItem, findItems as findSOItems, findItemById as findSOItemById, updateItemById as updateSOItemById, deleteItemById as deleteSOItemById,
+    SaleOrder
+} from './saleOrderModel.js';

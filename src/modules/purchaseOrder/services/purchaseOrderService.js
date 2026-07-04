@@ -1,6 +1,6 @@
 import {
     findPurchaseOrders, findPurchaseOrderById, createPurchaseOrder as modelPurchaseOrder, updatePurchaseOrderById, deletePurchaseOrderById,
-    findItems, findItemById, createItem as modelCreateItem, updateItemById, deleteItemById
+    findPOItems, findPOItemById, createPOItem, updatePOItemById, deletePOItemById
 } from '../../../models/index.js';
 
 /**
@@ -49,7 +49,7 @@ export const deletePurchaseOrder = async (req) => {
  * @returns {Promise<any>}
  */
 export const createItem = async (req) => {
-    return await modelCreateItem(req, req.params.id, req.body, false);
+    return await createPOItem(req, req.params.id, req.body, false);
 };
 
 /**
@@ -57,7 +57,7 @@ export const createItem = async (req) => {
  * @returns {Promise<any>}
  */
 export const readItem = async (req) => {
-    return await findItemById(req, req.params.id, req.params.itemId, false);
+    return await findPOItemById(req, req.params.id, req.params.itemId, false);
 };
 
 /**
@@ -65,7 +65,7 @@ export const readItem = async (req) => {
  * @returns {Promise<any>}
  */
 export const readItems = async (req) => {
-    return await findItems(req, req.params.id, false, true, true);
+    return await findPOItems(req, req.params.id, false, true, true);
 };
 
 /**
@@ -73,7 +73,7 @@ export const readItems = async (req) => {
  * @returns {Promise<any>}
  */
 export const updateItem = async (req) => {
-    return await updateItemById(req, req.params.id, req.params.itemId, req.body, false);
+    return await updatePOItemById(req, req.params.id, req.params.itemId, req.body, false);
 };
 
 /**
@@ -81,6 +81,6 @@ export const updateItem = async (req) => {
  * @returns {Promise<any>}
  */
 export const deleteItem = async (req) => {
-    return await deleteItemById(req, req.params.id, req.params.itemId, false);
+    return await deletePOItemById(req, req.params.id, req.params.itemId, false);
 };
 

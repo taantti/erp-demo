@@ -289,5 +289,57 @@
             "adminTenantOnly": true,
             "immutable": true
         }
+    },
+    "saleOrder": {
+        "createSaleOrderItem": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "readSaleOrderItem": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "readSaleOrderItems": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "updateSaleOrderItem": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "deleteSaleOrderItem": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "createSaleOrder": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "readSaleOrder": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "readSaleOrders": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "updateSaleOrder": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        },
+        "deleteSaleOrder": {
+            "access": true,
+            "adminTenantOnly": true,
+            "immutable": true
+        }
     }
 }

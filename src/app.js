@@ -43,6 +43,7 @@ app.use('/stock', routes.stock);
 app.use('/asset', routes.asset);
 app.use('/customer', routes.customer);
 app.use('/purchase-order', routes.purchaseOrder);
+app.use('/sale-order', routes.saleOrder);
 
 /* Error handling middlewares */
 app.use(validationErrorMiddleware);

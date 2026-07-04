@@ -75,6 +75,7 @@ Request → helmet → JSON parser → sanitization → [/login (public)] → au
 │   │   ├── stockShelfModel.js
 │   │   ├── customerModel.js
 │   │   ├── purchaseOrderModel.js
+│   │   ├── saleOrderModel.js
 │   │   ├── tenantModel.js
 │   │   ├── roleModel.js
 │   │   ├── logModel.js
@@ -104,6 +105,10 @@ Request → helmet → JSON parser → sanitization → [/login (public)] → au
 │   │   │   ├── purchaseOrderController.js
 │   │   │   └── services/
 │   │   │       └── purchaseOrderService.js
+│   │   ├── saleOrder/
+│   │   │   ├── saleOrderController.js
+│   │   │   └── services/
+│   │   │       └── saleOrderService.js
 │   │   ├── asset/
 │   │   │   └── assetController.js
 │   │   ├── login/
@@ -278,6 +283,8 @@ tests/
         │   └── product.test.js        # Product CRUD endpoint tests
         ├── purchaseOrder/
         │   └── purchaseOrder.test.js  # Purchase order (+ items) CRUD endpoint tests
+        ├── saleOrder/
+        │   └── saleOrder.test.js       # Sale order (+ items) CRUD endpoint tests
         ├── stock/
         │   ├── event.test.js           # Stock event CRUD endpoint tests
         │   ├── inventory.test.js       # Stock inventory CRUD endpoint tests

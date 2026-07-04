@@ -158,6 +158,7 @@ export const createItem = async (req, purchaseOrderId, itemData, allTenants = fa
 /**
  * Find embedded items of the purchase order
  * @param {Object} req - The request object.
+ * @param {string} purchaseOrderId - The ID of the parent purchase order.
  * @param {boolean} allTenants - (Optional) Whether to include all tenants or not.
  * @param {boolean} sanitize - (Optional) Whether to sanitize the output by removing protected fields.
  * @param {boolean} lean - (Optional) Whether to return plain JavaScript objects or Mongoose documents.
@@ -175,6 +176,7 @@ export const findItems = async (req, purchaseOrderId, allTenants = false, saniti
 /**
  * Find a item by ID.
  * @param {Object} req - The request object.
+ * @param {string} purchaseOrderId - The ID of the parent purchase order.
  * @param {string} itemId - The ID of the purchase order item to find.
  * @param {boolean} allTenants - (Optional) Whether to include all tenants or not.
  * @param {boolean} sanitize - (Optional) Whether to sanitize the output by removing protected fields.
