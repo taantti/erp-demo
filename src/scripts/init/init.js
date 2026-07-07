@@ -117,7 +117,10 @@ const saveRoleData = async (roles) => {
             role: new Map(Object.entries(rolePermissions.role)),
             tenant: new Map(Object.entries(rolePermissions.tenant)),
             user: new Map(Object.entries(rolePermissions.user)),
-            stock: new Map(Object.entries(rolePermissions.stock))
+            stock: new Map(Object.entries(rolePermissions.stock)),
+            customer: new Map(Object.entries(rolePermissions.customer)),
+            purchaseOrder: new Map(Object.entries(rolePermissions.purchaseOrder)),
+            saleOrder: new Map(Object.entries(rolePermissions.saleOrder))
         };
 
 
@@ -192,10 +195,10 @@ const saveUserData = async (users, tenantModel) => {
 
 const saveProductCategoryData = async (productCategories) => {
     log("INFO", "saveProductCategoryData(): productCategories = " + JSON.stringify(productCategories), true);
-    
+
     for (const productCategoryData of productCategories) {
         const { name, description, active } = productCategoryData;
-        
+
         try {
             const productCategoryModel = new ProductCategory({ name, description, active });
             if (!await productCategoryModel.save()) return false;
@@ -204,7 +207,7 @@ const saveProductCategoryData = async (productCategories) => {
             return false;
         }
     }
-    
+
     return true;
 }
 

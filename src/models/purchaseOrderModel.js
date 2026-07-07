@@ -15,10 +15,10 @@ export const PurchaseOrderStatuses = {
 }
 
 const ItemSchema = new mongoose.Schema({
-  productName: String,
-  productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
-  stockId: { type: mongoose.Schema.Types.ObjectId, ref: 'Stock' },
-  shelfId: { type: mongoose.Schema.Types.ObjectId, ref: 'Shelf' },
+  productName: { type: String, required: true },
+  productId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Product' },
+  stockId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Stock' },
+  shelfId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Shelf' },
   quantity: { type: Number, required: true },
   unitNetPrice: { type: Number, required: true },
   unitGrossPrice: { type: Number, required: true },
