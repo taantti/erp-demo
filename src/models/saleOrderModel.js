@@ -16,9 +16,9 @@ export const SaleOrderStatuses = {
 
 const ItemSchema = new mongoose.Schema({
   productName: String,
-  productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
-  stockId: { type: mongoose.Schema.Types.ObjectId, ref: 'Stock' },
-  shelfId: { type: mongoose.Schema.Types.ObjectId, ref: 'Shelf' },
+  productId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Product' },
+  stockId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Stock' },
+  shelfId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Shelf' },
   quantity: { type: Number, required: true },
   unitNetPrice: { type: Number, required: true },
   unitGrossPrice: { type: Number, required: true },
@@ -31,7 +31,7 @@ const ItemSchema = new mongoose.Schema({
 
 const SaleOrderSchema = new mongoose.Schema({
   orderNumber: { type: String, required: true, unique: true },
-  customerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Customer' },
+  customerId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Customer' },
   status: { type: String, enum: Object.values(SaleOrderStatuses), default: SaleOrderStatuses.DRAFT, required: true },
   orderDate: { type: Date },
   expectedDeliveryDate: { type: Date },

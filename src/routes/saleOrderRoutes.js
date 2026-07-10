@@ -318,7 +318,7 @@ router.delete('/:id/item/:itemId', authorizationMiddleware('saleOrder', 'deleteS
  *         name: status
  *         schema:
  *           type: string
- *           enum: [draft, ordered, partially_send, send, cancelled]
+ *           enum: [draft, ordered, partially_sent, send, cancelled]
  *         description: Filter by status
  *     responses:
  *       200:

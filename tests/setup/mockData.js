@@ -397,8 +397,20 @@ export const createMockPurchaseOrder = async (options = {}) => {
     }
 }
 
-export const createMockCustomer = (options = {}) => {
-    return { ...initCustomerData[0], ...options };
+/**
+ * Create a mock customer for testing
+ * @param {Object} [options={}] - Fields to override the defaults (e.g. first_name, last_name).
+ * @returns {Promise<Customer>}
+ */
+export const createMockCustomer = async (options = {}) => {
+    const mockCustomerData = { ...initCustomerData[0], tenant: mockTenantId, ...options };
+
+    try {
+        const customerModel = new Customer(mockCustomerData);
+        return await customerModel.save();
+    } catch (error) {
+        throw error;
+    }
 }
 
 

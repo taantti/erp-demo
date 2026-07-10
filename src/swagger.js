@@ -652,7 +652,7 @@ const options = {
             _id: { type: 'string', description: 'Sale order ID' },
             orderNumber: { type: 'string' },
             customerId: { type: 'string', description: 'Customer ObjectId' },
-            status: { type: 'string', enum: ['draft', 'ordered', 'partially_send', 'send', 'cancelled'] },
+            status: { type: 'string', enum: ['draft', 'ordered', 'partially_sent', 'send', 'cancelled'] },
             orderDate: { type: 'string', format: 'date-time' },
             expectedDeliveryDate: { type: 'string', format: 'date-time' },
             items: { type: 'array', items: { $ref: '#/components/schemas/SaleOrderItem' } },
@@ -665,7 +665,7 @@ const options = {
         },
         SaleOrderItemCreate: {
           type: 'object',
-          required: ['quantity', 'unitNetPrice', 'unitGrossPrice', 'vat'],
+          required: ['productId', 'stockId', 'shelfId', 'quantity', 'unitNetPrice', 'unitGrossPrice', 'vat'],
           properties: {
             productName: { type: 'string' },
             productId: { type: 'string', description: 'Product ObjectId' },
@@ -680,11 +680,11 @@ const options = {
         },
         SaleOrderCreate: {
           type: 'object',
-          required: ['orderNumber'],
+          required: ['orderNumber', 'customerId'],
           properties: {
             orderNumber: { type: 'string' },
             customerId: { type: 'string', description: 'Customer ObjectId' },
-            status: { type: 'string', enum: ['draft', 'ordered', 'partially_send', 'send', 'cancelled'] },
+            status: { type: 'string', enum: ['draft', 'ordered', 'partially_sent', 'send', 'cancelled'] },
             orderDate: { type: 'string', format: 'date-time' },
             expectedDeliveryDate: { type: 'string', format: 'date-time' },
             items: { type: 'array', items: { $ref: '#/components/schemas/SaleOrderItemCreate' } },
@@ -696,7 +696,7 @@ const options = {
           properties: {
             orderNumber: { type: 'string' },
             customerId: { type: 'string', description: 'Customer ObjectId' },
-            status: { type: 'string', enum: ['draft', 'ordered', 'partially_send', 'send', 'cancelled'] },
+            status: { type: 'string', enum: ['draft', 'ordered', 'partially_sent', 'send', 'cancelled'] },
             orderDate: { type: 'string', format: 'date-time' },
             expectedDeliveryDate: { type: 'string', format: 'date-time' },
             items: { type: 'array', items: { $ref: '#/components/schemas/SaleOrderItemCreate' } },
