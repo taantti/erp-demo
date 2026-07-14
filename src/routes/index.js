@@ -8,6 +8,7 @@ import assetRoutes from './assetRoutes.js';
 import customerRoutes from './customerRoutes.js';
 import purchaseOrderRoutes from './purchaseOrderRoutes.js';
 import saleOrderRoutes from './saleOrderRoutes.js';
+// --- api-create-module-route import marker: inserts new route imports above this line. ---
 
 const routes = {
     login: loginRoutes,
@@ -19,7 +20,8 @@ const routes = {
     asset: assetRoutes,
     customer: customerRoutes,
     purchaseOrder: purchaseOrderRoutes,
-    saleOrder: saleOrderRoutes
+    saleOrder: saleOrderRoutes,
+    // --- api-create-module-route object marker: inserts new route entries above this line. ----
 }
 
 export default routes;

@@ -44,6 +44,7 @@ app.use('/asset', routes.asset);
 app.use('/customer', routes.customer);
 app.use('/purchase-order', routes.purchaseOrder);
 app.use('/sale-order', routes.saleOrder);
+/* api-create-app-mount marker: keep this in 'Protected routes' section, below 'Authentication middleware'. */
 
 /* Error handling middlewares */
 app.use(validationErrorMiddleware);

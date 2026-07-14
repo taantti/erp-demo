@@ -26,8 +26,9 @@ const RoleSchema = new mongoose.Schema({
         stock: { type: Map, of: PermissionSchema },
         customer: { type: Map, of: PermissionSchema },
         purchaseOrder: { type: Map, of: PermissionSchema },
-        saleOrder: { type: Map, of: PermissionSchema }
-    },
+        saleOrder: { type: Map, of: PermissionSchema },
+        // --- api-create-rolepermission-entry object marker: inserts new role permission above this line. ----
+    },   
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 });

@@ -19,3 +19,4 @@ export {
     createItem as createSOItem, findItems as findSOItems, findItemById as findSOItemById, updateItemById as updateSOItemById, deleteItemById as deleteSOItemById,
     SaleOrder
 } from './saleOrderModel.js';
+// --- api-create-model marker: this agent inserts new model re-exports directly above this line. Do not remove; keep it as the last line of this file. ---
