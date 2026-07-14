@@ -7,7 +7,8 @@
     "test": "vitest run --fileParallelism=false",
     "start": "node src/server.js",
     "init": "node src/scripts/init/init.js",
-    "build": "echo 'TODO: Typescript build'"
+    "build": "echo 'TODO: Typescript build'",
+    "lint": "eslint ."
   },
   "keywords": [],
   "author": "Antti",
@@ -28,6 +29,9 @@
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.7.0",
+    "globals": "^17.7.0",
     "mongodb-memory-server": "^11.2.0",
     "supertest": "^7.2.2",
     "vitest": "^4.1.9"
