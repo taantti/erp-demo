@@ -4,12 +4,13 @@ import { setup, teardown } from "../../../setup/db.js";
 import request from 'supertest';
 import {
     createMockTenant, createMockRole, createMockUser,
-    createMockStock, createMockShelf, createMockProductCategory, createMockProduct, initProductData,
+    createMockStock, createMockShelf, createMockProductCategory, createMockProduct,
     createMockCustomer
 } from "../../../setup/mockData.js";
 
 import { login } from "../../../setup/login.js";
 import { SaleOrderStatuses } from '../../../../src/models/saleOrderModel.js';
+import mockData from "../../../setup/mockData/index.js";
 
 let jwtToken = null;
 let saleOrderData = null;
@@ -35,8 +36,8 @@ const createMockData = async () => {
         mockStockId = (await createMockStock())._id;
         mockShelfId = (await createMockShelf({ stockId: mockStockId }))._id;
         mockProductCategoryId = (await createMockProductCategory())._id;
-        mockProductId1 = (await createMockProduct({ ...initProductData[0], categoryIds: [mockProductCategoryId] }))._id;
-        mockProductId2 = (await createMockProduct({ ...initProductData[1], categoryIds: [mockProductCategoryId] }))._id;
+        mockProductId1 = (await createMockProduct({ ...mockData.product[0], categoryIds: [mockProductCategoryId] }))._id;
+        mockProductId2 = (await createMockProduct({ ...mockData.product[1], categoryIds: [mockProductCategoryId] }))._id;
         mockCustomerId = (await createMockCustomer())._id;
     } catch (error) {
         console.error('MOCK DATA FAILED:', error);

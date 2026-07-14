@@ -4,14 +4,14 @@ import { setup, teardown } from "../../../setup/db.js";
 import request from 'supertest';
 import {
     createMockTenant, createMockRole, createMockUser,
-    createMockStock, initStockData,
-    createMockShelf, initShelfData,
-    createMockProductCategory, initProductCategoryData,
-    createMockProduct, initProductData,
-    createMockInventory, initInventoryData
+    createMockStock, createMockShelf,
+    createMockProductCategory, createMockProduct,
+    createMockInventory
 } from "../../../setup/mockData.js";
 import { login } from "../../../setup/login.js";
 import { StockEventTypes } from "../../../../src/models/stockEventModel.js";
+import mockData from "../../../setup/mockData/index.js";
+
 
 let jwtToken = null;
 let stockEventData = null;
@@ -35,17 +35,17 @@ const createMockData = async () => {
         await createMockRole();
         await createMockUser();
 
-        sourceStockId = (await createMockStock(initStockData[0]))._id;
-        sourceShelfId = (await createMockShelf({ ...initShelfData[0], stockId: sourceStockId }))._id;
+        sourceStockId = (await createMockStock(mockData.stock[0]))._id;
+        sourceShelfId = (await createMockShelf({ ...mockData.shelf[0], stockId: sourceStockId }))._id;
 
-        destinationStockId = (await createMockStock(initStockData[1]))._id;
-        destinationShelfId = (await createMockShelf({ ...initShelfData[1], stockId: destinationStockId }))._id;
+        destinationStockId = (await createMockStock(mockData.stock[1]))._id;
+        destinationShelfId = (await createMockShelf({ ...mockData.shelf[1], stockId: destinationStockId }))._id;
 
         mockProductCategoryId = (await createMockProductCategory())._id;
         productId = (await createMockProduct({ categoryIds: [mockProductCategoryId] }))._id;
 
-        sourceInventoryId = (await createMockInventory({ ...initInventoryData[0], stockId: sourceStockId, shelfId: sourceShelfId, productId: productId }))._id;
-        destinationInventoryId = (await createMockInventory({ ...initInventoryData[1], stockId: destinationStockId, shelfId: destinationShelfId, productId: productId }))._id;
+        sourceInventoryId = (await createMockInventory({ ...mockData.inventory[0], stockId: sourceStockId, shelfId: sourceShelfId, productId: productId }))._id;
+        destinationInventoryId = (await createMockInventory({ ...mockData.inventory[1], stockId: destinationStockId, shelfId: destinationShelfId, productId: productId }))._id;
     } catch (error) {
         console.error('MOCK DATA FAILED:', error);
         throw error;
