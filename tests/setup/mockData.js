@@ -9,6 +9,7 @@ import { Inventory } from "../../src/models/index.js";
 import { StockEvent } from "../../src/models/index.js";
 import { PurchaseOrder } from "../../src/models/index.js";
 import { Customer } from "../../src/models/index.js";
+// --- api-create-mock-factory-fn import marker: inserts new model imports above this line. ---
 import { hashPassword } from "../../src/utils/password.js";
 import { ProductUnits } from '../../src/models/productModel.js';
 import mockData  from "./mockData/index.js";
@@ -188,7 +189,4 @@ export const createMockCustomer = async (options = {}) => {
     }
 }
 
-
-
-
-
+// --- api-create-mock-factory-fn factory marker: inserts new mock factories above this line. ---

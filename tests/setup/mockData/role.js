@@ -77,7 +77,8 @@ export default [
                 readSaleOrders: { access: true, adminTenantOnly: false, immutable: false },
                 updateSaleOrder: { access: true, adminTenantOnly: false, immutable: false },
                 deleteSaleOrder: { access: true, adminTenantOnly: false, immutable: false }
-            }
+            },
+            // --- api-create-mock-rolepermission object marker: inserts new permission block above this line. ----
         }
     }
 ];

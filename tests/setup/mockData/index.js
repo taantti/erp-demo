@@ -29,5 +29,5 @@ export default {
     saleOrder: saleOrderMockData,
     saleOrderItem: saleOrderItemMockData,
     customer: customerMockData,
-    // --- api-create-mock-data index export marker: inserts new mock data exports above this line. ---
+    // --- api-create-mock-data index object marker: inserts new mock data exports above this line. ---
 }

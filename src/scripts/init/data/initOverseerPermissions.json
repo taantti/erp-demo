@@ -341,5 +341,6 @@
             "adminTenantOnly": true,
             "immutable": true
         }
-    }
+    },
+    "__api-create-seed-rolepermission_marker__": "New module permission blocks are inserted directly above this line. Do not remove; keep it as the last key."
 }

@@ -120,7 +120,8 @@ const saveRoleData = async (roles) => {
             stock: new Map(Object.entries(rolePermissions.stock)),
             customer: new Map(Object.entries(rolePermissions.customer)),
             purchaseOrder: new Map(Object.entries(rolePermissions.purchaseOrder)),
-            saleOrder: new Map(Object.entries(rolePermissions.saleOrder))
+            saleOrder: new Map(Object.entries(rolePermissions.saleOrder)),
+            // --- api-create-init-rolepermission marker: inserts new module Map entries above this line. ---
         };
 
 
